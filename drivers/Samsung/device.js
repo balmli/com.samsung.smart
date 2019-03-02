@@ -20,6 +20,7 @@ module.exports = class SamsungDevice extends Homey.Device {
 
         this.registerFlowCards();
         this._pollDeviceInterval = setInterval(this.pollDevice.bind(this), 10000);
+        this._apps = await this._samsung.getListOfApps();
         this.log('virtual device initialized', this.getData());
     }
 
@@ -131,8 +132,10 @@ module.exports = class SamsungDevice extends Homey.Device {
         new Homey.FlowCardCondition('is_app_running')
             .register()
             .registerRunListener((args, state) => {
-                return args.device._samsung.isAppRunning(args.app_id);
-            });
+                return args.device._samsung.isAppRunning(args.app_id.id);
+            })
+            .getArgument('app_id')
+            .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
 
         new Homey.FlowCardAction('send_key')
             .register()
@@ -145,8 +148,10 @@ module.exports = class SamsungDevice extends Homey.Device {
             .register()
             .registerRunListener((args, state) => {
                 const device = args.device;
-                return device._samsung.launchApp(args.app_id);
-            });
+                return device._samsung.launchApp(args.app_id.id);
+            })
+            .getArgument('app_id')
+            .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
 
         new Homey.FlowCardAction('browse')
             .register()
@@ -187,6 +192,21 @@ module.exports = class SamsungDevice extends Homey.Device {
         this.registerCapabilityListener('channel_down', async (value, opts) => {
             return this._samsung.sendKey('KEY_CHDOWN');
         });
+    }
+
+    onAppAutocomplete(query, args) {
+        return Promise.resolve(this._apps.map(app => {
+            return {
+                id: app.appId,
+                name: app.name
+            };
+        }).filter(result => {
+            return result.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        }).sort((a, b) => {
+            if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+            if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+            return 0;
+        }));
     }
 
 };

@@ -98,51 +98,10 @@
           },
           {
             "name": "app_id",
-            "type": "dropdown",
-            "values": [
-              {
-                "id": "11101200001",
-                "label": {
-                  "en": "Netflix"
-                }
-              },
-              {
-                "id": "111299001912",
-                "label": {
-                  "en": "YouTube"
-                }
-              },
-              {
-                "id": "3201601007250",
-                "label": {
-                  "en": "Google Play Filmer og TV"
-                }
-              },
-              {
-                "id": "111299002125",
-                "label": {
-                  "en": "HBO Nordic"
-                }
-              },
-              {
-                "id": "11111300404",
-                "label": {
-                  "en": "Viaplay"
-                }
-              },
-              {
-                "id": "3201606009684",
-                "label": {
-                  "en": "Spotify"
-                }
-              },
-              {
-                "id": "111477001221",
-                "label": {
-                  "en": "NRK TV"
-                }
-              }
-            ]
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Search for app..."
+            }
           }
         ]
       }
@@ -161,51 +120,10 @@
           },
           {
             "name": "app_id",
-            "type": "dropdown",
-            "values": [
-              {
-                "id": "11101200001",
-                "label": {
-                  "en": "Netflix"
-                }
-              },
-              {
-                "id": "111299001912",
-                "label": {
-                  "en": "YouTube"
-                }
-              },
-              {
-                "id": "3201601007250",
-                "label": {
-                  "en": "Google Play Filmer og TV"
-                }
-              },
-              {
-                "id": "111299002125",
-                "label": {
-                  "en": "HBO Nordic"
-                }
-              },
-              {
-                "id": "11111300404",
-                "label": {
-                  "en": "Viaplay"
-                }
-              },
-              {
-                "id": "3201606009684",
-                "label": {
-                  "en": "Spotify"
-                }
-              },
-              {
-                "id": "111477001221",
-                "label": {
-                  "en": "NRK TV"
-                }
-              }
-            ]
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Search for app..."
+            }
           }
         ]
       },
