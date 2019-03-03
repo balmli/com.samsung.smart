@@ -163,9 +163,39 @@
             "type": "dropdown",
             "values": [
               {
-                "id": "KEY_UP",
+                "id": "KEY_CHDOWN",
                 "label": {
-                  "en": "Up"
+                  "en": "Channel Down"
+                }
+              },
+              {
+                "id": "KEY_CHUP",
+                "label": {
+                  "en": "Channel Up"
+                }
+              },
+              {
+                "id": "KEY_MUTE",
+                "label": {
+                  "en": "Mute"
+                }
+              },
+              {
+                "id": "KEY_POWER",
+                "label": {
+                  "en": "Power Toggle"
+                }
+              },
+              {
+                "id": "KEY_VOLDOWN",
+                "label": {
+                  "en": "Volume Down"
+                }
+              },
+              {
+                "id": "KEY_VOLUP",
+                "label": {
+                  "en": "Volume Up"
                 }
               },
               {
@@ -187,21 +217,135 @@
                 }
               },
               {
+                "id": "KEY_UP",
+                "label": {
+                  "en": "Up"
+                }
+              },
+              {
                 "id": "KEY_ENTER",
                 "label": {
                   "en": "Enter"
                 }
               },
               {
-                "id": "KEY_RETURN",
+                "id": "KEY_0",
                 "label": {
-                  "en": "Return"
+                  "en": "Key 0"
                 }
               },
               {
-                "id": "KEY_CH_LIST",
+                "id": "KEY_1",
                 "label": {
-                  "en": "Channel List"
+                  "en": "Key 1"
+                }
+              },
+              {
+                "id": "KEY_2",
+                "label": {
+                  "en": "Key 2"
+                }
+              },
+              {
+                "id": "KEY_3",
+                "label": {
+                  "en": "Key 3"
+                }
+              },
+              {
+                "id": "KEY_4",
+                "label": {
+                  "en": "Key 4"
+                }
+              },
+              {
+                "id": "KEY_5",
+                "label": {
+                  "en": "Key 5"
+                }
+              },
+              {
+                "id": "KEY_6",
+                "label": {
+                  "en": "Key 6"
+                }
+              },
+              {
+                "id": "KEY_7",
+                "label": {
+                  "en": "Key 7"
+                }
+              },
+              {
+                "id": "KEY_8",
+                "label": {
+                  "en": "Key 8"
+                }
+              },
+              {
+                "id": "KEY_9",
+                "label": {
+                  "en": "Key 9"
+                }
+              },
+              {
+                "id": "KEY_RETURN",
+                "label": {
+                  "en": "Return/Back"
+                }
+              },
+              {
+                "id": "KEY_ENTERTAINMENT",
+                "label": {
+                  "en": "Entertainment"
+                }
+              },
+              {
+                "id": "KEY_GUIDE",
+                "label": {
+                  "en": "Guide"
+                }
+              },
+              {
+                "id": "KEY_HDMI",
+                "label": {
+                  "en": "HDMI"
+                }
+              },
+              {
+                "id": "KEY_HDMI1",
+                "label": {
+                  "en": "HDMI 1"
+                }
+              },
+              {
+                "id": "KEY_HDMI2",
+                "label": {
+                  "en": "HDMI 2"
+                }
+              },
+              {
+                "id": "KEY_HDMI3",
+                "label": {
+                  "en": "HDMI 3"
+                }
+              },
+              {
+                "id": "KEY_HDMI4",
+                "label": {
+                  "en": "HDMI 4"
+                }
+              },
+              {
+                "id": "KEY_HOME",
+                "label": {
+                  "en": "Home"
+                }
+              },
+              {
+                "id": "KEY_INFO",
+                "label": {
+                  "en": "Info"
                 }
               },
               {
@@ -217,45 +361,303 @@
                 }
               },
               {
-                "id": "KEY_GUIDE",
-                "label": {
-                  "en": "Guide"
-                }
-              },
-              {
                 "id": "KEY_TOOLS",
                 "label": {
                   "en": "Tools"
                 }
               },
               {
-                "id": "KEY_INFO",
+                "id": "KEY_PANNEL_CHDOWN",
                 "label": {
-                  "en": "Info"
+                  "en": "3D"
                 }
               },
               {
-                "id": "KEY_RED",
+                "id": "KEY_AD",
                 "label": {
-                  "en": "A / Red"
+                  "en": "AD"
                 }
               },
               {
-                "id": "KEY_GREEN",
+                "id": "KEY_ADDDEL",
                 "label": {
-                  "en": "B / Green"
+                  "en": "Add/Del"
                 }
               },
               {
-                "id": "KEY_YELLOW",
+                "id": "KEY_ALT_MHP",
                 "label": {
-                  "en": "C / Yellow"
+                  "en": "Alternate MHP"
                 }
               },
               {
-                "id": "KEY_BLUE",
+                "id": "KEY_ANTENA",
                 "label": {
-                  "en": "D / Blue"
+                  "en": "Analog TV"
+                }
+              },
+              {
+                "id": "KEY_ANGLE",
+                "label": {
+                  "en": "Angle"
+                }
+              },
+              {
+                "id": "KEY_ANYVIEW",
+                "label": {
+                  "en": "Any View"
+                }
+              },
+              {
+                "id": "KEY_ANYNET",
+                "label": {
+                  "en": "AnyNet+"
+                }
+              },
+              {
+                "id": "KEY_APP_LIST",
+                "label": {
+                  "en": "Application List"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_ANTENNA_AIR",
+                "label": {
+                  "en": "ARC Antenna Air"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_ANTENNA_CABLE",
+                "label": {
+                  "en": "ARC Antenna Cable"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_ANTENNA_SATELLITE",
+                "label": {
+                  "en": "ARC Antenna Satellite"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_ANYNET_AUTO_START",
+                "label": {
+                  "en": "ARC Anynet Auto Start"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_ANYNET_MODE_OK",
+                "label": {
+                  "en": "ARC Anynet Mode OK"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_AUTOCOLOR_FAIL",
+                "label": {
+                  "en": "ARC Autocolor Fail"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_AUTOCOLOR_SUCCESS",
+                "label": {
+                  "en": "ARC Autocolor Success"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_C_FORCE_AGING",
+                "label": {
+                  "en": "ARC C Force Aging"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_CAPTION_ENG",
+                "label": {
+                  "en": "ARC Caption ENG"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_CAPTION_KOR",
+                "label": {
+                  "en": "ARC Caption KOR"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_CAPTION_OFF",
+                "label": {
+                  "en": "ARC Caption Off"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_CAPTION_ON",
+                "label": {
+                  "en": "ARC Caption On"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_JACK_IDENT",
+                "label": {
+                  "en": "ARC Jack Ident"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_LNA_OFF",
+                "label": {
+                  "en": "ARC LNA Off"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_LNA_ON",
+                "label": {
+                  "en": "ARC LNA On"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_RESET",
+                "label": {
+                  "en": "ARC Reset"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_USBJACK_INSPECT",
+                "label": {
+                  "en": "ARC USB Jack Inspect"
+                }
+              },
+              {
+                "id": "KEY_ASPECT",
+                "label": {
+                  "en": "Aspect Ratio"
+                }
+              },
+              {
+                "id": "KEY_16_9",
+                "label": {
+                  "en": "Aspect Ratio 16:9"
+                }
+              },
+              {
+                "id": "KEY_4_3",
+                "label": {
+                  "en": "Aspect Ratio 4:3"
+                }
+              },
+              {
+                "id": "KEY_AUTO_FORMAT",
+                "label": {
+                  "en": "Auto Format"
+                }
+              },
+              {
+                "id": "KEY_AUTO_PROGRAM",
+                "label": {
+                  "en": "Auto Program"
+                }
+              },
+              {
+                "id": "KEY_AV1",
+                "label": {
+                  "en": "AV 1"
+                }
+              },
+              {
+                "id": "KEY_AV2",
+                "label": {
+                  "en": "AV 2"
+                }
+              },
+              {
+                "id": "KEY_AV3",
+                "label": {
+                  "en": "AV 3"
+                }
+              },
+              {
+                "id": "KEY_BACK_MHP",
+                "label": {
+                  "en": "Back MHP"
+                }
+              },
+              {
+                "id": "KEY_CYAN",
+                "label": {
+                  "en": "Blue (Cyan)"
+                }
+              },
+              {
+                "id": "KEY_BOOKMARK",
+                "label": {
+                  "en": "Bookmark"
+                }
+              },
+              {
+                "id": "KEY_CALLER_ID",
+                "label": {
+                  "en": "Caller ID"
+                }
+              },
+              {
+                "id": "KEY_CAPTION",
+                "label": {
+                  "en": "Caption"
+                }
+              },
+              {
+                "id": "KEY_CATV_MODE",
+                "label": {
+                  "en": "CATV Mode"
+                }
+              },
+              {
+                "id": "KEY_CH_LIST",
+                "label": {
+                  "en": "Channel List"
+                }
+              },
+              {
+                "id": "KEY_CLEAR",
+                "label": {
+                  "en": "Clear"
+                }
+              },
+              {
+                "id": "KEY_CLOCK_DISPLAY",
+                "label": {
+                  "en": "Clock Display"
+                }
+              },
+              {
+                "id": "KEY_COMPONENT1",
+                "label": {
+                  "en": "Component 1"
+                }
+              },
+              {
+                "id": "KEY_COMPONENT2",
+                "label": {
+                  "en": "Component 2"
+                }
+              },
+              {
+                "id": "KEY_CONTENTS",
+                "label": {
+                  "en": "Contents"
+                }
+              },
+              {
+                "id": "KEY_CONVERGENCE",
+                "label": {
+                  "en": "Convergence"
+                }
+              },
+              {
+                "id": "KEY_CONVERT_AUDIO_MAINSUB",
+                "label": {
+                  "en": "Convert Audio Main/Sub"
+                }
+              },
+              {
+                "id": "KEY_DEVICE_CONNECT",
+                "label": {
+                  "en": "Device Connect"
                 }
               },
               {
@@ -265,1539 +667,951 @@
                 }
               },
               {
-                "id": "KEY_HDMI",
-                "label": {
-                  "en": "HDMI Source"
-                }
-              },
-              {
-                "id": "KEY_CONTENTS",
-                "label": {
-                  "en": "SmartHub"
-                }
-              },
-              {
-                "id": "KEY_0",
-                "label": {
-                  "en": "0"
-                }
-              },
-              {
-                "id": "KEY_1",
-                "label": {
-                  "en": "1"
-                }
-              },
-              {
-                "id": "KEY_2",
-                "label": {
-                  "en": "2"
-                }
-              },
-              {
-                "id": "KEY_3",
-                "label": {
-                  "en": "3"
-                }
-              },
-              {
-                "id": "KEY_4",
-                "label": {
-                  "en": "4"
-                }
-              },
-              {
-                "id": "KEY_5",
-                "label": {
-                  "en": "5"
-                }
-              },
-              {
-                "id": "KEY_6",
-                "label": {
-                  "en": "6"
-                }
-              },
-              {
-                "id": "KEY_7",
-                "label": {
-                  "en": "7"
-                }
-              },
-              {
-                "id": "KEY_8",
-                "label": {
-                  "en": "8"
-                }
-              },
-              {
-                "id": "KEY_9",
-                "label": {
-                  "en": "9"
-                }
-              },
-              {
-                "id": "KEY_11",
-                "label": {
-                  "en": "KEY_11"
-                }
-              },
-              {
-                "id": "KEY_12",
-                "label": {
-                  "en": "KEY_12"
-                }
-              },
-              {
-                "id": "KEY_16_9",
-                "label": {
-                  "en": "KEY_16_9"
-                }
-              },
-              {
-                "id": "KEY_3SPEED",
-                "label": {
-                  "en": "KEY_3SPEED"
-                }
-              },
-              {
-                "id": "KEY_4_3",
-                "label": {
-                  "en": "KEY_4_3"
-                }
-              },
-              {
-                "id": "KEY_AD",
-                "label": {
-                  "en": "KEY_AD"
-                }
-              },
-              {
-                "id": "KEY_ADDDEL",
-                "label": {
-                  "en": "KEY_ADDDEL"
-                }
-              },
-              {
-                "id": "KEY_ALT_MHP",
-                "label": {
-                  "en": "KEY_ALT_MHP"
-                }
-              },
-              {
-                "id": "KEY_ANGLE",
-                "label": {
-                  "en": "KEY_ANGLE"
-                }
-              },
-              {
-                "id": "KEY_ANTENA",
-                "label": {
-                  "en": "Analog TV (KEY_ANTENA)"
-                }
-              },
-              {
-                "id": "KEY_ANYNET",
-                "label": {
-                  "en": "KEY_ANYNET"
-                }
-              },
-              {
-                "id": "KEY_ANYVIEW",
-                "label": {
-                  "en": "KEY_ANYVIEW"
-                }
-              },
-              {
-                "id": "KEY_APP_LIST",
-                "label": {
-                  "en": "KEY_APP_LIST"
-                }
-              },
-              {
-                "id": "KEY_ASPECT",
-                "label": {
-                  "en": "KEY_ASPECT"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_ANTENNA_AIR",
-                "label": {
-                  "en": "KEY_AUTO_ARC_ANTENNA_AIR"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_ANTENNA_CABLE",
-                "label": {
-                  "en": "KEY_AUTO_ARC_ANTENNA_CABLE"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_ANTENNA_SATELLITE",
-                "label": {
-                  "en": "KEY_AUTO_ARC_ANTENNA_SATELLITE"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_ANYNET_AUTO_START",
-                "label": {
-                  "en": "KEY_AUTO_ARC_ANYNET_AUTO_START"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_ANYNET_MODE_OK",
-                "label": {
-                  "en": "KEY_AUTO_ARC_ANYNET_MODE_OK"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_AUTOCOLOR_FAIL",
-                "label": {
-                  "en": "KEY_AUTO_ARC_AUTOCOLOR_FAIL"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_AUTOCOLOR_SUCCESS",
-                "label": {
-                  "en": "KEY_AUTO_ARC_AUTOCOLOR_SUCCESS"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_C_FORCE_AGING",
-                "label": {
-                  "en": "KEY_AUTO_ARC_C_FORCE_AGING"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_CAPTION_ENG",
-                "label": {
-                  "en": "KEY_AUTO_ARC_CAPTION_ENG"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_CAPTION_KOR",
-                "label": {
-                  "en": "KEY_AUTO_ARC_CAPTION_KOR"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_CAPTION_OFF",
-                "label": {
-                  "en": "KEY_AUTO_ARC_CAPTION_OFF"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_CAPTION_ON",
-                "label": {
-                  "en": "KEY_AUTO_ARC_CAPTION_ON"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_JACK_IDENT",
-                "label": {
-                  "en": "KEY_AUTO_ARC_JACK_IDENT"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_LNA_OFF",
-                "label": {
-                  "en": "KEY_AUTO_ARC_LNA_OFF"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_LNA_ON",
-                "label": {
-                  "en": "KEY_AUTO_ARC_LNA_ON"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_PIP_CH_CHANGE",
-                "label": {
-                  "en": "KEY_AUTO_ARC_PIP_CH_CHANGE"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_PIP_DOUBLE",
-                "label": {
-                  "en": "KEY_AUTO_ARC_PIP_DOUBLE"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_PIP_LARGE",
-                "label": {
-                  "en": "KEY_AUTO_ARC_PIP_LARGE"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_PIP_LEFT_BOTTOM",
-                "label": {
-                  "en": "KEY_AUTO_ARC_PIP_LEFT_BOTTOM"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_PIP_LEFT_TOP",
-                "label": {
-                  "en": "KEY_AUTO_ARC_PIP_LEFT_TOP"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_PIP_RIGHT_BOTTOM",
-                "label": {
-                  "en": "KEY_AUTO_ARC_PIP_RIGHT_BOTTOM"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_PIP_RIGHT_TOP",
-                "label": {
-                  "en": "KEY_AUTO_ARC_PIP_RIGHT_TOP"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_PIP_SMALL",
-                "label": {
-                  "en": "KEY_AUTO_ARC_PIP_SMALL"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_PIP_SOURCE_CHANGE",
-                "label": {
-                  "en": "KEY_AUTO_ARC_PIP_SOURCE_CHANGE"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_PIP_WIDE",
-                "label": {
-                  "en": "KEY_AUTO_ARC_PIP_WIDE"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_RESET",
-                "label": {
-                  "en": "KEY_AUTO_ARC_RESET"
-                }
-              },
-              {
-                "id": "KEY_AUTO_ARC_USBJACK_INSPECT",
-                "label": {
-                  "en": "KEY_AUTO_ARC_USBJACK_INSPECT"
-                }
-              },
-              {
-                "id": "KEY_AUTO_FORMAT",
-                "label": {
-                  "en": "KEY_AUTO_FORMAT"
-                }
-              },
-              {
-                "id": "KEY_AUTO_PROGRAM",
-                "label": {
-                  "en": "KEY_AUTO_PROGRAM"
-                }
-              },
-              {
-                "id": "KEY_AV1",
-                "label": {
-                  "en": "KEY_AV1"
-                }
-              },
-              {
-                "id": "KEY_AV2",
-                "label": {
-                  "en": "KEY_AV2"
-                }
-              },
-              {
-                "id": "KEY_AV3",
-                "label": {
-                  "en": "KEY_AV3"
-                }
-              },
-              {
-                "id": "KEY_BACK_MHP",
-                "label": {
-                  "en": "KEY_BACK_MHP"
-                }
-              },
-              {
-                "id": "KEY_BOOKMARK",
-                "label": {
-                  "en": "KEY_BOOKMARK"
-                }
-              },
-              {
-                "id": "KEY_CALLER_ID",
-                "label": {
-                  "en": "KEY_CALLER_ID"
-                }
-              },
-              {
-                "id": "KEY_CAPTION",
-                "label": {
-                  "en": "Caption (KEY_CAPTION)"
-                }
-              },
-              {
-                "id": "KEY_CATV_MODE",
-                "label": {
-                  "en": "CATV Mode (KEY_CATV_MODE)"
-                }
-              },
-              {
-                "id": "KEY_CH_LIST",
-                "label": {
-                  "en": "KEY_CH_LIST"
-                }
-              },
-              {
-                "id": "KEY_CHDOWN",
-                "label": {
-                  "en": "KEY_CHDOWN"
-                }
-              },
-              {
-                "id": "KEY_CHUP",
-                "label": {
-                  "en": "KEY_CHUP"
-                }
-              },
-              {
-                "id": "KEY_CLEAR",
-                "label": {
-                  "en": "KEY_CLEAR"
-                }
-              },
-              {
-                "id": "KEY_CLOCK_DISPLAY",
-                "label": {
-                  "en": "Clock display (KEY_CLOCK_DISPLAY)"
-                }
-              },
-              {
-                "id": "KEY_COMPONENT1",
-                "label": {
-                  "en": "KEY_COMPONENT1"
-                }
-              },
-              {
-                "id": "KEY_COMPONENT2",
-                "label": {
-                  "en": "KEY_COMPONENT2"
-                }
-              },
-              {
-                "id": "KEY_CONTENTS",
-                "label": {
-                  "en": "KEY_CONTENTS"
-                }
-              },
-              {
-                "id": "KEY_CONVERGENCE",
-                "label": {
-                  "en": "KEY_CONVERGENCE"
-                }
-              },
-              {
-                "id": "KEY_CONVERT_AUDIO_MAINSUB",
-                "label": {
-                  "en": "KEY_CONVERT_AUDIO_MAINSUB"
-                }
-              },
-              {
-                "id": "KEY_CUSTOM",
-                "label": {
-                  "en": "KEY_CUSTOM"
-                }
-              },
-              {
-                "id": "KEY_CYAN",
-                "label": {
-                  "en": "KEY_CYAN"
-                }
-              },
-              {
-                "id": "KEY_DEVICE_CONNECT",
-                "label": {
-                  "en": "KEY_DEVICE_CONNECT"
-                }
-              },
-              {
                 "id": "KEY_DISC_MENU",
                 "label": {
-                  "en": "KEY_DISC_MENU"
+                  "en": "Disc Menu"
                 }
               },
               {
                 "id": "KEY_DMA",
                 "label": {
-                  "en": "KEY_DMA"
+                  "en": "DMA"
                 }
               },
               {
                 "id": "KEY_DNET",
                 "label": {
-                  "en": "KEY_DNET"
+                  "en": "DNET"
                 }
               },
               {
                 "id": "KEY_DNIe",
                 "label": {
-                  "en": "KEY_DNIe"
+                  "en": "DNIe"
                 }
               },
               {
                 "id": "KEY_DNSe",
                 "label": {
-                  "en": "KEY_DNSe"
+                  "en": "DNSe"
                 }
               },
               {
                 "id": "KEY_DOOR",
                 "label": {
-                  "en": "KEY_DOOR"
-                }
-              },
-              {
-                "id": "KEY_DOWN",
-                "label": {
-                  "en": "KEY_DOWN"
+                  "en": "Door"
                 }
               },
               {
                 "id": "KEY_DSS_MODE",
                 "label": {
-                  "en": "KEY_DSS_MODE"
-                }
-              },
-              {
-                "id": "KEY_DTV",
-                "label": {
-                  "en": "Digital TV (KEY_DTV)"
+                  "en": "DSS Mode"
                 }
               },
               {
                 "id": "KEY_DTV_LINK",
                 "label": {
-                  "en": "KEY_DTV_LINK"
+                  "en": "DTV Link"
                 }
               },
               {
                 "id": "KEY_DTV_SIGNAL",
                 "label": {
-                  "en": "KEY_DTV_SIGNAL"
+                  "en": "DTV Signal"
                 }
               },
               {
                 "id": "KEY_DVD_MODE",
                 "label": {
-                  "en": "KEY_DVD_MODE"
+                  "en": "DVD Mode"
                 }
               },
               {
                 "id": "KEY_DVI",
                 "label": {
-                  "en": "KEY_DVI"
+                  "en": "DVI"
                 }
               },
               {
                 "id": "KEY_DVR",
                 "label": {
-                  "en": "KEY_DVR"
+                  "en": "DVR"
                 }
               },
               {
                 "id": "KEY_DVR_MENU",
                 "label": {
-                  "en": "KEY_DVR_MENU"
-                }
-              },
-              {
-                "id": "KEY_DYNAMIC",
-                "label": {
-                  "en": "KEY_DYNAMIC"
-                }
-              },
-              {
-                "id": "KEY_ENTER",
-                "label": {
-                  "en": "KEY_ENTER"
-                }
-              },
-              {
-                "id": "KEY_ENTERTAINMENT",
-                "label": {
-                  "en": "KEY_ENTERTAINMENT"
+                  "en": "DVR Menu"
                 }
               },
               {
                 "id": "KEY_ESAVING",
                 "label": {
-                  "en": "KEY_ESAVING"
-                }
-              },
-              {
-                "id": "KEY_EXIT",
-                "label": {
-                  "en": "KEY_EXIT"
+                  "en": "Energy Saving"
                 }
               },
               {
                 "id": "KEY_EXT1",
                 "label": {
-                  "en": "KEY_EXT1"
-                }
-              },
-              {
-                "id": "KEY_EXT10",
-                "label": {
-                  "en": "KEY_EXT10"
-                }
-              },
-              {
-                "id": "KEY_EXT11",
-                "label": {
-                  "en": "KEY_EXT11"
-                }
-              },
-              {
-                "id": "KEY_EXT12",
-                "label": {
-                  "en": "KEY_EXT12"
-                }
-              },
-              {
-                "id": "KEY_EXT13",
-                "label": {
-                  "en": "KEY_EXT13"
-                }
-              },
-              {
-                "id": "KEY_EXT14",
-                "label": {
-                  "en": "KEY_EXT14"
-                }
-              },
-              {
-                "id": "KEY_EXT15",
-                "label": {
-                  "en": "KEY_EXT15"
-                }
-              },
-              {
-                "id": "KEY_EXT16",
-                "label": {
-                  "en": "KEY_EXT16"
-                }
-              },
-              {
-                "id": "KEY_EXT17",
-                "label": {
-                  "en": "KEY_EXT17"
-                }
-              },
-              {
-                "id": "KEY_EXT18",
-                "label": {
-                  "en": "KEY_EXT18"
-                }
-              },
-              {
-                "id": "KEY_EXT19",
-                "label": {
-                  "en": "KEY_EXT19"
+                  "en": "EXT 01"
                 }
               },
               {
                 "id": "KEY_EXT2",
                 "label": {
-                  "en": "KEY_EXT2"
-                }
-              },
-              {
-                "id": "KEY_EXT20",
-                "label": {
-                  "en": "KEY_EXT20"
-                }
-              },
-              {
-                "id": "KEY_EXT21",
-                "label": {
-                  "en": "KEY_EXT21"
-                }
-              },
-              {
-                "id": "KEY_EXT22",
-                "label": {
-                  "en": "KEY_EXT22"
-                }
-              },
-              {
-                "id": "KEY_EXT23",
-                "label": {
-                  "en": "KEY_EXT23"
-                }
-              },
-              {
-                "id": "KEY_EXT24",
-                "label": {
-                  "en": "KEY_EXT24"
-                }
-              },
-              {
-                "id": "KEY_EXT25",
-                "label": {
-                  "en": "KEY_EXT25"
-                }
-              },
-              {
-                "id": "KEY_EXT26",
-                "label": {
-                  "en": "KEY_EXT26"
-                }
-              },
-              {
-                "id": "KEY_EXT27",
-                "label": {
-                  "en": "KEY_EXT27"
-                }
-              },
-              {
-                "id": "KEY_EXT28",
-                "label": {
-                  "en": "KEY_EXT28"
-                }
-              },
-              {
-                "id": "KEY_EXT29",
-                "label": {
-                  "en": "KEY_EXT29"
+                  "en": "EXT 02"
                 }
               },
               {
                 "id": "KEY_EXT3",
                 "label": {
-                  "en": "KEY_EXT3"
-                }
-              },
-              {
-                "id": "KEY_EXT30",
-                "label": {
-                  "en": "KEY_EXT30"
-                }
-              },
-              {
-                "id": "KEY_EXT31",
-                "label": {
-                  "en": "KEY_EXT31"
-                }
-              },
-              {
-                "id": "KEY_EXT32",
-                "label": {
-                  "en": "KEY_EXT32"
-                }
-              },
-              {
-                "id": "KEY_EXT33",
-                "label": {
-                  "en": "KEY_EXT33"
-                }
-              },
-              {
-                "id": "KEY_EXT34",
-                "label": {
-                  "en": "KEY_EXT34"
-                }
-              },
-              {
-                "id": "KEY_EXT35",
-                "label": {
-                  "en": "KEY_EXT35"
-                }
-              },
-              {
-                "id": "KEY_EXT36",
-                "label": {
-                  "en": "KEY_EXT36"
-                }
-              },
-              {
-                "id": "KEY_EXT37",
-                "label": {
-                  "en": "KEY_EXT37"
-                }
-              },
-              {
-                "id": "KEY_EXT38",
-                "label": {
-                  "en": "KEY_EXT38"
-                }
-              },
-              {
-                "id": "KEY_EXT39",
-                "label": {
-                  "en": "KEY_EXT39"
+                  "en": "EXT 03"
                 }
               },
               {
                 "id": "KEY_EXT4",
                 "label": {
-                  "en": "KEY_EXT4"
-                }
-              },
-              {
-                "id": "KEY_EXT40",
-                "label": {
-                  "en": "KEY_EXT40"
-                }
-              },
-              {
-                "id": "KEY_EXT41",
-                "label": {
-                  "en": "KEY_EXT41"
+                  "en": "EXT 04"
                 }
               },
               {
                 "id": "KEY_EXT5",
                 "label": {
-                  "en": "KEY_EXT5"
+                  "en": "EXT 05"
                 }
               },
               {
                 "id": "KEY_EXT6",
                 "label": {
-                  "en": "KEY_EXT6"
+                  "en": "EXT 06"
                 }
               },
               {
                 "id": "KEY_EXT7",
                 "label": {
-                  "en": "KEY_EXT7"
+                  "en": "EXT 07"
                 }
               },
               {
                 "id": "KEY_EXT8",
                 "label": {
-                  "en": "KEY_EXT8"
+                  "en": "EXT 08"
                 }
               },
               {
                 "id": "KEY_EXT9",
                 "label": {
-                  "en": "KEY_EXT9"
+                  "en": "EXT 09"
                 }
               },
               {
-                "id": "KEY_FACTORY",
+                "id": "KEY_EXT10",
                 "label": {
-                  "en": "KEY_FACTORY"
+                  "en": "EXT 10"
                 }
               },
               {
-                "id": "KEY_FAVCH",
+                "id": "KEY_EXT11",
                 "label": {
-                  "en": "KEY_FAVCH"
+                  "en": "EXT 11"
+                }
+              },
+              {
+                "id": "KEY_EXT12",
+                "label": {
+                  "en": "EXT 12"
+                }
+              },
+              {
+                "id": "KEY_EXT13",
+                "label": {
+                  "en": "EXT 13"
+                }
+              },
+              {
+                "id": "KEY_EXT14",
+                "label": {
+                  "en": "EXT 14"
+                }
+              },
+              {
+                "id": "KEY_EXT15",
+                "label": {
+                  "en": "EXT 15"
+                }
+              },
+              {
+                "id": "KEY_EXT16",
+                "label": {
+                  "en": "EXT 16"
+                }
+              },
+              {
+                "id": "KEY_EXT17",
+                "label": {
+                  "en": "EXT 17"
+                }
+              },
+              {
+                "id": "KEY_EXT18",
+                "label": {
+                  "en": "EXT 18"
+                }
+              },
+              {
+                "id": "KEY_EXT19",
+                "label": {
+                  "en": "EXT 19"
+                }
+              },
+              {
+                "id": "KEY_EXT20",
+                "label": {
+                  "en": "EXT 20"
+                }
+              },
+              {
+                "id": "KEY_EXT21",
+                "label": {
+                  "en": "EXT 21"
+                }
+              },
+              {
+                "id": "KEY_EXT22",
+                "label": {
+                  "en": "EXT 22"
+                }
+              },
+              {
+                "id": "KEY_EXT23",
+                "label": {
+                  "en": "EXT 23"
+                }
+              },
+              {
+                "id": "KEY_EXT24",
+                "label": {
+                  "en": "EXT 24"
+                }
+              },
+              {
+                "id": "KEY_EXT25",
+                "label": {
+                  "en": "EXT 25"
+                }
+              },
+              {
+                "id": "KEY_EXT26",
+                "label": {
+                  "en": "EXT 26"
+                }
+              },
+              {
+                "id": "KEY_EXT27",
+                "label": {
+                  "en": "EXT 27"
+                }
+              },
+              {
+                "id": "KEY_EXT28",
+                "label": {
+                  "en": "EXT 28"
+                }
+              },
+              {
+                "id": "KEY_EXT29",
+                "label": {
+                  "en": "EXT 29"
+                }
+              },
+              {
+                "id": "KEY_EXT30",
+                "label": {
+                  "en": "EXT 30"
+                }
+              },
+              {
+                "id": "KEY_EXT31",
+                "label": {
+                  "en": "EXT 31"
+                }
+              },
+              {
+                "id": "KEY_EXT32",
+                "label": {
+                  "en": "EXT 32"
+                }
+              },
+              {
+                "id": "KEY_EXT33",
+                "label": {
+                  "en": "EXT 33"
+                }
+              },
+              {
+                "id": "KEY_EXT34",
+                "label": {
+                  "en": "EXT 34"
+                }
+              },
+              {
+                "id": "KEY_EXT35",
+                "label": {
+                  "en": "EXT 35"
+                }
+              },
+              {
+                "id": "KEY_EXT36",
+                "label": {
+                  "en": "EXT 36"
+                }
+              },
+              {
+                "id": "KEY_EXT37",
+                "label": {
+                  "en": "EXT 37"
+                }
+              },
+              {
+                "id": "KEY_EXT38",
+                "label": {
+                  "en": "EXT 38"
+                }
+              },
+              {
+                "id": "KEY_EXT39",
+                "label": {
+                  "en": "EXT 39"
+                }
+              },
+              {
+                "id": "KEY_EXT40",
+                "label": {
+                  "en": "EXT 40"
+                }
+              },
+              {
+                "id": "KEY_EXT41",
+                "label": {
+                  "en": "EXT 41"
                 }
               },
               {
                 "id": "KEY_FF",
                 "label": {
-                  "en": "KEY_FF"
+                  "en": "Fast Forward"
+                }
+              },
+              {
+                "id": "KEY_FAVCH",
+                "label": {
+                  "en": "Favorite Channels"
                 }
               },
               {
                 "id": "KEY_FF_",
                 "label": {
-                  "en": "KEY_FF_"
+                  "en": "FF_"
                 }
               },
               {
                 "id": "KEY_FM_RADIO",
                 "label": {
-                  "en": "FM Radio (KEY_FM_RADIO)"
-                }
-              },
-              {
-                "id": "KEY_GAME",
-                "label": {
-                  "en": "KEY_GAME"
+                  "en": "FM Radio"
                 }
               },
               {
                 "id": "KEY_GREEN",
                 "label": {
-                  "en": "KEY_GREEN"
-                }
-              },
-              {
-                "id": "KEY_GUIDE",
-                "label": {
-                  "en": "KEY_GUIDE"
-                }
-              },
-              {
-                "id": "KEY_HDMI",
-                "label": {
-                  "en": "KEY_HDMI"
-                }
-              },
-              {
-                "id": "KEY_HDMI1",
-                "label": {
-                  "en": "KEY_HDMI1"
-                }
-              },
-              {
-                "id": "KEY_HDMI2",
-                "label": {
-                  "en": "KEY_HDMI2"
-                }
-              },
-              {
-                "id": "KEY_HDMI3",
-                "label": {
-                  "en": "KEY_HDMI3"
-                }
-              },
-              {
-                "id": "KEY_HDMI4",
-                "label": {
-                  "en": "KEY_HDMI4"
+                  "en": "Green"
                 }
               },
               {
                 "id": "KEY_HELP",
                 "label": {
-                  "en": "KEY_HELP"
-                }
-              },
-              {
-                "id": "KEY_HOME",
-                "label": {
-                  "en": "KEY_HOME"
+                  "en": "Help"
                 }
               },
               {
                 "id": "KEY_ID_INPUT",
                 "label": {
-                  "en": "KEY_ID_INPUT"
+                  "en": "ID Input"
                 }
               },
               {
                 "id": "KEY_ID_SETUP",
                 "label": {
-                  "en": "KEY_ID_SETUP"
-                }
-              },
-              {
-                "id": "KEY_INFO",
-                "label": {
-                  "en": "KEY_INFO"
+                  "en": "ID Setup"
                 }
               },
               {
                 "id": "KEY_INSTANT_REPLAY",
                 "label": {
-                  "en": "KEY_INSTANT_REPLAY"
+                  "en": "Instant Replay"
                 }
               },
               {
-                "id": "KEY_LEFT",
+                "id": "KEY_11",
                 "label": {
-                  "en": "KEY_LEFT"
+                  "en": "Key 11"
                 }
               },
               {
-                "id": "KEY_LINK",
+                "id": "KEY_12",
                 "label": {
-                  "en": "KEY_LINK"
+                  "en": "Key 12"
                 }
               },
               {
-                "id": "KEY_LIVE",
+                "id": "KEY_3SPEED",
                 "label": {
-                  "en": "KEY_LIVE"
+                  "en": "Key 3 Speed"
                 }
               },
               {
-                "id": "KEY_MAGIC_BRIGHT",
+                "id": "KEY_FACTORY",
                 "label": {
-                  "en": "KEY_MAGIC_BRIGHT"
-                }
-              },
-              {
-                "id": "KEY_MAGIC_CHANNEL",
-                "label": {
-                  "en": "KEY_MAGIC_CHANNEL"
-                }
-              },
-              {
-                "id": "KEY_MDC",
-                "label": {
-                  "en": "KEY_MDC"
-                }
-              },
-              {
-                "id": "KEY_MENU",
-                "label": {
-                  "en": "KEY_MENU"
-                }
-              },
-              {
-                "id": "KEY_MIC",
-                "label": {
-                  "en": "KEY_MIC"
-                }
-              },
-              {
-                "id": "KEY_MORE",
-                "label": {
-                  "en": "KEY_MORE"
-                }
-              },
-              {
-                "id": "KEY_MOVIE1",
-                "label": {
-                  "en": "KEY_MOVIE1"
-                }
-              },
-              {
-                "id": "KEY_MS",
-                "label": {
-                  "en": "KEY_MS"
-                }
-              },
-              {
-                "id": "KEY_MTS",
-                "label": {
-                  "en": "KEY_MTS"
-                }
-              },
-              {
-                "id": "KEY_MUTE",
-                "label": {
-                  "en": "KEY_MUTE"
-                }
-              },
-              {
-                "id": "KEY_NINE_SEPERATE",
-                "label": {
-                  "en": "KEY_NINE_SEPERATE"
-                }
-              },
-              {
-                "id": "KEY_OPEN",
-                "label": {
-                  "en": "KEY_OPEN"
-                }
-              },
-              {
-                "id": "KEY_PANEL_MENU",
-                "label": {
-                  "en": "KEY_PANEL_MENU"
-                }
-              },
-              {
-                "id": "KEY_PANNEL_CHDOWN",
-                "label": {
-                  "en": "KEY_PANNEL_CHDOWN"
-                }
-              },
-              {
-                "id": "KEY_PANNEL_CHUP",
-                "label": {
-                  "en": "KEY_PANNEL_CHUP"
-                }
-              },
-              {
-                "id": "KEY_PANNEL_ENTER",
-                "label": {
-                  "en": "KEY_PANNEL_ENTER"
-                }
-              },
-              {
-                "id": "KEY_PANNEL_POWER",
-                "label": {
-                  "en": "KEY_PANNEL_POWER"
-                }
-              },
-              {
-                "id": "KEY_PANNEL_SOURCE",
-                "label": {
-                  "en": "KEY_PANNEL_SOURCE"
-                }
-              },
-              {
-                "id": "KEY_PANNEL_VOLDOW",
-                "label": {
-                  "en": "KEY_PANNEL_VOLDOW"
-                }
-              },
-              {
-                "id": "KEY_PANNEL_VOLUP",
-                "label": {
-                  "en": "KEY_PANNEL_VOLUP"
-                }
-              },
-              {
-                "id": "KEY_PANORAMA",
-                "label": {
-                  "en": "KEY_PANORAMA"
-                }
-              },
-              {
-                "id": "KEY_PAUSE",
-                "label": {
-                  "en": "KEY_PAUSE"
-                }
-              },
-              {
-                "id": "KEY_PCMODE",
-                "label": {
-                  "en": "KEY_PCMODE"
-                }
-              },
-              {
-                "id": "KEY_PERPECT_FOCUS",
-                "label": {
-                  "en": "KEY_PERPECT_FOCUS"
-                }
-              },
-              {
-                "id": "KEY_PIP_CHDOWN",
-                "label": {
-                  "en": "KEY_PIP_CHDOWN"
-                }
-              },
-              {
-                "id": "KEY_PIP_CHUP",
-                "label": {
-                  "en": "KEY_PIP_CHUP"
-                }
-              },
-              {
-                "id": "KEY_PIP_ONOFF",
-                "label": {
-                  "en": "KEY_PIP_ONOFF"
-                }
-              },
-              {
-                "id": "KEY_PIP_SCAN",
-                "label": {
-                  "en": "KEY_PIP_SCAN"
-                }
-              },
-              {
-                "id": "KEY_PIP_SIZE",
-                "label": {
-                  "en": "KEY_PIP_SIZE"
-                }
-              },
-              {
-                "id": "KEY_PIP_SWAP",
-                "label": {
-                  "en": "KEY_PIP_SWAP"
-                }
-              },
-              {
-                "id": "KEY_PLAY",
-                "label": {
-                  "en": "KEY_PLAY"
-                }
-              },
-              {
-                "id": "KEY_PLUS100",
-                "label": {
-                  "en": "KEY_PLUS100"
-                }
-              },
-              {
-                "id": "KEY_PMODE",
-                "label": {
-                  "en": "KEY_PMODE"
-                }
-              },
-              {
-                "id": "KEY_POWEROFF",
-                "label": {
-                  "en": "KEY_POWEROFF"
-                }
-              },
-              {
-                "id": "KEY_POWERON",
-                "label": {
-                  "en": "KEY_POWERON"
-                }
-              },
-              {
-                "id": "KEY_PRECH",
-                "label": {
-                  "en": "KEY_PRECH"
-                }
-              },
-              {
-                "id": "KEY_PRINT",
-                "label": {
-                  "en": "KEY_PRINT"
-                }
-              },
-              {
-                "id": "KEY_PROGRAM",
-                "label": {
-                  "en": "KEY_PROGRAM"
-                }
-              },
-              {
-                "id": "KEY_QUICK_REPLAY",
-                "label": {
-                  "en": "KEY_QUICK_REPLAY"
-                }
-              },
-              {
-                "id": "KEY_REC",
-                "label": {
-                  "en": "KEY_REC"
-                }
-              },
-              {
-                "id": "KEY_RED",
-                "label": {
-                  "en": "KEY_RED"
-                }
-              },
-              {
-                "id": "KEY_REPEAT",
-                "label": {
-                  "en": "KEY_REPEAT"
-                }
-              },
-              {
-                "id": "KEY_RESERVED1",
-                "label": {
-                  "en": "KEY_RESERVED1"
-                }
-              },
-              {
-                "id": "KEY_RETURN",
-                "label": {
-                  "en": "KEY_RETURN"
-                }
-              },
-              {
-                "id": "KEY_REWIND",
-                "label": {
-                  "en": "KEY_REWIND"
-                }
-              },
-              {
-                "id": "KEY_REWIND_",
-                "label": {
-                  "en": "KEY_REWIND_"
-                }
-              },
-              {
-                "id": "KEY_RIGHT",
-                "label": {
-                  "en": "KEY_RIGHT"
-                }
-              },
-              {
-                "id": "KEY_RSS",
-                "label": {
-                  "en": "KEY_RSS"
+                  "en": "Key Factory"
                 }
               },
               {
                 "id": "KEY_RSURF",
                 "label": {
-                  "en": "KEY_RSURF"
+                  "en": "Key RSURF"
                 }
               },
               {
-                "id": "KEY_SCALE",
+                "id": "KEY_LINK",
                 "label": {
-                  "en": "KEY_SCALE"
+                  "en": "Link"
                 }
               },
               {
-                "id": "KEY_SEFFECT",
+                "id": "KEY_LIVE",
                 "label": {
-                  "en": "KEY_SEFFECT"
+                  "en": "Live"
                 }
               },
               {
-                "id": "KEY_SETUP_CLOCK_TIMER",
+                "id": "KEY_MAGIC_BRIGHT",
                 "label": {
-                  "en": "Setup Clock (KEY_SETUP_CLOCK_TIMER)"
+                  "en": "Magic Bright"
                 }
               },
               {
-                "id": "KEY_SLEEP",
+                "id": "KEY_MAGIC_CHANNEL",
                 "label": {
-                  "en": "KEY_SLEEP"
+                  "en": "Magic Channel"
                 }
               },
               {
-                "id": "KEY_SOURCE",
+                "id": "KEY_MDC",
                 "label": {
-                  "en": "KEY_SOURCE"
+                  "en": "MDC"
                 }
               },
               {
-                "id": "KEY_SRS",
+                "id": "KEY_MIC",
                 "label": {
-                  "en": "KEY_SRS"
+                  "en": "Mic"
+                }
+              },
+              {
+                "id": "KEY_MORE",
+                "label": {
+                  "en": "More"
+                }
+              },
+              {
+                "id": "KEY_MS",
+                "label": {
+                  "en": "MS"
+                }
+              },
+              {
+                "id": "KEY_MTS",
+                "label": {
+                  "en": "MTS"
+                }
+              },
+              {
+                "id": "KEY_NINE_SEPERATE",
+                "label": {
+                  "en": "Nine Separate"
+                }
+              },
+              {
+                "id": "KEY_OPEN",
+                "label": {
+                  "en": "Open"
+                }
+              },
+              {
+                "id": "KEY_PANNEL_CHUP",
+                "label": {
+                  "en": "Panel Channel Up"
+                }
+              },
+              {
+                "id": "KEY_PANNEL_ENTER",
+                "label": {
+                  "en": "Panel Enter"
+                }
+              },
+              {
+                "id": "KEY_PANNEL_MENU",
+                "label": {
+                  "en": "Panel Menu"
+                }
+              },
+              {
+                "id": "KEY_PANNEL_POWER",
+                "label": {
+                  "en": "Panel Power"
+                }
+              },
+              {
+                "id": "KEY_PANNEL_SOURCE",
+                "label": {
+                  "en": "Panel Source"
+                }
+              },
+              {
+                "id": "KEY_PANNEL_VOLDOW",
+                "label": {
+                  "en": "Panel Volume Down"
+                }
+              },
+              {
+                "id": "KEY_PANNEL_VOLUP",
+                "label": {
+                  "en": "Panel Volume Up"
+                }
+              },
+              {
+                "id": "KEY_PAUSE",
+                "label": {
+                  "en": "Pause"
+                }
+              },
+              {
+                "id": "KEY_PCMODE",
+                "label": {
+                  "en": "PC Mode"
+                }
+              },
+              {
+                "id": "KEY_PERPECT_FOCUS",
+                "label": {
+                  "en": "Perfect Focus"
+                }
+              },
+              {
+                "id": "KEY_PMODE",
+                "label": {
+                  "en": "Picture Mode"
+                }
+              },
+              {
+                "id": "KEY_CUSTOM",
+                "label": {
+                  "en": "Picture Mode Custom"
+                }
+              },
+              {
+                "id": "KEY_DYNAMIC",
+                "label": {
+                  "en": "Picture Mode Dynamic"
+                }
+              },
+              {
+                "id": "KEY_GAME",
+                "label": {
+                  "en": "Picture Mode Game"
+                }
+              },
+              {
+                "id": "KEY_MOVIE1",
+                "label": {
+                  "en": "Picture Mode Movie"
+                }
+              },
+              {
+                "id": "KEY_PANORAMA",
+                "label": {
+                  "en": "Picture Mode Panorama"
                 }
               },
               {
                 "id": "KEY_STANDARD",
                 "label": {
-                  "en": "KEY_STANDARD"
+                  "en": "Picture Mode Standard"
                 }
               },
               {
-                "id": "KEY_STB_MODE",
+                "id": "KEY_PICTURE_SIZE",
                 "label": {
-                  "en": "STB Mode (KEY_STB_MODE)"
+                  "en": "Picture Size"
                 }
               },
               {
-                "id": "KEY_STILL_PICTURE",
+                "id": "KEY_AUTO_ARC_PIP_CH_CHANGE",
                 "label": {
-                  "en": "KEY_STILL_PICTURE"
+                  "en": "PIP Channel Change"
                 }
               },
               {
-                "id": "KEY_STOP",
+                "id": "KEY_PIP_CHDOWN",
                 "label": {
-                  "en": "KEY_STOP"
+                  "en": "PIP Channel Down"
                 }
               },
               {
-                "id": "KEY_SUB_TITLE",
+                "id": "KEY_PIP_CHUP",
                 "label": {
-                  "en": "Subtitle (KEY_SUB_TITLE)"
+                  "en": "PIP Channel Up"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_PIP_DOUBLE",
+                "label": {
+                  "en": "PIP Double"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_PIP_LARGE",
+                "label": {
+                  "en": "PIP Large"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_PIP_LEFT_BOTTOM",
+                "label": {
+                  "en": "PIP Left Bottom"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_PIP_LEFT_TOP",
+                "label": {
+                  "en": "PIP Left Top"
+                }
+              },
+              {
+                "id": "KEY_PIP_ONOFF",
+                "label": {
+                  "en": "PIP On/Off"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_PIP_RIGHT_BOTTOM",
+                "label": {
+                  "en": "PIP Right Bottom"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_PIP_RIGHT_TOP",
+                "label": {
+                  "en": "PIP Right Top"
+                }
+              },
+              {
+                "id": "KEY_PIP_SCAN",
+                "label": {
+                  "en": "PIP Scan"
+                }
+              },
+              {
+                "id": "KEY_PIP_SIZE",
+                "label": {
+                  "en": "PIP Size"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_PIP_SMALL",
+                "label": {
+                  "en": "PIP Small"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_PIP_SOURCE_CHANGE",
+                "label": {
+                  "en": "PIP Source Change"
+                }
+              },
+              {
+                "id": "KEY_PIP_SWAP",
+                "label": {
+                  "en": "PIP Swap"
+                }
+              },
+              {
+                "id": "KEY_AUTO_ARC_PIP_WIDE",
+                "label": {
+                  "en": "PIP Wide"
+                }
+              },
+              {
+                "id": "KEY_PLAY",
+                "label": {
+                  "en": "Play"
+                }
+              },
+              {
+                "id": "KEY_PLUS100",
+                "label": {
+                  "en": "Plus 100"
+                }
+              },
+              {
+                "id": "KEY_POWEROFF",
+                "label": {
+                  "en": "Power Off"
+                }
+              },
+              {
+                "id": "KEY_POWERON",
+                "label": {
+                  "en": "Power On"
+                }
+              },
+              {
+                "id": "KEY_PRECH",
+                "label": {
+                  "en": "Previous Channel"
+                }
+              },
+              {
+                "id": "KEY_PRINT",
+                "label": {
+                  "en": "Print"
+                }
+              },
+              {
+                "id": "KEY_PROGRAM",
+                "label": {
+                  "en": "Program"
+                }
+              },
+              {
+                "id": "KEY_QUICK_REPLAY",
+                "label": {
+                  "en": "Quick Replay"
+                }
+              },
+              {
+                "id": "KEY_REC",
+                "label": {
+                  "en": "Record"
+                }
+              },
+              {
+                "id": "KEY_RED",
+                "label": {
+                  "en": "Red"
+                }
+              },
+              {
+                "id": "KEY_REPEAT",
+                "label": {
+                  "en": "Repeat"
+                }
+              },
+              {
+                "id": "KEY_RESERVED1",
+                "label": {
+                  "en": "Reserved 1"
+                }
+              },
+              {
+                "id": "KEY_REWIND",
+                "label": {
+                  "en": "Rewind"
+                }
+              },
+              {
+                "id": "KEY_REWIND_",
+                "label": {
+                  "en": "Rewind_"
+                }
+              },
+              {
+                "id": "KEY_RSS",
+                "label": {
+                  "en": "RSS"
                 }
               },
               {
                 "id": "KEY_SVIDEO1",
                 "label": {
-                  "en": "KEY_SVIDEO1"
+                  "en": "S Video 1"
                 }
               },
               {
                 "id": "KEY_SVIDEO2",
                 "label": {
-                  "en": "KEY_SVIDEO2"
+                  "en": "S Video 2"
                 }
               },
               {
                 "id": "KEY_SVIDEO3",
                 "label": {
-                  "en": "KEY_SVIDEO3"
+                  "en": "S Video 3"
                 }
               },
               {
-                "id": "KEY_TOOLS",
+                "id": "KEY_SCALE",
                 "label": {
-                  "en": "KEY_TOOLS"
+                  "en": "Scale"
                 }
               },
               {
-                "id": "KEY_TOPMENU",
+                "id": "KEY_SETUP_CLOCK_TIMER",
                 "label": {
-                  "en": "KEY_TOPMENU"
+                  "en": "Setup Clock Timer"
+                }
+              },
+              {
+                "id": "KEY_SLEEP",
+                "label": {
+                  "en": "Sleep Timer"
+                }
+              },
+              {
+                "id": "KEY_SEFFECT",
+                "label": {
+                  "en": "Sound Effect"
+                }
+              },
+              {
+                "id": "KEY_SRS",
+                "label": {
+                  "en": "SRS"
+                }
+              },
+              {
+                "id": "KEY_STB_MODE",
+                "label": {
+                  "en": "STB Mode"
+                }
+              },
+              {
+                "id": "KEY_STILL_PICTURE",
+                "label": {
+                  "en": "Still Picture"
+                }
+              },
+              {
+                "id": "KEY_STOP",
+                "label": {
+                  "en": "Stop"
+                }
+              },
+              {
+                "id": "KEY_SUB_TITLE",
+                "label": {
+                  "en": "Subtitle"
                 }
               },
               {
                 "id": "KEY_TTX_MIX",
                 "label": {
-                  "en": "KEY_TTX_MIX"
+                  "en": "Teletext Mix"
                 }
               },
               {
                 "id": "KEY_TTX_SUBFACE",
                 "label": {
-                  "en": "KEY_TTX_SUBFACE"
+                  "en": "Teletext Subface"
+                }
+              },
+              {
+                "id": "KEY_TOPMENU",
+                "label": {
+                  "en": "Top Menu"
                 }
               },
               {
                 "id": "KEY_TURBO",
                 "label": {
-                  "en": "KEY_TURBO"
+                  "en": "Turbo"
                 }
               },
               {
                 "id": "KEY_TV",
                 "label": {
-                  "en": "KEY_TV"
+                  "en": "TV"
                 }
               },
               {
                 "id": "KEY_TV_MODE",
                 "label": {
-                  "en": "TV Mode (KEY_TV_MODE)"
-                }
-              },
-              {
-                "id": "KEY_UP",
-                "label": {
-                  "en": "KEY_UP"
-                }
-              },
-              {
-                "id": "KEY_VAL_142",
-                "label": {
-                  "en": "KEY_VAL_142"
-                }
-              },
-              {
-                "id": "KEY_VAL_23",
-                "label": {
-                  "en": "KEY_VAL_23"
-                }
-              },
-              {
-                "id": "KEY_VAL_24",
-                "label": {
-                  "en": "KEY_VAL_24"
-                }
-              },
-              {
-                "id": "KEY_VAL_28",
-                "label": {
-                  "en": "KEY_VAL_28"
-                }
-              },
-              {
-                "id": "KEY_VAL_29",
-                "label": {
-                  "en": "KEY_VAL_29"
-                }
-              },
-              {
-                "id": "KEY_VAL_30",
-                "label": {
-                  "en": "KEY_VAL_30"
-                }
-              },
-              {
-                "id": "KEY_VAL_34",
-                "label": {
-                  "en": "KEY_VAL_34"
-                }
-              },
-              {
-                "id": "KEY_VAL_36",
-                "label": {
-                  "en": "KEY_VAL_36"
-                }
-              },
-              {
-                "id": "KEY_VAL_38",
-                "label": {
-                  "en": "KEY_VAL_38"
-                }
-              },
-              {
-                "id": "KEY_VAL_41",
-                "label": {
-                  "en": "KEY_VAL_41"
-                }
-              },
-              {
-                "id": "KEY_VAL_42",
-                "label": {
-                  "en": "KEY_VAL_42"
-                }
-              },
-              {
-                "id": "KEY_VAL_43",
-                "label": {
-                  "en": "KEY_VAL_43"
-                }
-              },
-              {
-                "id": "KEY_VAL_43",
-                "label": {
-                  "en": "KEY_VAL_43"
+                  "en": "TV Mode"
                 }
               },
               {
                 "id": "KEY_VCHIP",
                 "label": {
-                  "en": "KEY_VCHIP"
+                  "en": "V Chip"
                 }
               },
               {
                 "id": "KEY_VCR_MODE",
                 "label": {
-                  "en": "VCR Mode (KEY_VCR_MODE)"
-                }
-              },
-              {
-                "id": "KEY_VOLDOWN",
-                "label": {
-                  "en": "KEY_VOLDOWN"
-                }
-              },
-              {
-                "id": "KEY_VOLUP",
-                "label": {
-                  "en": "KEY_VOLUP"
+                  "en": "VCR Mode"
                 }
               },
               {
                 "id": "KEY_W_LINK",
                 "label": {
-                  "en": "KEY_W_LINK"
+                  "en": "W Link"
                 }
               },
               {
                 "id": "KEY_WHEEL_LEFT",
                 "label": {
-                  "en": "KEY_WHEEL_LEFT"
+                  "en": "Wheel Left"
                 }
               },
               {
                 "id": "KEY_WHEEL_RIGHT",
                 "label": {
-                  "en": "KEY_WHEEL_RIGHT"
+                  "en": "Wheel Right"
                 }
               },
               {
                 "id": "KEY_YELLOW",
                 "label": {
-                  "en": "KEY_YELLOW"
-                }
-              },
-              {
-                "id": "KEY_ZOOM_IN",
-                "label": {
-                  "en": "KEY_ZOOM_IN"
-                }
-              },
-              {
-                "id": "KEY_ZOOM_MOVE",
-                "label": {
-                  "en": "KEY_ZOOM_MOVE"
-                }
-              },
-              {
-                "id": "KEY_ZOOM_OUT",
-                "label": {
-                  "en": "KEY_ZOOM_OUT"
+                  "en": "Yellow"
                 }
               },
               {
                 "id": "KEY_ZOOM1",
                 "label": {
-                  "en": "KEY_ZOOM1"
+                  "en": "Zoom 1"
                 }
               },
               {
                 "id": "KEY_ZOOM2",
                 "label": {
-                  "en": "KEY_ZOOM2"
+                  "en": "Zoom 2"
+                }
+              },
+              {
+                "id": "KEY_ZOOM_IN",
+                "label": {
+                  "en": "Zoom In"
+                }
+              },
+              {
+                "id": "KEY_ZOOM_MOVE",
+                "label": {
+                  "en": "Zoom Move"
+                }
+              },
+              {
+                "id": "KEY_ZOOM_OUT",
+                "label": {
+                  "en": "Zoom Out"
                 }
               }
             ]

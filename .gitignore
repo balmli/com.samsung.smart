@@ -1,6 +1,7 @@
 env.json
 *.iml
 .idea
+info/*
 node_modules/*
 !node_modules/async-limiter
 !node_modules/http.min
