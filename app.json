@@ -23,6 +23,7 @@
     "large": "/assets/images/large.png",
     "small": "/assets/images/small.png"
   },
+  "homeyCommunityTopicId": 10019,
   "author": {
     "name": "Bjørnar Almli",
     "email": "bjornar.almli@gmail.com"
