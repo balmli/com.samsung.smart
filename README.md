@@ -43,6 +43,10 @@ Use at your own risk. I accept no responsibility for any damages caused by using
 
 ### Release Notes:
 
+#### 1.0.1 
+
+- Autocomplete for keys
+
 #### 1.0.0
 
 - Initial version
