@@ -3,6 +3,7 @@
 const Homey = require('homey');
 const {ManagerArp} = Homey;
 const Samsung = require('../../lib/samsung');
+const keycodes = require('../../lib/keys');
 
 module.exports = class SamsungDevice extends Homey.Device {
 
@@ -141,8 +142,10 @@ module.exports = class SamsungDevice extends Homey.Device {
             .register()
             .registerRunListener((args, state) => {
                 const device = args.device;
-                return device._samsung.sendKey(args.key);
-            });
+                return device._samsung.sendKey(args.key.id);
+            })
+            .getArgument('key')
+            .registerAutocompleteListener((query, args) => args.device.onKeyAutocomplete(query, args));
 
         new Homey.FlowCardAction('launch_app')
             .register()
@@ -206,6 +209,12 @@ module.exports = class SamsungDevice extends Homey.Device {
             if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
             if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
             return 0;
+        }));
+    }
+
+    onKeyAutocomplete(query, args) {
+        return Promise.resolve(keycodes.filter(result => {
+            return result.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
         }));
     }
 
