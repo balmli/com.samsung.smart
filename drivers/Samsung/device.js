@@ -156,9 +156,21 @@ module.exports = class SamsungDevice extends Homey.Device {
             .getArgument('app_id')
             .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
 
+        new Homey.FlowCardAction('youtube')
+            .register()
+            .registerRunListener((args, state) => {
+                if (!args.videoId || args.videoId.length !== 11) {
+                    return Promise.reject('Invalid video id');
+                }
+                return args.device._samsung.launchYouTube(args.videoId);
+            });
+
         new Homey.FlowCardAction('browse')
             .register()
             .registerRunListener((args, state) => {
+                if (!args.url || args.url.length === 0) {
+                    return Promise.reject('Invalid URL');
+                }
                 return args.device._samsung.launchBrowser(args.url);
             });
 

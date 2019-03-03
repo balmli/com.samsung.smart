@@ -30,6 +30,7 @@ Searching for the TV(s) might take up to 30 seconds.  If the TV is not found, th
 - One channel up
 - One channel down
 - Launch app
+- Launch video on YouTube
 - Launch browser
 - Send key
 
@@ -42,6 +43,10 @@ Please report issues at the [issues section on Github](https://github.com/balmli
 Use at your own risk. I accept no responsibility for any damages caused by using this app.
 
 ### Release Notes:
+
+#### 1.0.2
+
+- Added 'Launch video on YouTube' action
 
 #### 1.0.1 
 
