@@ -144,11 +144,10 @@ module.exports = class SamsungDevice extends Homey.Device {
         new Homey.FlowCardCondition('is_on')
             .register()
             .registerRunListener((args, state) => {
-                const device = args.device;
-                if (device._is_powering_off) {
+                if (args.device._is_powering_off) {
                     return false;
                 }
-                return device._samsung.apiActive();
+                return args.device._samsung.apiActive();
             });
 
         new Homey.FlowCardCondition('is_app_running')
@@ -162,8 +161,7 @@ module.exports = class SamsungDevice extends Homey.Device {
         new Homey.FlowCardAction('send_key')
             .register()
             .registerRunListener((args, state) => {
-                const device = args.device;
-                return device._samsung.sendKey(args.key.id);
+                return args.device._samsung.sendKey(args.key.id);
             })
             .getArgument('key')
             .registerAutocompleteListener((query, args) => args.device.onKeyAutocomplete(query, args));
@@ -171,8 +169,7 @@ module.exports = class SamsungDevice extends Homey.Device {
         new Homey.FlowCardAction('launch_app')
             .register()
             .registerRunListener((args, state) => {
-                const device = args.device;
-                return device._samsung.launchApp(args.app_id.id);
+                return args.device._samsung.launchApp(args.app_id.id);
             })
             .getArgument('app_id')
             .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
