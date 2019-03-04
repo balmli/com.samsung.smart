@@ -23,6 +23,7 @@ module.exports = class SamsungDevice extends Homey.Device {
 
         this.registerFlowCards();
         this._pollDeviceInterval = setInterval(this.pollDevice.bind(this), 10000);
+        this.pollDevice();
         this.log('virtual device initialized', this.getData());
     }
 
@@ -118,7 +119,7 @@ module.exports = class SamsungDevice extends Homey.Device {
     }
 
     async refreshAppList() {
-        this._apps = await this._samsung.getListOfApps();
+        this._apps = await this._samsung.getListOfApps().catch(err => this.log('refreshAppList ERROR', err));
         if (!this._apps || !Array.isArray(this._apps)) {
             this._apps = [];
         }

@@ -47,6 +47,7 @@ Use at your own risk. I accept no responsibility for any damages caused by using
 #### 1.0.2
 
 - Added 'Launch video on YouTube' action
+- Refresh list of applications every 5 minutes
 
 #### 1.0.1 
 
