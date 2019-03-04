@@ -18,15 +18,16 @@ module.exports = class SamsungDevice extends Homey.Device {
             api_timeout: 2000
         });
         this._is_powering_off = false;
+        this._apps = undefined;
+        this._lastAppsRefresh = undefined;
 
         this.registerFlowCards();
         this._pollDeviceInterval = setInterval(this.pollDevice.bind(this), 10000);
-        this._apps = await this._samsung.getListOfApps();
         this.log('virtual device initialized', this.getData());
     }
 
     async onAdded() {
-        this.log('virtual device added:', this.getData().id);
+        this.log(`virtual device added: ${this.getData().id}`);
         let settings = await this.getSettings();
         if (settings.ipaddress) {
             await this.updateMacAddress(settings.ipaddress);
@@ -49,7 +50,7 @@ module.exports = class SamsungDevice extends Homey.Device {
 
     async updateIPAddress(ipaddress) {
         this._samsung.config()["ip_address"] = ipaddress;
-        this.log('Updated IP address', ipaddress);
+        this.log(`Updated IP address: ${ipaddress}`);
         this.checkIPAddress(ipaddress);
         this.updateMacAddress(ipaddress);
     }
@@ -63,6 +64,7 @@ module.exports = class SamsungDevice extends Homey.Device {
         if (info) {
             this.log('TV set available');
             this.setAvailable();
+            this._lastAppsRefresh = undefined; // Force app list refresh
         }
     }
 
@@ -70,7 +72,7 @@ module.exports = class SamsungDevice extends Homey.Device {
         ManagerArp.getMAC(ipaddress)
             .then(mac => {
                 if (mac.indexOf(':') >= 0) {
-                    this.log('Found MAC address for IP address', ipaddress, mac);
+                    this.log(`Found MAC address for IP address: ${ipaddress} -> ${mac}`);
                     if (this._samsung) {
                         this._samsung.config()["mac_address"] = mac;
                     }
@@ -82,24 +84,26 @@ module.exports = class SamsungDevice extends Homey.Device {
                 }
             })
             .catch(err => {
-                this.log('Unable to find MAC address for IP address', ipaddress);
+                this.log(`Unable to find MAC address for IP address: ${ipaddress}`);
                 return false;
             });
     }
 
     async pollDevice() {
         let onOff = await this._samsung.apiActive();
-        if (onOff) {
-            if (this.getAvailable() === false) {
-                this.setAvailable();
-            }
+        if (onOff && this.getAvailable() === false) {
+            this.setAvailable();
         }
-        this.log('pollDevice', onOff);
 
         let settings = await this.getSettings();
         if (onOff !== settings["power"]) {
             this.setCapabilityValue('onoff', onOff).catch(console.error);
             this.handleOnOff(onOff);
+        }
+
+        if (onOff) {
+            this.log('pollDevice: TV is on');
+            this.shouldRefreshAppList();
         }
     }
 
@@ -110,6 +114,22 @@ module.exports = class SamsungDevice extends Homey.Device {
         } else {
             this.setSettings({"power": false});
             this._turnedOffTrigger.trigger(this, null, null);
+        }
+    }
+
+    async refreshAppList() {
+        this._apps = await this._samsung.getListOfApps();
+        if (!this._apps || !Array.isArray(this._apps)) {
+            this._apps = [];
+        }
+        this._lastAppsRefresh = new Date().getTime();
+        this.log(`refreshAppList: has ${this._apps.length} apps`);
+    }
+
+    async shouldRefreshAppList() {
+        let now = new Date().getTime();
+        if (!this._lastAppsRefresh || (now - this._lastAppsRefresh) > 300000) {
+            this.refreshAppList();
         }
     }
 
@@ -210,7 +230,7 @@ module.exports = class SamsungDevice extends Homey.Device {
     }
 
     onAppAutocomplete(query, args) {
-        return Promise.resolve(this._apps.map(app => {
+        return Promise.resolve((this._apps === undefined ? [] : this._apps).map(app => {
             return {
                 id: app.appId,
                 name: app.name
