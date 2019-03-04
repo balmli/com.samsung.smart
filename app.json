@@ -46,9 +46,9 @@
   "flow": {
     "triggers": [
       {
-        "id": "turned_on",
+        "id": "onoff_true",
         "title": {
-          "en": "TV is turned on"
+          "en": "TV turned on"
         },
         "args": [
           {
@@ -59,9 +59,9 @@
         ]
       },
       {
-        "id": "turned_off",
+        "id": "onoff_false",
         "title": {
-          "en": "TV is turned off"
+          "en": "TV turned off"
         },
         "args": [
           {
@@ -74,9 +74,9 @@
     ],
     "conditions": [
       {
-        "id": "is_on",
+        "id": "on",
         "title": {
-          "en": "Is !{{on|off}}"
+          "en": "Is turned !{{on|off}}"
         },
         "args": [
           {
@@ -108,6 +108,32 @@
       }
     ],
     "actions": [
+      {
+        "id": "on",
+        "title": {
+          "en": "Turn on"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=Samsung"
+          }
+        ]
+      },
+      {
+        "id": "off",
+        "title": {
+          "en": "Turn off"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=Samsung"
+          }
+        ]
+      },
       {
         "id": "launch_app",
         "title": {

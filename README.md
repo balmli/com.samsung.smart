@@ -10,8 +10,8 @@ Searching for the TV(s) might take up to 30 seconds.  If the TV is not found, th
 
 #### Triggers
 
-- TV is turned on
-- TV is turned off
+- TV turned on
+- TV turned off
 
 #### Conditions
 
