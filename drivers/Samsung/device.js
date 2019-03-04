@@ -91,6 +91,9 @@ module.exports = class SamsungDevice extends Homey.Device {
     }
 
     async pollDevice() {
+        if (this._is_powering_off) {
+            return;
+        }
         let onOff = await this._samsung.apiActive();
         if (onOff && this.getAvailable() === false) {
             this.setAvailable();
@@ -101,7 +104,9 @@ module.exports = class SamsungDevice extends Homey.Device {
             this.setCapabilityValue('onoff', onOff).catch(console.error);
             this.handleOnOff(onOff);
         }
-
+        if (onOff !== this.getCapabilityValue('onoff')) {
+            this.setCapabilityValue('onoff', onOff).catch(console.error);
+        }
         if (onOff) {
             this.log('pollDevice: TV is on');
             this.shouldRefreshAppList();
