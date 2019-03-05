@@ -101,7 +101,8 @@ class SamsungDriver extends Homey.Driver {
                     'id': data.data.id
                 },
                 'settings': {
-                    'ipaddress': ipAddr
+                    'ipaddress': ipAddr,
+                    'tokenAuthSupport': data.data.device.TokenAuthSupport === 'true'
                 }
             });
             socket.emit('list_devices', devices);

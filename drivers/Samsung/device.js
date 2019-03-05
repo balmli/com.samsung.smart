@@ -103,19 +103,21 @@ module.exports = class SamsungDevice extends Homey.Device {
         if (onOff !== this.getCapabilityValue('onoff')) {
             this.setCapabilityValue('onoff', onOff).catch(console.error);
             if (onOff) {
-                this._turnedOnTrigger.trigger(this, null, null);
+                this._turnedOnTrigger.trigger(this);
             } else {
-                this._turnedOffTrigger.trigger(this, null, null);
+                this._turnedOffTrigger.trigger(this);
             }
         }
         if (onOff) {
-            this.log('pollDevice: TV is on');
+            //this.log('pollDevice: TV is on');
             this.shouldRefreshAppList();
+        } else {
+            //this.log('pollDevice: TV is off');
         }
     }
 
     async refreshAppList() {
-        this._apps = await this._samsung.getListOfApps().catch(err => this.log('refreshAppList ERROR', err));
+        this._apps = await this._samsung.getListOfApps(this).catch(err => this.log('refreshAppList ERROR', err));
         if (!this._apps || !Array.isArray(this._apps)) {
             this._apps = [];
         }
@@ -157,7 +159,7 @@ module.exports = class SamsungDevice extends Homey.Device {
 
         new Homey.FlowCardAction('send_key')
             .register()
-            .registerRunListener(args => args.device._samsung.sendKey(args.key.id))
+            .registerRunListener(args => args.device._samsung.sendKey(args.key.id, args.device))
             .getArgument('key')
             .registerAutocompleteListener((query, args) => args.device.onKeyAutocomplete(query, args));
 
@@ -182,7 +184,7 @@ module.exports = class SamsungDevice extends Homey.Device {
                 if (!args.url || args.url.length === 0) {
                     return Promise.reject('Invalid URL');
                 }
-                return args.device._samsung.launchBrowser(args.url);
+                return args.device._samsung.launchBrowser(args.url, args.device);
             });
 
         this.registerCapabilityListener('onoff', async (value, opts) => {
@@ -190,23 +192,23 @@ module.exports = class SamsungDevice extends Homey.Device {
         });
 
         this.registerCapabilityListener('volume_mute', async (value, opts) => {
-            return this._samsung.sendKey('KEY_MUTE');
+            return this._samsung.sendKey('KEY_MUTE', this);
         });
 
         this.registerCapabilityListener('volume_up', async (value, opts) => {
-            return this._samsung.sendKey('KEY_VOLUP');
+            return this._samsung.sendKey('KEY_VOLUP', this);
         });
 
         this.registerCapabilityListener('volume_down', async (value, opts) => {
-            return this._samsung.sendKey('KEY_VOLDOWN');
+            return this._samsung.sendKey('KEY_VOLDOWN', this);
         });
 
         this.registerCapabilityListener('channel_up', async (value, opts) => {
-            return this._samsung.sendKey('KEY_CHUP');
+            return this._samsung.sendKey('KEY_CHUP', this);
         });
 
         this.registerCapabilityListener('channel_down', async (value, opts) => {
-            return this._samsung.sendKey('KEY_CHDOWN');
+            return this._samsung.sendKey('KEY_CHDOWN', this);
         });
     }
 
@@ -224,13 +226,13 @@ module.exports = class SamsungDevice extends Homey.Device {
         this.setCapabilityValue('onoff', onOff).catch(console.error);
         this.addOnOffPolling();
         this.addOnOffTimeout();
-        let response = onOff ? await this._samsung.wake() : await this._samsung.turnOff();
+        let response = onOff ? await this._samsung.wake(this) : await this._samsung.turnOff(this);
         if (response) {
             this.log('turnOnOff: finished: ' + (onOff ? 'on' : 'off'), response);
             if (onOff) {
-                this._turnedOnTrigger.trigger(this, null, null);
+                this._turnedOnTrigger.trigger(this);
             } else {
-                this._turnedOffTrigger.trigger(this, null, null);
+                this._turnedOffTrigger.trigger(this);
             }
         }
         return response;
@@ -255,6 +257,7 @@ module.exports = class SamsungDevice extends Homey.Device {
             this._is_powering_onoff = undefined;
             this.clearOnOffPolling();
             this.clearOnOffTimeout();
+            this.log('onOffPollDevice: finished');
         }
     }
 
