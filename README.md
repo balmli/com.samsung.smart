@@ -34,6 +34,15 @@ Searching for the TV(s) might take up to 30 seconds.  If the TV is not found, th
 - Launch browser
 - Send key
 
+##### Launch video on YouTube
+
+To use the 'Launch video on YouTube' action, the YouTube _video id_ must be provided, which is a 11 character long string.  The video id for this link on YouTube:
+
+https://www.youtube.com/watch?v=aqz-KE-bpKQ
+
+is ```aqz-KE-bpKQ```
+
+
 ### Feedback:
 
 Please report issues at the [issues section on Github](https://github.com/balmli/com.samsung.smart/issues).
