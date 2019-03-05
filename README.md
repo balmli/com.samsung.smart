@@ -44,6 +44,10 @@ Use at your own risk. I accept no responsibility for any damages caused by using
 
 ### Release Notes:
 
+#### 1.0.3
+
+- Improved logic for on / off
+
 #### 1.0.2
 
 - Added 'Launch video on YouTube' action
