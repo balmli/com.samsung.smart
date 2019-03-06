@@ -2,10 +2,11 @@
 
 const Homey = require('homey');
 const {ManagerArp} = Homey;
+const SamDevice = require('../../lib/SamDevice');
 const Samsung = require('../../lib/samsung');
 const keycodes = require('../../lib/keys');
 
-module.exports = class SamsungDevice extends Homey.Device {
+module.exports = class SamsungDevice extends SamDevice {
 
     async onInit() {
         super.onInit();

@@ -1,10 +1,10 @@
 'use strict';
 
-const Homey = require('homey');
+const SamDriver = require('../../lib/SamDriver');
 const Samsung = require('../../lib/samsung');
 const ip = require('ip');
 
-class SamsungDriver extends Homey.Driver {
+module.exports = class SamsungDriver extends SamDriver {
 
     onInit() {
         this.log('Samsung driver has been initialized');
@@ -109,9 +109,7 @@ class SamsungDriver extends Homey.Driver {
         }
     }
 
-}
-
-module.exports = SamsungDriver;
+}:
 
 function guid() {
     function s4() {
