@@ -69,7 +69,7 @@ module.exports = class SamsungDevice extends SamDevice {
             this.log('pollDevice: TV is on');
             this.shouldRefreshAppList();
         } else {
-            this.log('pollDevice: TV is off');
+            //this.log('pollDevice: TV is off');
         }
     }
 
