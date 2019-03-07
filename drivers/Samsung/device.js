@@ -10,15 +10,45 @@ module.exports = class SamsungDevice extends SamDevice {
         super.onInit('Samsung');
 
         let settings = await this.getSettings();
+        if (settings.tokenAuthSupport === undefined || settings.tokenAuthSupport === null) {
+            this.setSettings({"tokenAuthSupport": false});
+            settings.tokenAuthSupport = false;
+        }
         this._samsung = new Samsung({
             name: "homey",
             ip_address: settings.ipaddress,
             mac_address: settings.mac_address,
-            api_timeout: 2000
+            api_timeout: 2000,
+            tokenAuthSupport: settings.tokenAuthSupport,
+            token: settings.token
         });
 
+        this._pairRetries = 3;
         this._apps = [];
         this._lastAppsRefresh = undefined;
+        this.pairDevice();
+    }
+
+    onSettings(oldSettingsObj, newSettingsObj, changedKeysArr, callback) {
+        if (changedKeysArr.includes('ipaddress')) {
+            this.updateIPAddress(newSettingsObj.ipaddress);
+            this._lastAppsRefresh = undefined; // Force app list refresh
+        }
+        if (changedKeysArr.includes('tokenAuthSupport')) {
+            this._samsung.config()["tokenAuthSupport"] = newSettingsObj.tokenAuthSupport;
+            if (newSettingsObj.tokenAuthSupport) {
+                // Will pair if tokenAuthSupport is set to TRUE
+                if (this.getAvailable() === false) {
+                    this.setAvailable();
+                }
+                this.pairDevice();
+            } else {
+                // Clear token
+                this._samsung.config()["token"] = undefined;
+                this.setSettings({"token": undefined});
+            }
+        }
+        callback(null, true);
     }
 
     async pollDevice() {
@@ -43,6 +73,31 @@ module.exports = class SamsungDevice extends SamDevice {
         } else {
             this.log('pollDevice: TV is off');
         }
+    }
+
+    async pairDevice(delay = 5000) {
+        let config = this._samsung.config();
+        if (config.tokenAuthSupport !== true || config.token) {
+            return;
+        }
+
+        await this._delay(delay);
+
+        this.log('Pairing started...');
+        this._samsung.pair()
+            .then(token => {
+                this.log(`pairDevice: got a new token: ${self._config.token}`);
+                this.setSettings({"token": token});
+            })
+            .catch(error => {
+                if (this._pairRetries > 1) {
+                    this.pairDevice(1000);
+                    this.pairRetries--;
+                } else {
+                    this.log('pairDevice: failed', error);
+                    this.setUnavailable('Pair failed.');
+                }
+            });
     }
 
     async refreshAppList() {

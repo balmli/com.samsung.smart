@@ -248,6 +248,14 @@
                 "en": "IP address"
               },
               "value": ""
+            },
+            {
+              "id": "tokenAuthSupport",
+              "type": "checkbox",
+              "label": {
+                "en": "Secure connection"
+              },
+              "value": false
             }
           ]
         }

@@ -78,6 +78,8 @@ For older TVs, that respond to http://TV-IP-ADDRESS:55000
 
 Thanks to https://github.com/natalan/samsung-remote for solution to support older Samsung TVs.
 
+Thanks to https://github.com/tavicu/homebridge-samsung-tizen for solution to pair with newer Samsung TVs.
+
 ### Feedback:
 
 Please report issues at the [issues section on Github](https://github.com/balmli/com.samsung.smart/issues).
@@ -86,11 +88,14 @@ Please report issues at the [issues section on Github](https://github.com/balmli
 
 Use at your own risk. I accept no responsibility for any damages caused by using this app.
 
+Some TVs use a different type of pairing, and are therefore not supported at the moment.
+
 ### Release Notes:
 
 #### 1.0.4 
 
 - Separate device for older Samsung TVs
+- Fixes for newer Samsung TVs
 
 #### 1.0.3
 
