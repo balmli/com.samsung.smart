@@ -1,6 +1,6 @@
 {
   "id": "com.samsung.smart",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "compatibility": ">=2.0.0",
   "sdk": 2,
   "name": {
@@ -268,6 +268,56 @@
       "images": {
         "large": "/drivers/Samsung/assets/images/large.png",
         "small": "/drivers/Samsung/assets/images/small.png"
+      }
+    },
+    {
+      "id": "SamsungLegacy",
+      "name": {
+        "en": "Samsung (legacy)"
+      },
+      "class": "tv",
+      "capabilities": [
+        "onoff",
+        "volume_mute",
+        "volume_up",
+        "volume_down",
+        "channel_up",
+        "channel_down"
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings"
+          },
+          "children": [
+            {
+              "id": "ipaddress",
+              "type": "text",
+              "label": {
+                "en": "IP address"
+              },
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "images": {
+        "large": "/drivers/SamsungLegacy/assets/images/large.jpg",
+        "small": "/drivers/SamsungLegacy/assets/images/small.jpg"
       }
     }
   ]
