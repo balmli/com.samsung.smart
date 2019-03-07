@@ -298,6 +298,14 @@
                 "en": "IP address"
               },
               "value": ""
+            },
+            {
+              "id": "tvAppString",
+              "type": "text",
+              "label": {
+                "en": "TV model"
+              },
+              "value": "UN60D6000"
             }
           ]
         }

@@ -1,7 +1,8 @@
 'use strict';
 
 const Homey = require('homey');
-const {ManagerArp} = Homey;
+const macaddress = require('macaddress');
+
 const SamDevice = require('../../lib/SamDevice');
 const SamsungLegacy = require('../../lib/samsung_legacy');
 const ip = require('ip');
@@ -16,29 +17,27 @@ module.exports = class SamsungLegacyDevice extends SamDevice {
             name: "homey",
             ip_address: settings.ipaddress,
             mac_address: settings.mac_address,
-            api_timeout: 2000
+            api_timeout: 2000,
+            ip_address_homey: ip.address(),
+            appString: 'iphone..iapp.samsung',
+            tvAppString: 'iphone.' + settings.tvAppString + '.iapp.samsung'
         });
 
-        this.initDevice();
+        let self = this;
+        macaddress.one(function (err, mac) {
+            self._samsung.config()["mac_address_homey"] = mac;
+            self.log(`Found MAC address for Homey -> ${mac}`, self._samsung.config());
+        });
     }
 
-    async initDevice() {
-        const homeyIp = ip.address();
-        let config = this._samsung.config();
-        config["ip_address_homey"] = homeyIp;
-        config["appString"] = 'iphone..iapp.samsung';
-        config["tvAppString"] = 'iphone.UN60D6000.iapp.samsung'; // TODO get from TV
-
-        ManagerArp.getMAC(homeyIp)
-            .then(mac => {
-                this.log(`Found MAC address for IP address: ${homeyIp} -> ${mac}`);
-                config["mac_address_homey"] = mac;
-            })
-            .catch(err => {
-                this.log(`Unable to find MAC address for IP address: ${ipaddress}`);
-            });
-
-        this.log('initDevice', this._samsung.config());
+    onSettings(oldSettingsObj, newSettingsObj, changedKeysArr, callback) {
+        if (changedKeysArr.includes('ipaddress')) {
+            this.updateIPAddress(newSettingsObj.ipaddress);
+        }
+        if (changedKeysArr.includes('tvAppString')) {
+            this._samsung.config()["tvAppString"] = 'iphone.' + newSettingsObj.tvAppString + '.iapp.samsung';
+        }
+        callback(null, true);
     }
 
     async pollDevice() {
