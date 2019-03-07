@@ -50,11 +50,6 @@ module.exports = class SamsungLegacyDevice extends SamDevice {
         }
         if (onOff !== this.getCapabilityValue('onoff')) {
             this.setCapabilityValue('onoff', onOff).catch(console.error);
-            if (onOff) {
-                this._turnedOnTrigger.trigger(this);
-            } else {
-                this._turnedOffTrigger.trigger(this);
-            }
         }
     }
 

@@ -59,17 +59,10 @@ module.exports = class SamsungDevice extends SamDevice {
         }
         if (onOff !== this.getCapabilityValue('onoff')) {
             this.setCapabilityValue('onoff', onOff).catch(console.error);
-            if (onOff) {
-                this._turnedOnTrigger.trigger(this);
-            } else {
-                this._turnedOffTrigger.trigger(this);
-            }
         }
         if (onOff) {
             this.log('pollDevice: TV is on');
             this.shouldRefreshAppList();
-        } else {
-            //this.log('pollDevice: TV is off');
         }
     }
 

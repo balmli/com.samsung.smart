@@ -44,34 +44,6 @@
     ]
   },
   "flow": {
-    "triggers": [
-      {
-        "id": "onoff_true",
-        "title": {
-          "en": "TV turned on"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "filter": "driver_id=Samsung"
-          }
-        ]
-      },
-      {
-        "id": "onoff_false",
-        "title": {
-          "en": "TV turned off"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "filter": "driver_id=Samsung"
-          }
-        ]
-      }
-    ],
     "conditions": [
       {
         "id": "on",

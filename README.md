@@ -96,6 +96,7 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 - Separate device for older Samsung TVs
 - Fixes for newer Samsung TVs
+- Minor bugfixes
 
 #### 1.0.3
 
