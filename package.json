@@ -1,6 +1,6 @@
 {
   "name": "com.samsung.smart",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Samsung Smart TV",
   "main": "app.js",
   "scripts": {

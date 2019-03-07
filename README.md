@@ -92,11 +92,14 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ### Release Notes:
 
+#### 1.0.5 
+
+- Minor bugfixes
+
 #### 1.0.4 
 
 - Separate device for older Samsung TVs
 - Fixes for newer Samsung TVs
-- Minor bugfixes
 
 #### 1.0.3
 
