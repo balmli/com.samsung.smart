@@ -38,9 +38,7 @@ module.exports = class SamsungDevice extends SamDevice {
             this._samsung.config()["tokenAuthSupport"] = newSettingsObj.tokenAuthSupport;
             if (newSettingsObj.tokenAuthSupport) {
                 // Will pair if tokenAuthSupport is set to TRUE
-                if (this.getAvailable() === false) {
-                    this.setAvailable();
-                }
+                this._pairRetries = 3;
                 this.pairDevice();
             } else {
                 // Clear token
@@ -92,10 +90,11 @@ module.exports = class SamsungDevice extends SamDevice {
             .catch(error => {
                 if (this._pairRetries > 1) {
                     this.pairDevice(1000);
-                    this.pairRetries--;
+                    this._pairRetries--;
                 } else {
                     this.log('pairDevice: failed', error);
-                    this.setUnavailable('Pair failed.');
+                    this.setSettings({"tokenAuthSupport": false});
+                    config.tokenAuthSupport = false;
                 }
             });
     }
