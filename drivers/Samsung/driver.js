@@ -9,6 +9,7 @@ module.exports = class SamsungDriver extends SamDriver {
         super.onInit('Samsung');
 
         this._samsung = new Samsung({
+            port: 8001,
             api_timeout: 100
         });
     }

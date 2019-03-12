@@ -49,7 +49,7 @@ is ```aqz-KE-bpKQ```
 
 ## Device: SamsungLegacy
 
-For older TVs, that respond to http://TV-IP-ADDRESS:55000
+For older TVs, that respond to port 55000.
 
 #### Triggers
 
@@ -91,6 +91,10 @@ Use at your own risk. I accept no responsibility for any damages caused by using
 Some TVs use a different type of pairing, and are therefore not supported at the moment.
 
 ### Release Notes:
+
+#### 1.1.0
+
+- Fixed 'Samsung (legacy)' device
 
 #### 1.0.5 
 

@@ -17,10 +17,11 @@ module.exports = class SamsungLegacyDevice extends SamDevice {
             name: "homey",
             ip_address: settings.ipaddress,
             mac_address: settings.mac_address,
+            port: 55000,
             api_timeout: 2000,
             ip_address_homey: ip.address(),
             appString: 'iphone..iapp.samsung',
-            tvAppString: 'iphone.' + settings.tvAppString + '.iapp.samsung'
+            tvAppString: 'iphone.UN60D6000.iapp.samsung'
         });
 
         let self = this;
@@ -34,10 +35,18 @@ module.exports = class SamsungLegacyDevice extends SamDevice {
         if (changedKeysArr.includes('ipaddress')) {
             this.updateIPAddress(newSettingsObj.ipaddress);
         }
-        if (changedKeysArr.includes('tvAppString')) {
-            this._samsung.config()["tvAppString"] = 'iphone.' + newSettingsObj.tvAppString + '.iapp.samsung';
-        }
         callback(null, true);
+    }
+
+    async checkIPAddress(ipaddress) {
+        let info = await this._samsung.pingPort(ipaddress);
+        if (info) {
+            this.log('TV set available');
+            this.setAvailable();
+        } else {
+            this.log('TV set unavailable');
+            this.setUnavailable('TV not found. Check IP address.');
+        }
     }
 
     async pollDevice() {
@@ -50,6 +59,9 @@ module.exports = class SamsungLegacyDevice extends SamDevice {
         }
         if (onOff !== this.getCapabilityValue('onoff')) {
             this.setCapabilityValue('onoff', onOff).catch(console.error);
+        }
+        if (onOff) {
+            this.log('pollDevice: TV is on');
         }
     }
 

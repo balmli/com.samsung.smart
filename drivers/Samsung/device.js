@@ -18,6 +18,7 @@ module.exports = class SamsungDevice extends SamDevice {
             name: "homey",
             ip_address: settings.ipaddress,
             mac_address: settings.mac_address,
+            port: 8001,
             api_timeout: 2000,
             tokenAuthSupport: settings.tokenAuthSupport,
             token: settings.token
@@ -47,6 +48,18 @@ module.exports = class SamsungDevice extends SamDevice {
             }
         }
         callback(null, true);
+    }
+
+    async checkIPAddress(ipaddress) {
+        let info = await this._samsung.getInfo(ipaddress)
+            .catch(err => {
+                this.log('TV set unavailable');
+                this.setUnavailable('TV not found. Check IP address.');
+            });
+        if (info) {
+            this.log('TV set available');
+            this.setAvailable();
+        }
     }
 
     async pollDevice() {

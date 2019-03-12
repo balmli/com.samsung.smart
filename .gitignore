@@ -6,6 +6,7 @@ node_modules/*
 !node_modules/async-limiter
 !node_modules/http.min
 !node_modules/ip
+!node_modules/is-port-reachable
 !node_modules/macaddress
 !node_modules/wake_on_lan
 !node_modules/ws

@@ -1,6 +1,6 @@
 {
   "id": "com.samsung.smart",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "compatibility": ">=2.0.0",
   "sdk": 2,
   "name": {
@@ -89,7 +89,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=Samsung"
+            "filter": "driver_id=Samsung|SamsungLegacy"
           }
         ]
       },
@@ -102,7 +102,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=Samsung"
+            "filter": "driver_id=Samsung|SamsungLegacy"
           }
         ]
       },
@@ -178,7 +178,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=Samsung"
+            "filter": "driver_id=Samsung|SamsungLegacy"
           },
           {
             "name": "key",
@@ -278,14 +278,6 @@
                 "en": "IP address"
               },
               "value": ""
-            },
-            {
-              "id": "tvAppString",
-              "type": "text",
-              "label": {
-                "en": "TV model"
-              },
-              "value": "UN60D6000"
             }
           ]
         }
