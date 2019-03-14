@@ -15,17 +15,19 @@ module.exports = class SamsungDevice extends SamDevice {
             settings.tokenAuthSupport = false;
         }
         this._samsung = new Samsung({
+            device: this,
             name: "homey",
             ip_address: settings.ipaddress,
             mac_address: settings.mac_address,
             port: 8001,
             api_timeout: 2000,
+            delay_keys: settings.delay_keys || 100,
+            delay_channel_keys: settings.delay_channel_keys || 1250,
             tokenAuthSupport: settings.tokenAuthSupport,
             token: settings.token
         });
 
         this._pairRetries = 3;
-        this._apps = [];
         this._lastAppsRefresh = undefined;
         this.pairDevice();
     }
@@ -34,6 +36,12 @@ module.exports = class SamsungDevice extends SamDevice {
         if (changedKeysArr.includes('ipaddress')) {
             this.updateIPAddress(newSettingsObj.ipaddress);
             this._lastAppsRefresh = undefined; // Force app list refresh
+        }
+        if (changedKeysArr.includes('delay_keys')) {
+            this._samsung.config()["delay_keys"] = newSettingsObj.delay_keys;
+        }
+        if (changedKeysArr.includes('delay_channel_keys')) {
+            this._samsung.config()["delay_channel_keys"] = newSettingsObj.delay_channel_keys;
         }
         if (changedKeysArr.includes('tokenAuthSupport')) {
             this._samsung.config()["tokenAuthSupport"] = newSettingsObj.tokenAuthSupport;
@@ -106,12 +114,8 @@ module.exports = class SamsungDevice extends SamDevice {
     }
 
     async refreshAppList() {
-        let apps = await this._samsung.getListOfApps(this).catch(err => this.log('refreshAppList ERROR', err));
-        if (apps && apps.length > 0) {
-            this._apps = apps
-        }
+        this._samsung.getListOfApps().catch(err => this.log('refreshAppList ERROR', err));
         this._lastAppsRefresh = new Date().getTime();
-        this.log(`refreshAppList: has ${this._apps.length} apps`);
     }
 
     async shouldRefreshAppList() {
@@ -151,12 +155,13 @@ module.exports = class SamsungDevice extends SamDevice {
                 if (!args.url || args.url.length === 0) {
                     return Promise.reject('Invalid URL');
                 }
-                return args.device._samsung.launchBrowser(args.url, args.device);
+                return args.device._samsung.launchBrowser(args.url);
             });
     }
 
     onAppAutocomplete(query, args) {
-        return Promise.resolve((this._apps === undefined ? [] : this._apps).map(app => {
+        let apps = this._samsung.getApps();
+        return Promise.resolve((apps === undefined ? [] : apps).map(app => {
             return {
                 id: app.appId,
                 name: app.name

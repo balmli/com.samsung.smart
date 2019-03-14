@@ -14,11 +14,14 @@ module.exports = class SamsungLegacyDevice extends SamDevice {
 
         let settings = await this.getSettings();
         this._samsung = new SamsungLegacy({
+            device: this,
             name: "homey",
             ip_address: settings.ipaddress,
             mac_address: settings.mac_address,
             port: 55000,
             api_timeout: 2000,
+            delay_keys: settings.delay_keys || 100,
+            delay_channel_keys: settings.delay_channel_keys || 1250,
             ip_address_homey: ip.address(),
             appString: 'iphone..iapp.samsung',
             tvAppString: 'iphone.UN60D6000.iapp.samsung'
@@ -34,6 +37,12 @@ module.exports = class SamsungLegacyDevice extends SamDevice {
     onSettings(oldSettingsObj, newSettingsObj, changedKeysArr, callback) {
         if (changedKeysArr.includes('ipaddress')) {
             this.updateIPAddress(newSettingsObj.ipaddress);
+        }
+        if (changedKeysArr.includes('delay_keys')) {
+            this._samsung.config()["delay_keys"] = newSettingsObj.delay_keys;
+        }
+        if (changedKeysArr.includes('delay_channel_keys')) {
+            this._samsung.config()["delay_channel_keys"] = newSettingsObj.delay_channel_keys;
         }
         callback(null, true);
     }

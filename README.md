@@ -2,7 +2,7 @@
 
 Samsung SmartTV app.
 
-### Install
+## Install
 
 To install the device, the TV(s) must be turned on and on the same network as the Homey.
 
@@ -33,19 +33,12 @@ For newer TVs, that respond to http://TV-IP-ADDRESS:8001/api/v2/
 - Turn the volume down
 - One channel up
 - One channel down
+- Change channel
 - Launch app
 - Launch video on YouTube
 - Launch browser
 - Send key
-
-##### Launch video on YouTube
-
-To use the 'Launch video on YouTube' action, the YouTube _video id_ must be provided, which is a 11 character long string.  The video id for this link on YouTube:
-
-https://www.youtube.com/watch?v=aqz-KE-bpKQ
-
-is ```aqz-KE-bpKQ```
-
+- Send list of keys
 
 ## Device: SamsungLegacy
 
@@ -71,26 +64,70 @@ For older TVs, that respond to port 55000.
 - Turn the volume down
 - One channel up
 - One channel down
+- Change channel
 - Send key
+- Send list of keys
+
+## Details about actions:
+
+#### Change channel
+
+The 'Change channel' action will send a list of number-keys for the channel number, and finally the 'Enter'-key.  The default delay between each key is 1250 ms, but this can be changed in 'Advanced settings'.
+
+*Example: switch to channel '123':*
+
+Will send this list of keys: 'Key 1', 'Key 2', 'Key 3', 'Enter'.
 
 
-### Acknowledgements:
+#### Send list of keys
+
+With the 'Send list of keys' action it is possible to send a list of keys, with a short delay between each key.  The default delay between each key is 100 ms, but this can be changed in 'Advanced settings'.
+
+For the list of keys, see [here](./keys.md). 
+
+To send the same key several times, add a ```*X``` after the key, where X is the number of times for the key.
+
+*Example: Send 'Home', 'Left' and 'Enter':*
+
+```KEY_HOME,KEY_LEFT,KEY_ENTER```
+
+*Example: Set the aspect ratio, increase the volume 10 times and press play:*
+
+```KEY_16_9,KEY_VOLUP*10,KEY_PLAY```
+
+
+#### Launch video on YouTube (only Samsung)
+
+To use the 'Launch video on YouTube' action, the YouTube _video id_ must be provided, which is a 11 character long string.  The video id for this link on YouTube:
+
+https://www.youtube.com/watch?v=aqz-KE-bpKQ
+
+is ```aqz-KE-bpKQ```
+
+
+## Acknowledgements:
 
 Thanks to https://github.com/natalan/samsung-remote for solution to support older Samsung TVs.
 
 Thanks to https://github.com/tavicu/homebridge-samsung-tizen for solution to pair with newer Samsung TVs.
 
-### Feedback:
+## Feedback:
 
 Please report issues at the [issues section on Github](https://github.com/balmli/com.samsung.smart/issues).
 
-### Disclaimer
+## Disclaimer
 
 Use at your own risk. I accept no responsibility for any damages caused by using this app.
 
 Some TVs use a different type of pairing, and are therefore not supported at the moment.
 
-### Release Notes:
+## Release Notes:
+
+#### 1.2.0
+
+- Faster communication with the TV by keeping the socket open for a while (Samsung)
+- Action to change channel (Samsung and Samsung legacy)
+- Action to send a list of keys (Samsung and Samsung legacy)
 
 #### 1.1.0
 
