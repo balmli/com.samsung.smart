@@ -81,7 +81,7 @@ Will send this list of keys: 'Key 1', 'Key 2', 'Key 3', 'Enter'.
 
 #### Send list of keys
 
-With the 'Send list of keys' action it is possible to send a list of keys, with a short delay between each key.  The default delay between each key is 100 ms, but this can be changed in 'Advanced settings'.
+With the 'Send list of keys' action it is possible to send a list of keys, with a short delay between each key.  The default delay between each key is 100 ms, but this can be changed in 'Advanced settings'.  If the delay is too low, the TV might not respond.
 
 For the list of keys, see [here](./keys.md). 
 
