@@ -4,10 +4,12 @@ env.json
 info/*
 node_modules/*
 !node_modules/async-limiter
+!node_modules/eventemitter3
 !node_modules/http.min
 !node_modules/ip
 !node_modules/is-port-reachable
 !node_modules/macaddress
-!node_modules/p-throttle
+!node_modules/minimist
+!node_modules/p-queue
 !node_modules/wake_on_lan
 !node_modules/ws

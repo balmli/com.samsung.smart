@@ -85,15 +85,15 @@ With the 'Send list of keys' action it is possible to send a list of keys, with 
 
 For the list of keys, see [here](./keys.md). 
 
-To send the same key several times, add a ```*X``` after the key, where X is the number of times for the key.
+To send the same key several times, add a ```*X``` after the key, where X is the number of times for the key.  To add an extra delay before the next key, just add a number between 1 - 9999. The number is milliseconds.
 
 *Example: Send 'Home', 'Left' and 'Enter':*
 
 ```KEY_HOME,KEY_LEFT,KEY_ENTER```
 
-*Example: Set the aspect ratio, increase the volume 10 times and press play:*
+*Example: Set the aspect ratio, increase the volume 10 times, wait 2.5 seconds (2500 ms) and then press play:*
 
-```KEY_16_9,KEY_VOLUP*10,KEY_PLAY```
+```KEY_16_9,KEY_VOLUP*10,2500,KEY_PLAY```
 
 
 #### Launch video on YouTube (only Samsung)
