@@ -40,7 +40,35 @@ For newer TVs, that respond to http://TV-IP-ADDRESS:8001/api/v2/
 - Send key
 - Send list of keys
 
-## Device: SamsungLegacy
+## Device: Samsung (encrypted)
+
+For H, HU, J, JU and JS models. 
+
+#### Triggers
+
+- TV turned on
+- TV turned off
+
+#### Conditions
+
+- Is on / off
+
+#### Actions
+
+- Turn on
+- Turn off
+- Toggle on or off
+- Mute the volume
+- Unmute the volume
+- Turn the volume up
+- Turn the volume down
+- One channel up
+- One channel down
+- Change channel
+- Send key
+- Send list of keys
+
+## Device: Samsung (legacy)
 
 For older TVs, that respond to port 55000.
 
@@ -111,6 +139,8 @@ Thanks to https://github.com/natalan/samsung-remote for solution to support olde
 
 Thanks to https://github.com/tavicu/homebridge-samsung-tizen for solution to pair with newer Samsung TVs.
 
+Thanks to https://github.com/tdudek/samsung-remote-models-2014-and-newer and https://github.com/kkapitan/homebridge-homesung for solution to pair with H, HU, J, JU and JS models. 
+
 ## Feedback:
 
 Please report issues at the [issues section on Github](https://github.com/balmli/com.samsung.smart/issues).
@@ -122,6 +152,10 @@ Use at your own risk. I accept no responsibility for any damages caused by using
 Some TVs use a different type of pairing, and are therefore not supported at the moment.
 
 ## Release Notes:
+
+#### 1.3.0
+
+- Support for H, HU, J, JU and JS models.
 
 #### 1.2.0
 

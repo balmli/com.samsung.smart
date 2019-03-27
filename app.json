@@ -1,6 +1,6 @@
 {
   "id": "com.samsung.smart",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "compatibility": ">=2.0.0",
   "sdk": 2,
   "name": {
@@ -321,6 +321,99 @@
       "images": {
         "large": "/drivers/Samsung/assets/images/large.png",
         "small": "/drivers/Samsung/assets/images/small.png"
+      }
+    },
+    {
+      "id": "SamsungEncrypted",
+      "name": {
+        "en": "Samsung (encrypted)"
+      },
+      "class": "tv",
+      "capabilities": [
+        "onoff",
+        "volume_mute",
+        "volume_up",
+        "volume_down",
+        "channel_up",
+        "channel_down"
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings"
+          },
+          "children": [
+            {
+              "id": "ipaddress",
+              "type": "label",
+              "label": {
+                "en": "IP address"
+              },
+              "value": ""
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Timing"
+          },
+          "children": [
+            {
+              "id": "delay_keys",
+              "type": "number",
+              "min": 1,
+              "max:": 5000,
+              "step": 1,
+              "label": {
+                "en": "Delay between keys (ms)"
+              },
+              "value": 100
+            },
+            {
+              "id": "delay_channel_keys",
+              "type": "number",
+              "min": 1,
+              "max:": 5000,
+              "step": 1,
+              "label": {
+                "en": "Delay between channel keys (ms)"
+              },
+              "value": 1250
+            }
+          ]
+        }
+      ],
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "set_pin_code"
+          },
+          "options": {
+            "singular": true
+          }
+        },
+        {
+          "id": "set_pin_code",
+          "template": "pincode",
+          "navigation": {
+            "next": "add_my_devices"
+          },
+          "options": {
+            "type": "number"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "images": {
+        "large": "/drivers/SamsungEncrypted/assets/images/large.jpg",
+        "small": "/drivers/SamsungEncrypted/assets/images/small.jpg"
       }
     },
     {
