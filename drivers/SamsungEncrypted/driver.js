@@ -11,7 +11,7 @@ module.exports = class SamsungEncryptedDriver extends SamDriver {
 
         this._samsung = new SamsungEncrypted({
             port: 8001,
-            api_timeout: 100,
+            api_timeout: 200,
             appId: '721b6fce-4ee6-48ba-8045-955a539edadb',
             deviceId: undefined,
             userId: '654321'
@@ -39,33 +39,54 @@ module.exports = class SamsungEncryptedDriver extends SamDriver {
 
         });
 
-        socket.on('pincode', function (pincode, callback) {
-            self.setPinCode(pincode)
-                .then(result => {
+        socket.on('pincode', async (pincode, callback) => {
+            try {
+                await self.setPinCode(pincode);
+                if (self._identity) {
                     callback(null, true);
-                })
-                .catch(err => {
+                } else {
+                    self.log('socket pincode error: no identify');
                     callback(null, false);
-                })
+                }
+            } catch (err) {
+                self.log('socket pincode error:', err);
+                callback(null, false);
+            } finally {
+                const hidePinPage = await self._samsung.hidePinPage();
+                self.log('socket pincode hidePinPage:', hidePinPage);
+            }
+        });
+
+        socket.on('showView', async (viewId, callback) => {
+            if (viewId === 'pin_wait') {
+                await self._samsung.showPinPage();
+                await self._samsung.startPairing();
+                socket.showView('set_pin_code');
+            }
+            callback();
+        });
+
+        socket.on('add_device', (device, callback) => {
+            self.log('socket add_device:', device);
         });
 
         socket.on('disconnect', function () {
+            self.log('socket disconnect');
             self.clearSearchTimeout();
         });
     }
 
     async checkForTV(ipAddr, devices, socket) {
-        this.log('searchForTVs', ipAddr);
+        this.log('checkForTV:', ipAddr);
         let data = await this._samsung.getInfo(ipAddr).catch(err => {
         });
         if (data && data.data) {
-            this.log('Found TV', ipAddr, data.data);
-            this.stopSearch = true;
+            this.log('checkForTV: found TV:', ipAddr, data.data);
+            this.clearSearchTimeout();
 
             devices.push({
                 name: data.data.DeviceName,
                 data: {
-                    /*id: data.data.DeviceID*/
                     id: data.data.ModelName
                 },
                 settings: {
@@ -76,42 +97,27 @@ module.exports = class SamsungEncryptedDriver extends SamDriver {
                 }
             });
             this._devices = devices;
-
-            this._samsung.config()['ip_address'] = ipAddr;
-            console.log('config', this._samsung.config());
-
-            await this._samsung.showPinPage();
-            await this._samsung.startPairing();
-
             socket.emit('list_devices', this._devices);
+            this._samsung.config()['ip_address'] = ipAddr;
         }
     }
 
     async setPinCode(pincode) {
+        this._identity = undefined;
         const pin = pincode.join('');
 
-        console.log('setPinCode', pin, this._devices);
+        this.log('setPinCode:', pin, this._devices);
 
         let device = this._devices.length > 0 ? this._devices[0] : undefined;
         if (!device) {
-            console.log('setPinCode hidePinPage 1:', await this._samsung.hidePinPage());
             throw new Error('Found no Samsung TVs.');
         }
 
-        try {
-            let requestId = await this._samsung.confirmPin(pin);
-            console.log('setPinCode requestId:', requestId);
+        let requestId = await this._samsung.confirmPin(pin);
+        this.log('setPinCode requestId:', requestId);
 
-            this._identity = await this._samsung.acknowledgeRequestId(requestId);
-            console.log('setPinCode identity:', this._identity);
-            //socket.emit('list_devices', this._devices);
-
-        } catch (err) {
-            console.log('setPinCode error', err);
-            throw new Error('Pairing failed.');
-        } finally {
-            console.log('setPinCode hidePinPage 2:', await this._samsung.hidePinPage());
-        }
+        this._identity = await this._samsung.acknowledgeRequestId(requestId);
+        this.log('setPinCode identity:', this._identity);
     }
 
 };

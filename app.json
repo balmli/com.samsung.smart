@@ -1,6 +1,6 @@
 {
   "id": "com.samsung.smart",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "compatibility": ">=2.0.0",
   "sdk": 2,
   "name": {
@@ -390,18 +390,19 @@
           "id": "list_devices",
           "template": "list_devices",
           "navigation": {
-            "next": "set_pin_code"
+            "next": "pin_wait"
           },
           "options": {
             "singular": true
           }
         },
         {
+          "id": "pin_wait",
+          "template": "loading"
+        },
+        {
           "id": "set_pin_code",
           "template": "pincode",
-          "navigation": {
-            "next": "add_my_devices"
-          },
           "options": {
             "type": "number"
           }

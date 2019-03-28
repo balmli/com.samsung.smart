@@ -23,11 +23,15 @@ module.exports = class SamsungEncryptedDevice extends SamDevice {
             duid: settings.duid,
             modelName: settings.modelName,
             modelClass: settings.modelClass,
-            identitySessionId: settings.identitySessionId || (identity ? identity.sessionId : undefined),
-            identityAesKey: settings.identityAesKey || (identity ? identity.aesKey : undefined)
+            identitySessionId: settings.identitySessionId || (identity ? identity.sessionId : undefined),
+            identityAesKey: settings.identityAesKey || (identity ? identity.aesKey : undefined)
         });
 
-        console.log('config 1', this._samsung.config());
+        this.log('onInit config:',
+            this._samsung.config()['ip_address'],
+            this._samsung.config()['identitySessionId'],
+            this._samsung.config()['identityAesKey']
+        );
     }
 
     async onAdded() {
