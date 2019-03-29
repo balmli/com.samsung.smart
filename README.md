@@ -1,12 +1,12 @@
-# Samsung SmartTV
-
-Samsung SmartTV app.
+# Samsung SmartTV app
 
 ## Install
 
 To install the device, the TV(s) must be turned on and on the same network as the Homey.
 
 Searching for the TV(s) might take up to 30 seconds.  If the TV is not found, the IP address can be set manually.
+
+To be able to turn the TV on, it must support wake-on-lan / wake-on-wireless.
 
 ## Device: Samsung
 
