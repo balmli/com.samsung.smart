@@ -91,7 +91,7 @@ module.exports = class SamsungEncryptedDriver extends SamDriver {
                 },
                 settings: {
                     ipaddress: ipAddr,
-                    duid: data.data.DUID && data.data.DUID.split(':').length > 1 ? data.data.DUID.split(':')[1] : undefined,
+                    duid: getDuid(data.data),
                     modelName: data.data.ModelName,
                     modelClass: this._samsung.modelClass(data.data.ModelName)
                 }
@@ -100,6 +100,12 @@ module.exports = class SamsungEncryptedDriver extends SamDriver {
             socket.emit('list_devices', this._devices);
             this._samsung.config()['ip_address'] = ipAddr;
         }
+    }
+
+    getDuid(val) {
+        return val && val.DUID ?
+            (val.DUID.indexOf(':') >= 0 && val.DUID.split(':').length > 1 ? val.DUID.split(':')[1] : val.DUID) :
+            undefined;
     }
 
     async setPinCode(pincode) {
