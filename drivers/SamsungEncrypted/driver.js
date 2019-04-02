@@ -91,7 +91,7 @@ module.exports = class SamsungEncryptedDriver extends SamDriver {
                 },
                 settings: {
                     ipaddress: ipAddr,
-                    duid: getDuid(data.data),
+                    duid: data.data.DUID && data.data.DUID.split(':').length > 1 ? data.data.DUID.split(':')[1] : undefined,
                     modelName: data.data.ModelName,
                     modelClass: this._samsung.modelClass(data.data.ModelName)
                 }
