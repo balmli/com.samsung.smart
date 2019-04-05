@@ -11,7 +11,7 @@ module.exports = class SamsungEncryptedDriver extends SamDriver {
 
         this._samsung = new SamsungEncrypted({
             port: 8001,
-            api_timeout: 200,
+            api_timeout: 100,
             appId: '721b6fce-4ee6-48ba-8045-955a539edadb',
             deviceId: undefined,
             userId: '654321'
@@ -91,7 +91,7 @@ module.exports = class SamsungEncryptedDriver extends SamDriver {
                 },
                 settings: {
                     ipaddress: ipAddr,
-                    duid: data.data.DUID && data.data.DUID.split(':').length > 1 ? data.data.DUID.split(':')[1] : undefined,
+                    duid: this.getDuid(data.data),
                     modelName: data.data.ModelName,
                     modelClass: this._samsung.modelClass(data.data.ModelName)
                 }
