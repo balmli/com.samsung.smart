@@ -156,6 +156,7 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 #### 1.4.0
 
 - Added 'Power on/off is in progress' condition (all devices)
+- Changed the order of the volume and channel keys (all devices, need to reinstall the device for this to work)
 
 #### 1.3.0
 

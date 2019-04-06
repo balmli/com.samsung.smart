@@ -256,11 +256,11 @@
       "class": "tv",
       "capabilities": [
         "onoff",
-        "volume_mute",
         "volume_up",
-        "volume_down",
         "channel_up",
-        "channel_down"
+        "volume_down",
+        "channel_down",
+        "volume_mute"
       ],
       "settings": [
         {
@@ -344,11 +344,11 @@
       "class": "tv",
       "capabilities": [
         "onoff",
-        "volume_mute",
         "volume_up",
-        "volume_down",
         "channel_up",
-        "channel_down"
+        "volume_down",
+        "channel_down",
+        "volume_mute"
       ],
       "settings": [
         {
@@ -438,11 +438,11 @@
       "class": "tv",
       "capabilities": [
         "onoff",
-        "volume_mute",
         "volume_up",
-        "volume_down",
         "channel_up",
-        "channel_down"
+        "volume_down",
+        "channel_down",
+        "volume_mute"
       ],
       "settings": [
         {
