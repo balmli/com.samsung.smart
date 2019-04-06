@@ -284,6 +284,14 @@
                 "en": "Secure connection"
               },
               "value": false
+            },
+            {
+              "id": "poll_interval",
+              "type": "number",
+              "label": {
+                "en": "Polling interval for TV status (s)"
+              },
+              "value": 10
             }
           ]
         },
@@ -364,6 +372,14 @@
                 "en": "IP address"
               },
               "value": ""
+            },
+            {
+              "id": "poll_interval",
+              "type": "number",
+              "label": {
+                "en": "Polling interval for TV status (s)"
+              },
+              "value": 10
             }
           ]
         },
@@ -458,6 +474,14 @@
                 "en": "IP address"
               },
               "value": ""
+            },
+            {
+              "id": "poll_interval",
+              "type": "number",
+              "label": {
+                "en": "Polling interval for TV status (s)"
+              },
+              "value": 10
             }
           ]
         },

@@ -38,6 +38,9 @@ module.exports = class SamsungLegacyDevice extends SamDevice {
         if (changedKeysArr.includes('ipaddress')) {
             this.updateIPAddress(newSettingsObj.ipaddress);
         }
+        if (changedKeysArr.includes('poll_interval')) {
+            this.addPollDevice(newSettingsObj.poll_interval);
+        }
         if (changedKeysArr.includes('delay_keys')) {
             this._samsung.config()["delay_keys"] = newSettingsObj.delay_keys;
         }

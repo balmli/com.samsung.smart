@@ -37,6 +37,9 @@ module.exports = class SamsungDevice extends SamDevice {
             this.updateIPAddress(newSettingsObj.ipaddress);
             this._lastAppsRefresh = undefined; // Force app list refresh
         }
+        if (changedKeysArr.includes('poll_interval')) {
+            this.addPollDevice(newSettingsObj.poll_interval);
+        }
         if (changedKeysArr.includes('delay_keys')) {
             this._samsung.config()["delay_keys"] = newSettingsObj.delay_keys;
         }

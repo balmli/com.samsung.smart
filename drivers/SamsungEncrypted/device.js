@@ -59,6 +59,9 @@ module.exports = class SamsungEncryptedDevice extends SamDevice {
     }
 
     onSettings(oldSettingsObj, newSettingsObj, changedKeysArr, callback) {
+        if (changedKeysArr.includes('poll_interval')) {
+            this.addPollDevice(newSettingsObj.poll_interval);
+        }
         if (changedKeysArr.includes('delay_keys')) {
             this._samsung.config()["delay_keys"] = newSettingsObj.delay_keys;
         }
