@@ -1,6 +1,6 @@
 {
   "id": "com.samsung.smart",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "compatibility": ">=2.0.0",
   "sdk": 2,
   "name": {
@@ -54,7 +54,20 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=Samsung|SamsungLegacy"
+            "filter": "driver_id=Samsung|SamsungEncrypted|SamsungLegacy"
+          }
+        ]
+      },
+      {
+        "id": "is_power_onoff",
+        "title": {
+          "en": "Power on/off !{{is|is not}} in progress"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=Samsung|SamsungEncrypted|SamsungLegacy"
           }
         ]
       },
@@ -89,7 +102,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=Samsung|SamsungLegacy"
+            "filter": "driver_id=Samsung|SamsungEncrypted|SamsungLegacy"
           }
         ]
       },
@@ -102,7 +115,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=Samsung|SamsungLegacy"
+            "filter": "driver_id=Samsung|SamsungEncrypted|SamsungLegacy"
           }
         ]
       },
@@ -178,7 +191,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=Samsung|SamsungLegacy"
+            "filter": "driver_id=Samsung|SamsungEncrypted|SamsungLegacy"
           },
           {
             "name": "key",
@@ -198,7 +211,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=Samsung|SamsungLegacy"
+            "filter": "driver_id=Samsung|SamsungEncrypted|SamsungLegacy"
           },
           {
             "name": "keys1",
@@ -218,7 +231,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=Samsung|SamsungLegacy"
+            "filter": "driver_id=Samsung|SamsungEncrypted|SamsungLegacy"
           },
           {
             "name": "channel",

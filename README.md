@@ -153,6 +153,10 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.4.0
+
+- Added 'Power on/off is in progress' condition (all devices)
+
 #### 1.3.0
 
 - Support for H, HU, J, JU and JS models.
