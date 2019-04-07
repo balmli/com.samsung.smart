@@ -158,6 +158,7 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 - Added 'Power on/off is in progress' condition (all devices)
 - Changed the order of the volume and channel keys (all devices, need to reinstall the device for this to work)
 - Added 'Polling interval for TV status (s)' in Advanced settings (all device)
+- Added screen to manually set IP address (Samsung encrypted)
 
 #### 1.3.0
 

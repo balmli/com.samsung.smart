@@ -1,1 +1,14 @@
-{}
+{
+  "pair": {
+    "title": "Samsung (encrypted)",
+    "ipaddress_label": "ENTER THE IP ADDRESS FOR YOUR TV",
+    "ipaddress": "IP address",
+    "add": "Add",
+    "cancel": "Cancel",
+    "valid_ip_address": "Enter a valid IP address (xxx.xxx.xxx.xxx)",
+    "invalid_ipaddress": "Invalid IP address"
+  },
+  "errors": {
+    "connection": "Connection could not be estabished."
+  }
+}

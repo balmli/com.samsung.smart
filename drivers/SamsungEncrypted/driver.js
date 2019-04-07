@@ -11,7 +11,7 @@ module.exports = class SamsungEncryptedDriver extends SamDriver {
 
         this._samsung = new SamsungEncrypted({
             port: 8001,
-            api_timeout: 100,
+            api_timeout: 125,
             appId: '721b6fce-4ee6-48ba-8045-955a539edadb',
             deviceId: undefined,
             userId: '654321'
@@ -29,9 +29,14 @@ module.exports = class SamsungEncryptedDriver extends SamDriver {
         let self = this;
         socket.on('list_devices', function (data, callback) {
 
+            self._samsung.config()['api_timeout'] = 125;
             self.searchForTVs(ip.address(), socket)
                 .then(devices => {
-                    callback(null, devices);
+                    if (devices.length === 0) {
+                        socket.showView('ip_address');
+                    } else {
+                        callback(null, devices);
+                    }
                 })
                 .catch(err => {
                     callback(new Error('Found no Samsung TVs.'));
@@ -54,6 +59,26 @@ module.exports = class SamsungEncryptedDriver extends SamDriver {
             } finally {
                 const hidePinPage = await self._samsung.hidePinPage();
                 self.log('socket pincode hidePinPage:', hidePinPage);
+            }
+        });
+
+        socket.on('manual_input', async (userdata, callback) => {
+            try {
+                self._samsung.config()['api_timeout'] = 2000;
+                let data = await self._samsung.getInfo(userdata.ipaddress);
+                if (data) {
+                    let devices = [];
+                    await self.checkForTV(userdata.ipaddress, devices, socket);
+                    if (self._devices.length > 0) {
+                        callback(null, self._devices[0]);
+                    } else {
+                        callback('error', null);
+                    }
+                } else {
+                    callback('error', null);
+                }
+            } catch (err) {
+                callback('error', null);
             }
         });
 

@@ -426,6 +426,9 @@
           }
         },
         {
+          "id": "ip_address"
+        },
+        {
           "id": "pin_wait",
           "template": "loading"
         },

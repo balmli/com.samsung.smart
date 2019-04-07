@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="material.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<form action="#">
+    <table style="width: 100%;">
+        <tr style="height: 100px">
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td style="width: 5%">&nbsp;</td>
+            <td style="width: 90%"><h4 data-i18n="pair.title"></h4></td>
+            <td style="width: 5%">&nbsp;</td>
+        </tr>
+
+        <tr>
+            <td>&nbsp;</td>
+            <td><small data-i18n="pair.ipaddress_label"></small></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <div class="mdl-textfield mdl-js-textfield">
+                    <input class="mdl-textfield__input" type="text" id="ipaddress" name="ipAddress" maxlength="15"
+                           pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$">
+                    <span class="mdl-textfield__error" data-i18n="pair.valid_ip_address"></span>
+                </div>
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <div>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary" data-i18n="pair.add"></button>
+                </div>
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+        </tbody>
+
+    </table>
+</form>
+
+<script type="text/javascript">
+    class SamsungEncryptedManualInput {
+        constructor() {
+            Homey.setTitle(Homey.__('pair.title'));
+
+            const form = document.querySelector('form');
+            form.addEventListener('submit', e => this.onSubmit(e, this.device));
+        }
+
+        onSubmit(e, device) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const data = {
+                ipaddress: formData.get('ipAddress'),
+            };
+
+            Homey.showLoadingOverlay();
+            Homey.emit('manual_input', data, (err, device) => {
+                if (device) {
+                    Homey.setViewStoreValue('add_my_devices', 'devices', [device], (err, device) => {
+                        Homey.showView('pin_wait');
+                    });
+                } else  {
+                    Homey.hideLoadingOverlay();
+                    return Homey.alert(Homey.__('errors.connection'));
+                }
+            });
+        }
+    }
+
+    const samsungEncryptedManualInput = new SamsungEncryptedManualInput();
+</script>
+<script src="material.min.js"></script>
+</body>
+</html>
