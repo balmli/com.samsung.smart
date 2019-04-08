@@ -42,7 +42,7 @@ For newer TVs, that respond to http://TV-IP-ADDRESS:8001/api/v2/
 
 ## Device: Samsung (encrypted)
 
-For H, HU, J, JU and JS models. 
+For H, HU, J, JU and JS models, that respond to http://TV-IP-ADDRESS:8001/ms/1.0/
 
 #### Triggers
 
@@ -131,6 +131,41 @@ To use the 'Launch video on YouTube' action, the YouTube _video id_ must be prov
 https://www.youtube.com/watch?v=aqz-KE-bpKQ
 
 is ```aqz-KE-bpKQ```
+
+
+## Details about Advanced settings:
+
+#### IP address
+
+The IP address of the TV.
+
+Can be updated manually if the TV was not found or if the IP address of the TV has changed. 
+
+For the "Samsung (encrypted)" - device, it is not possible to change the IP address.
+ 
+#### Secure connection (Samsung)
+
+Used to enable a secure connection to the TV. Normally this is set correctly when adding the device.
+
+#### Polling interval for TV status
+
+Interval between each time the status of the TV (on / off) is checked, in seconds.
+
+A value lower than 10 seconds will disable the polling.
+
+#### Delay between keys
+
+The delay in milliseconds between each key is sent, for the 'Send list of keys' - action.
+
+Default is 100 ms. 
+
+If the value is too low, some or all of the commands might be ignored by the TV.
+
+#### Delay between channel keys
+
+The delay in milliseconds between each key is sent, for the 'Change channel' - action. 
+
+Default is 1250 ms.
 
 
 ## Acknowledgements:
