@@ -3,6 +3,7 @@
 const Homey = require('homey');
 const SamDevice = require('../../lib/SamDevice');
 const Samsung = require('../../lib/samsung');
+const ip = require('ip');
 
 module.exports = class SamsungDevice extends SamDevice {
 
@@ -23,6 +24,7 @@ module.exports = class SamsungDevice extends SamDevice {
             api_timeout: 2000,
             delay_keys: settings.delay_keys || 100,
             delay_channel_keys: settings.delay_channel_keys || 1250,
+            ip_address_homey: ip.address(),
             tokenAuthSupport: settings.tokenAuthSupport,
             frameTVSupport: settings.frameTVSupport,
             token: settings.token
@@ -164,6 +166,11 @@ module.exports = class SamsungDevice extends SamDevice {
                 }
                 return args.device._samsung.launchBrowser(args.url);
             });
+
+        new Homey.FlowCardAction('artmode_on').register().registerRunListener(args => args.device._samsung.artMode(true));
+
+        new Homey.FlowCardAction('artmode_off').register().registerRunListener(args => args.device._samsung.artMode(false));
+
     }
 
     onAppAutocomplete(query, args) {
