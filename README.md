@@ -147,6 +147,10 @@ For the "Samsung (encrypted)" - device, it is not possible to change the IP addr
 
 Used to enable a secure connection to the TV. Normally this is set correctly when adding the device.
 
+#### Frame TV support
+
+To be able to turn off 'The Frame', enable this.
+
 #### Polling interval for TV status
 
 Interval between each time the status of the TV (on / off) is checked, in seconds.
@@ -187,6 +191,10 @@ Use at your own risk. I accept no responsibility for any damages caused by using
 Some TVs use a different type of pairing, and are therefore not supported at the moment.
 
 ## Release Notes:
+
+#### 1.4.1
+
+- Support turn off for Samsung The Frame
 
 #### 1.4.0
 

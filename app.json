@@ -1,6 +1,6 @@
 {
   "id": "com.samsung.smart",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "compatibility": ">=2.0.0",
   "sdk": 2,
   "name": {
@@ -282,6 +282,14 @@
               "type": "checkbox",
               "label": {
                 "en": "Secure connection"
+              },
+              "value": false
+            },
+            {
+              "id": "frameTVSupport",
+              "type": "checkbox",
+              "label": {
+                "en": "Frame TV support"
               },
               "value": false
             },

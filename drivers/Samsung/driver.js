@@ -26,7 +26,8 @@ module.exports = class SamsungDriver extends SamDriver {
                 },
                 'settings': {
                     'ipaddress': ipAddr,
-                    'tokenAuthSupport': data.data.device.TokenAuthSupport === 'true'
+                    'tokenAuthSupport': data.data.device.TokenAuthSupport === 'true',
+                    'frameTVSupport': data.data.device.FrameTVSupport === 'true'
                 }
             });
             socket.emit('list_devices', devices);

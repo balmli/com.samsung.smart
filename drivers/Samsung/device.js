@@ -24,6 +24,7 @@ module.exports = class SamsungDevice extends SamDevice {
             delay_keys: settings.delay_keys || 100,
             delay_channel_keys: settings.delay_channel_keys || 1250,
             tokenAuthSupport: settings.tokenAuthSupport,
+            frameTVSupport: settings.frameTVSupport,
             token: settings.token
         });
 
@@ -57,6 +58,9 @@ module.exports = class SamsungDevice extends SamDevice {
                 this._samsung.config()["token"] = undefined;
                 this.setSettings({"token": undefined});
             }
+        }
+        if (changedKeysArr.includes('frameTVSupport')) {
+            this._samsung.config()["frameTVSupport"] = newSettingsObj.frameTVSupport;
         }
         callback(null, true);
     }
