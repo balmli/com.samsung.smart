@@ -37,8 +37,6 @@ For newer TVs, that respond to http://TV-IP-ADDRESS:8001/api/v2/
 - Launch app
 - Launch video on YouTube
 - Launch browser
-- Turn on artmode (for TVs with frame support)
-- Turn off artmode (for TVs with frame support)
 - Send key
 - Send list of keys
 

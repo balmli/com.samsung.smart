@@ -166,11 +166,6 @@ module.exports = class SamsungDevice extends SamDevice {
                 }
                 return args.device._samsung.launchBrowser(args.url);
             });
-
-        new Homey.FlowCardAction('artmode_on').register().registerRunListener(args => args.device._samsung.artMode(true));
-
-        new Homey.FlowCardAction('artmode_off').register().registerRunListener(args => args.device._samsung.artMode(false));
-
     }
 
     onAppAutocomplete(query, args) {

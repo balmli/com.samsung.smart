@@ -1,6 +1,6 @@
 {
   "id": "com.samsung.smart",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "compatibility": ">=2.0.0",
   "sdk": 2,
   "name": {
@@ -176,32 +176,6 @@
             "title": {
               "en": "Provide the YouTube video id"
             }
-          }
-        ]
-      },
-      {
-        "id": "artmode_on",
-        "title": {
-          "en": "Turn on artmode"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=Samsung"
-          }
-        ]
-      },
-      {
-        "id": "artmode_off",
-        "title": {
-          "en": "Turn off artmode"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=Samsung"
           }
         ]
       },
