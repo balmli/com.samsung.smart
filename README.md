@@ -194,11 +194,7 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
-#### 1.4.2
-
-- Actions to turn on / off artmode, for TVs with frame support
-
-#### 1.4.1
+#### 1.5.0
 
 - Support turn off for Samsung The Frame
 
