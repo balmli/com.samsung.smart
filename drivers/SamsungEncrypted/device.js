@@ -87,4 +87,53 @@ module.exports = class SamsungEncryptedDevice extends SamDevice {
         }
     }
 
+    registerFlowCards() {
+        super.registerFlowCards();
+
+        new Homey.FlowCardCondition('is_app_running')
+            .register()
+            .registerRunListener(args => args.device._samsung.isAppRunning(args.app_id.id))
+            .getArgument('app_id')
+            .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
+
+        new Homey.FlowCardAction('launch_app')
+            .register()
+            .registerRunListener(args => args.device._samsung.launchApp(args.app_id.id))
+            .getArgument('app_id')
+            .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
+
+        new Homey.FlowCardAction('youtube')
+            .register()
+            .registerRunListener(args => {
+                if (!args.videoId || args.videoId.length !== 11) {
+                    return Promise.reject('Invalid video id');
+                }
+                return args.device._samsung.launchYouTube(args.videoId);
+            });
+    }
+
+    onAppAutocomplete(query, args) {
+        let apps = [
+            {
+                id: 'YouTube',
+                name: 'YouTube'
+            },
+            {
+                id: 'Netflix',
+                name: 'Netflix'
+            },
+            {
+                id: 'Plex',
+                name: 'Plex'
+            }
+        ];
+        return Promise.resolve(apps.filter(result => {
+            return result.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        }).sort((a, b) => {
+            if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+            if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+            return 0;
+        }));
+    }
+
 };

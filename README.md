@@ -52,6 +52,7 @@ For H, HU, J, JU and JS models, that respond to http://TV-IP-ADDRESS:8001/ms/1.0
 #### Conditions
 
 - Is on / off
+- Is app running (J/JU/JS-models)
 
 #### Actions
 
@@ -65,6 +66,8 @@ For H, HU, J, JU and JS models, that respond to http://TV-IP-ADDRESS:8001/ms/1.0
 - One channel up
 - One channel down
 - Change channel
+- Launch app (J/JU/JS-models)
+- Launch video on YouTube (J/JU/JS-models)
 - Send key
 - Send list of keys
 
@@ -191,6 +194,12 @@ Use at your own risk. I accept no responsibility for any damages caused by using
 Some TVs use a different type of pairing, and are therefore not supported at the moment.
 
 ## Release Notes:
+
+#### 1.6.0
+
+- Added 'Is app running' condition (Sansung encrypted)
+- Added 'Launch app' action (Sansung encrypted)
+- Added 'Launch video on YouTube' action (Sansung encrypted)
 
 #### 1.5.0
 
