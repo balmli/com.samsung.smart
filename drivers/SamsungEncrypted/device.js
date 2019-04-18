@@ -113,21 +113,13 @@ module.exports = class SamsungEncryptedDevice extends SamDevice {
     }
 
     onAppAutocomplete(query, args) {
-        let apps = [
-            {
-                id: 'YouTube',
-                name: 'YouTube'
-            },
-            {
-                id: 'Netflix',
-                name: 'Netflix'
-            },
-            {
-                id: 'Plex',
-                name: 'Plex'
-            }
-        ];
-        return Promise.resolve(apps.filter(result => {
+        let apps = this._samsung.getApps();
+        return Promise.resolve((apps === undefined ? [] : apps).map(app => {
+            return {
+                id: app.appId,
+                name: app.name
+            };
+        }).filter(result => {
             return result.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
         }).sort((a, b) => {
             if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
