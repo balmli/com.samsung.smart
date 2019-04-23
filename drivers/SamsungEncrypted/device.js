@@ -1,5 +1,6 @@
 'use strict';
 
+const Homey = require('homey');
 const SamDevice = require('../../lib/SamDevice');
 const SamsungEncrypted = require('../../lib/samsung_encrypted');
 
