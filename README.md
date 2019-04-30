@@ -127,7 +127,7 @@ To send the same key several times, add a ```*X``` after the key, where X is the
 ```KEY_16_9,KEY_VOLUP*10,2500,KEY_PLAY```
 
 
-#### Launch video on YouTube (only Samsung)
+#### Launch video on YouTube (Samsung, Samsung Encrypted)
 
 To use the 'Launch video on YouTube' action, the YouTube _video id_ must be provided, which is a 11 character long string.  The video id for this link on YouTube:
 
@@ -200,6 +200,7 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 - Added 'Is app running' condition (Sansung encrypted)
 - Added 'Launch app' action (Sansung encrypted)
 - Added 'Launch video on YouTube' action (Sansung encrypted)
+- Set min and max for polling interval, issue #16.
 
 #### 1.5.0
 
