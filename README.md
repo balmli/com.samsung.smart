@@ -195,6 +195,10 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.6.1
+
+- Added Exit (KEY_EXIT) to the list of keys
+
 #### 1.6.0
 
 - Added 'Is app running' condition (Sansung encrypted)
