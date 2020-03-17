@@ -86,6 +86,7 @@
 |KEY_CONVERT_AUDIO_MAINSUB|Convert Audio Main/Sub|
 |KEY_DEVICE_CONNECT|Device Connect|
 |KEY_DTV|Digital TV|
+|KEY_AMBIENT|Ambient mode|
 |KEY_DISC_MENU|Disc Menu|
 |KEY_DMA|DMA|
 |KEY_DNET|DNET|

@@ -1,0 +1,8 @@
+{
+  "1.6.2": {
+    "en": "Added Ambient mode (KEY_AMBIENT) to the list of keys"
+  },
+  "1.6.1": {
+    "en": "Added Exit (KEY_EXIT) to the list of keys"
+  }
+}

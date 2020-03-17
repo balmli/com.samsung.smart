@@ -195,6 +195,10 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.6.2
+
+- Added Ambient mode (KEY_AMBIENT) to the list of keys
+
 #### 1.6.1
 
 - Added Exit (KEY_EXIT) to the list of keys
