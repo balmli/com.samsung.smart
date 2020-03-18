@@ -195,6 +195,10 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.6.3
+
+- Fix support and source url
+
 #### 1.6.2
 
 - Added Ambient mode (KEY_AMBIENT) to the list of keys

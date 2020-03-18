@@ -1,4 +1,7 @@
 {
+  "1.6.3": {
+    "en": "Added Ambient mode (KEY_AMBIENT) to the list of keys.  Fix support and source urls."
+  },
   "1.6.2": {
     "en": "Added Ambient mode (KEY_AMBIENT) to the list of keys"
   },

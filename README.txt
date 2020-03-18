@@ -34,7 +34,7 @@ With the 'Send list of keys' action it is possible to send a list of keys, with 
 
 For the list of keys, see [here](./keys.md). 
 
-To send the same key several times, add a ```*X``` after the key, where X is the number of times for the key.  To add an extra delay before the next key, just add a number between 1 - 9999. The number is milliseconds.
+To send the same key several times, add a *X after the key, where X is the number of times for the key.  To add an extra delay before the next key, just add a number between 1 - 9999. The number is milliseconds.
 
 Example: Send 'Home', 'Left' and 'Enter':
 
@@ -104,11 +104,6 @@ Thanks to https://github.com/natalan/samsung-remote for solution to support olde
 Thanks to https://github.com/tavicu/homebridge-samsung-tizen for solution to pair with newer Samsung TVs.
 
 Thanks to https://github.com/tdudek/samsung-remote-models-2014-and-newer and https://github.com/kkapitan/homebridge-homesung for solution to pair with H, HU, J, JU and JS models. 
-
-
-Feedback:
-
-Please report issues at the [issues section on Github](https://github.com/balmli/com.samsung.smart/issues).
 
 
 Disclaimer:

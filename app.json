@@ -1,8 +1,9 @@
 {
   "id": "com.samsung.smart",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "compatibility": ">=2.0.0",
   "sdk": 2,
+  "brandColor": "#206ADF",
   "name": {
     "en": "Samsung SmartTV app"
   },
@@ -18,22 +19,14 @@
       "tv"
     ]
   },
-  "permissions": [],
   "images": {
     "large": "/assets/images/large.png",
     "small": "/assets/images/small.png"
   },
-  "homeyCommunityTopicId": 10019,
+  "permissions": [],
   "author": {
     "name": "Bjørnar Almli",
     "email": "bjornar.almli@gmail.com"
-  },
-  "contributing": {
-    "donate": {
-      "paypal": {
-        "username": "bjornaralmli"
-      }
-    }
   },
   "contributors": {
     "developers": [
@@ -43,6 +36,18 @@
       }
     ]
   },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "bjornaralmli"
+      }
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/balmli/com.samsung.smart/issues"
+  },
+  "homeyCommunityTopicId": 10019,
+  "source": "https://github.com/balmli/com.samsung.smart",
   "flow": {
     "conditions": [
       {
