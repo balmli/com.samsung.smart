@@ -32,6 +32,7 @@ module.exports = class SamsungDevice extends SamDevice {
 
         this._pairRetries = 3;
         this._lastAppsRefresh = undefined;
+        this.initSmartThings();
         this.pairDevice();
     }
 
@@ -64,7 +65,29 @@ module.exports = class SamsungDevice extends SamDevice {
         if (changedKeysArr.includes('frameTVSupport')) {
             this._samsung.config()["frameTVSupport"] = newSettingsObj.frameTVSupport;
         }
+        if (changedKeysArr.includes('smartthings') || changedKeysArr.includes('smartthings_token')) {
+            this.initSmartThings();
+        }
         callback(null, true);
+    }
+
+    async isSmartThingsEnabled() {
+        let settings = await this.getSettings();
+        return settings.smartthings && settings.smartthings_token && settings.smartthings_token.length > 0;
+    }
+
+    async initSmartThings() {
+        setTimeout(async () => {
+            this._samsung.clearStClient();
+            const stEnabled = await this.isSmartThingsEnabled();
+            if (stEnabled) {
+                try {
+                    await this._samsung.getStInputSources();
+                } catch (err) {
+                    this.log(err);
+                }
+            }
+        }, 2000);
     }
 
     async checkIPAddress(ipaddress) {
@@ -83,7 +106,15 @@ module.exports = class SamsungDevice extends SamDevice {
         if (this._is_powering_onoff !== undefined) {
             return;
         }
-        let onOff = await this._samsung.apiActive();
+        let onOff;
+        const stEnabled = await this.isSmartThingsEnabled();
+        if (stEnabled) {
+            onOff = await this._samsung.getStHealth();
+        }
+        if (!stEnabled || (onOff !== false && onOff !== true)) {
+            onOff = await this._samsung.apiActive();
+        }
+
         if (onOff && this.getAvailable() === false) {
             this.setAvailable();
         }
@@ -166,6 +197,12 @@ module.exports = class SamsungDevice extends SamDevice {
                 }
                 return args.device._samsung.launchBrowser(args.url);
             });
+
+        new Homey.FlowCardAction('set_input_source')
+          .register()
+          .registerRunListener(args => args.device._samsung.setInputSource(args.input_source.id))
+          .getArgument('input_source')
+          .registerAutocompleteListener((query, args) => args.device.onInputSourceAutocomplete(query, args));
     }
 
     onAppAutocomplete(query, args) {
@@ -184,4 +221,19 @@ module.exports = class SamsungDevice extends SamDevice {
         }));
     }
 
+    async onInputSourceAutocomplete(query, args) {
+        let inputSources = await this._samsung.getStInputSources();
+        return Promise.resolve((inputSources === undefined ? [] : inputSources).map(is => {
+            return {
+                id: is,
+                name: is
+            };
+        }).filter(result => {
+            return result.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        }).sort((a, b) => {
+            if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+            if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+            return 0;
+        }));
+    }
 };

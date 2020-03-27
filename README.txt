@@ -97,6 +97,17 @@ The delay in milliseconds between each key is sent, for the 'Change channel' - a
 Default is 1250 ms.
 
 
+SmartThings API:
+
+To use the SmartThings API, your TV must be logged into your Samsung account.
+
+Go to https://account.smartthings.com/tokens to generate a token with device access.
+
+Go to advanced settings for the Samsung device, enable SmartThings API and enter the token.
+
+This will enable the 'Set input source' - action.
+
+
 Acknowledgements:
 
 Thanks to https://github.com/natalan/samsung-remote for solution to support older Samsung TVs.

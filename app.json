@@ -1,6 +1,6 @@
 {
   "id": "com.samsung.smart",
-  "version": "1.6.3",
+  "version": "1.7.0",
   "compatibility": ">=2.0.0",
   "sdk": 2,
   "brandColor": "#206ADF",
@@ -249,6 +249,26 @@
             }
           }
         ]
+      },
+      {
+        "id": "set_input_source",
+        "title": {
+          "en": "Set input source"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=Samsung"
+          },
+          {
+            "name": "input_source",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Input source..."
+            }
+          }
+        ]
       }
     ]
   },
@@ -338,6 +358,36 @@
                 "en": "Delay between channel keys (ms)"
               },
               "value": 1250
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "SmartThings"
+          },
+          "children": [
+            {
+              "id": "smartthings",
+              "type": "checkbox",
+              "label": {
+                "en": "SmartThings API"
+              },
+              "value": false,
+              "hint": {
+                "en": "Check this to enable the SmartThings API.  Your TV must be logged on to your Samsung account."
+              }
+            },
+            {
+              "id": "smartthings_token",
+              "type": "text",
+              "label": {
+                "en": "API Token"
+              },
+              "value": "",
+              "hint": {
+                "en": "Obtain an API key from https://account.smartthings.com/tokens."
+              }
             }
           ]
         }

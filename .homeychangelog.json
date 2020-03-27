@@ -1,4 +1,7 @@
 {
+  "1.7.0": {
+    "en": "Added support for SmartThings API. Can be enabled in Advanced settings."
+  },
   "1.6.3": {
     "en": "Added Ambient mode (KEY_AMBIENT) to the list of keys.  Fix support and source urls."
   },
