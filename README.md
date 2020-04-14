@@ -204,6 +204,10 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.7.1
+
+- Improved readme
+
 #### 1.7.0
 
 - Added support for SmartThings API. Can be enabled in Advanced settings.

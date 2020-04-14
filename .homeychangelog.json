@@ -1,4 +1,7 @@
 {
+  "1.7.1": {
+    "en": "Added support for SmartThings API. Can be enabled in Advanced settings. Improved README."
+  },
   "1.7.0": {
     "en": "Added support for SmartThings API. Can be enabled in Advanced settings."
   },
