@@ -1,0 +1,39 @@
+{
+  "id": "SamsungEncrypted",
+  "name": {
+    "en": "Samsung (encrypted)"
+  },
+  "$extends": [
+    "defaults"
+  ],
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "pin_wait"
+      },
+      "options": {
+        "singular": true
+      }
+    },
+    {
+      "id": "ip_address"
+    },
+    {
+      "id": "pin_wait",
+      "template": "loading"
+    },
+    {
+      "id": "set_pin_code",
+      "template": "pincode",
+      "options": {
+        "type": "number"
+      }
+    },
+    {
+      "id": "add_my_devices",
+      "template": "add_devices"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+[
+  {
+    "type": "group",
+    "label": {
+      "en": "General settings"
+    },
+    "children": [
+      {
+        "$extends": "ipaddress",
+        "id": "ipaddress",
+        "type": "label"
+      },
+      {
+        "$extends": "poll_interval",
+        "id": "poll_interval"
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Timing"
+    },
+    "children": [
+      {
+        "$extends": "delay_keys",
+        "id": "delay_keys"
+      },
+      {
+        "$extends": "delay_channel_keys",
+        "id": "delay_channel_keys"
+      }
+    ]
+  }
+]

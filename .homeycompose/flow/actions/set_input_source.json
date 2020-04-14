@@ -1,0 +1,20 @@
+{
+  "id": "set_input_source",
+  "title": {
+    "en": "Set input source"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=Samsung"
+    },
+    {
+      "name": "input_source",
+      "type": "autocomplete",
+      "placeholder": {
+        "en": "Input source..."
+      }
+    }
+  ]
+}

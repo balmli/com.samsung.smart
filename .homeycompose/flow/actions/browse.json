@@ -1,0 +1,20 @@
+{
+  "id": "browse",
+  "title": {
+    "en": "Launch browser"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=Samsung"
+    },
+    {
+      "name": "url",
+      "type": "text",
+      "title": {
+        "en": "URL"
+      }
+    }
+  ]
+}

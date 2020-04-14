@@ -1,0 +1,11 @@
+{
+	"id": "smartthings_token",
+	"type": "text",
+	"label": {
+		"en": "API Token"
+	},
+	"value": "",
+	"hint": {
+		"en": "Obtain an API key from https://account.smartthings.com/tokens."
+	}
+}

@@ -1,0 +1,23 @@
+{
+  "id": "send_key",
+  "title": {
+    "en": "Send key"
+  },
+  "hint": {
+    "en": "Send key"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=Samsung|SamsungEncrypted|SamsungLegacy"
+    },
+    {
+      "name": "key",
+      "type": "autocomplete",
+      "placeholder": {
+        "en": "Search for key..."
+      }
+    }
+  ]
+}

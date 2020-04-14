@@ -1,0 +1,11 @@
+{
+	"id": "smartthings",
+	"type": "checkbox",
+	"label": {
+		"en": "SmartThings API"
+	},
+	"value": false,
+	"hint": {
+		"en": "Check this to enable the SmartThings API.  Your TV must be logged on to your Samsung account."
+	}
+}

@@ -1,0 +1,8 @@
+{
+	"id": "frameTVSupport",
+	"type": "checkbox",
+	"label": {
+		"en": "Frame TV support"
+	},
+	"value": false
+}

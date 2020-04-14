@@ -1,0 +1,51 @@
+{
+  "id": "com.samsung.smart",
+  "version": "1.7.2",
+  "compatibility": ">=2.0.0",
+  "sdk": 2,
+  "brandColor": "#206ADF",
+  "name": {
+    "en": "Samsung SmartTV"
+  },
+  "description": {
+    "en": "Control your Samsung SmartTV"
+  },
+  "category": [
+    "video"
+  ],
+  "tags": {
+    "en": [
+      "samsung",
+      "tv"
+    ]
+  },
+  "images": {
+    "large": "/assets/images/large.png",
+    "small": "/assets/images/small.png"
+  },
+  "permissions": [],
+  "author": {
+    "name": "Bjørnar Almli",
+    "email": "bjornar.almli@gmail.com"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "Bjørnar Almli",
+        "email": "bjornar.almli@gmail.com"
+      }
+    ]
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "bjornaralmli"
+      }
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/balmli/com.samsung.smart/issues"
+  },
+  "homeyCommunityTopicId": 10019,
+  "source": "https://github.com/balmli/com.samsung.smart"
+}

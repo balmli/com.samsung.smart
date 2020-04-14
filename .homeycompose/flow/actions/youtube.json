@@ -1,0 +1,20 @@
+{
+  "id": "youtube",
+  "title": {
+    "en": "Launch video on YouTube"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=Samsung|SamsungEncrypted"
+    },
+    {
+      "name": "videoId",
+      "type": "text",
+      "title": {
+        "en": "Provide the YouTube video id"
+      }
+    }
+  ]
+}

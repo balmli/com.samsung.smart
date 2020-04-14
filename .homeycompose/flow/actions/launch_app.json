@@ -1,0 +1,20 @@
+{
+  "id": "launch_app",
+  "title": {
+    "en": "Launch app"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=Samsung|SamsungEncrypted"
+    },
+    {
+      "name": "app_id",
+      "type": "autocomplete",
+      "placeholder": {
+        "en": "Search for app..."
+      }
+    }
+  ]
+}

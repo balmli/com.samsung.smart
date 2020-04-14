@@ -1,0 +1,22 @@
+{
+  "id": "Samsung",
+  "name": {
+    "en": "Samsung"
+  },
+  "$extends": [
+    "defaults"
+  ],
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_my_devices"
+      }
+    },
+    {
+      "id": "add_my_devices",
+      "template": "add_devices"
+    }
+  ]
+}

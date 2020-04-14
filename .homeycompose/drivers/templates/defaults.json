@@ -1,0 +1,16 @@
+{
+  "icon": "{{driverAssetsPath}}/icon.svg",
+  "images": {
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "small": "{{driverAssetsPath}}/images/small.png"
+  },
+  "class": "tv",
+  "capabilities": [
+    "onoff",
+    "volume_up",
+    "channel_up",
+    "volume_down",
+    "channel_down",
+    "volume_mute"
+  ]
+}

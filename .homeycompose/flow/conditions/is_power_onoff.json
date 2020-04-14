@@ -1,0 +1,13 @@
+{
+  "id": "is_power_onoff",
+  "title": {
+    "en": "Power on/off !{{is|is not}} in progress"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=Samsung|SamsungEncrypted|SamsungLegacy"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "off",
+  "title": {
+    "en": "Turn off"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=Samsung|SamsungEncrypted|SamsungLegacy"
+    }
+  ]
+}

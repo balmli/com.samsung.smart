@@ -204,6 +204,10 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.7.2
+
+- Uses Homey Compose
+
 #### 1.7.1
 
 - Improved readme

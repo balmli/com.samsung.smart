@@ -1,15 +1,23 @@
 {
   "name": "com.samsung.smart",
-  "version": "1.7.1",
-  "description": "Samsung Smart TV",
+  "version": "1.7.2",
+  "description": "Samsung SmartTV",
   "main": "app.js",
   "scripts": {
     "pretest": "eslint --ignore-path .gitignore app.js lib drivers test",
     "test": "./node_modules/.bin/mocha --reporter spec",
     "posttest": "athom app validate --level publish"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/balmli/com.samsung.smart.git"
+  },
   "author": "Bjørnar Almli",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/balmli/com.samsung.smart/issues"
+  },
+  "homepage": "https://github.com/balmli/com.samsung.smart#readme",
   "dependencies": {
     "ws": "6.1.4",
     "wake_on_lan": "1.0.0",

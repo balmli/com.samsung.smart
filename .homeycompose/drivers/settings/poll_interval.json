@@ -1,0 +1,11 @@
+{
+	"id": "poll_interval",
+	"type": "number",
+	"min": 0,
+	"max:": 1000,
+	"step": 1,
+	"label": {
+		"en": "Polling interval for TV status (s)"
+	},
+	"value": 10
+}
