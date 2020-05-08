@@ -150,6 +150,8 @@ For the "Samsung (encrypted)" - device, it is not possible to change the IP addr
 
 Used to enable a secure connection to the TV. Normally this is set correctly when adding the device.
 
+To repair the secure connection, first set the "Secure connection" to 'off' and save settings, and the set it to 'on' and save settings.
+
 #### Frame TV support
 
 To be able to turn off 'The Frame', enable this.
@@ -203,6 +205,10 @@ Use at your own risk. I accept no responsibility for any damages caused by using
 Some TVs use a different type of pairing, and are therefore not supported at the moment.
 
 ## Release Notes:
+
+#### 1.7.3
+
+- Fixed issue with Secure connection being reset.
 
 #### 1.7.2
 

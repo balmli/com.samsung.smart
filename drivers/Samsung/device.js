@@ -147,8 +147,6 @@ module.exports = class SamsungDevice extends SamDevice {
                     this._pairRetries--;
                 } else {
                     this.log('pairDevice: failed', error);
-                    this.setSettings({"tokenAuthSupport": false});
-                    config.tokenAuthSupport = false;
                 }
             });
     }

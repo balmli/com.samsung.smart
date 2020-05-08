@@ -1,4 +1,7 @@
 {
+  "1.7.3": {
+    "en": "Fixed issue with Secure connection being reset."
+  },
   "1.7.2": {
     "en": "Uses Homey Compose"
   },
