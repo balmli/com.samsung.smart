@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 const readline = require('readline');
-const SamsungEncrypted = require('../lib/samsung_encrypted');
+const SamsungEncrypted = require('../drivers/SamsungEncrypted/SamsungEncrypted');
 
 const _samsung = new SamsungEncrypted({
     ip_address: '192.168.2.105',

@@ -1,10 +1,10 @@
 'use strict';
 
-const SamDriver = require('../../lib/SamDriver');
-const SamsungEncrypted = require('../../lib/samsung_encrypted');
+const BaseDriver = require('../../lib/BaseDriver');
+const SamsungEncrypted = require('./SamsungEncrypted');
 const ip = require('ip');
 
-module.exports = class SamsungEncryptedDriver extends SamDriver {
+module.exports = class SamsungEncryptedDriver extends BaseDriver {
 
     onInit() {
         super.onInit('Samsung Encrypted');
@@ -39,7 +39,7 @@ module.exports = class SamsungEncryptedDriver extends SamDriver {
                     }
                 })
                 .catch(err => {
-                    callback(new Error('Found no Samsung TVs.'));
+                    callback(new Error(Homey.__('pair.no_tvs')));
                 });
 
         });
@@ -102,11 +102,11 @@ module.exports = class SamsungEncryptedDriver extends SamDriver {
     }
 
     async checkForTV(ipAddr, devices, socket) {
-        this.log('checkForTV:', ipAddr);
+        this.logger.info('checkForTV:', ipAddr);
         let data = await this._samsung.getInfo(ipAddr).catch(err => {
         });
         if (data && data.data) {
-            this.log('checkForTV: found TV:', ipAddr, data.data);
+            this.logger.info('checkForTV: found TV:', ipAddr, data.data);
             this.clearSearchTimeout();
 
             devices.push({
@@ -137,18 +137,18 @@ module.exports = class SamsungEncryptedDriver extends SamDriver {
         this._identity = undefined;
         const pin = pincode.join('');
 
-        this.log('setPinCode:', pin, this._devices);
+        this.logger.info('setPinCode:', pin, this._devices);
 
         let device = this._devices.length > 0 ? this._devices[0] : undefined;
         if (!device) {
-            throw new Error('Found no Samsung TVs.');
+            throw new Error(Homey.__('pair.no_tvs'));
         }
 
         let requestId = await this._samsung.confirmPin(pin);
-        this.log('setPinCode requestId:', requestId);
+        this.logger.info('setPinCode requestId:', requestId);
 
         this._identity = await this._samsung.acknowledgeRequestId(requestId);
-        this.log('setPinCode identity:', this._identity);
+        this.logger.info('setPinCode identity:', this._identity);
     }
 
 };

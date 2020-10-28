@@ -1,7 +1,7 @@
 'use strict';
 
 const readline = require('readline');
-const SamsungEncrypted = require('../lib/samsung_encrypted');
+const SamsungEncrypted = require('../drivers/SamsungEncrypted/SamsungEncrypted');
 
 const rl = readline.createInterface({
     input: process.stdin,

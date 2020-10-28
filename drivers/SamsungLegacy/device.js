@@ -1,13 +1,12 @@
 'use strict';
 
-const Homey = require('homey');
 const macaddress = require('macaddress');
 
-const SamDevice = require('../../lib/SamDevice');
-const SamsungLegacy = require('../../lib/samsung_legacy');
+const BaseDevice = require('../../lib/BaseDevice');
+const SamsungLegacy = require('./SamsungLegacy');
 const ip = require('ip');
 
-module.exports = class SamsungLegacyDevice extends SamDevice {
+module.exports = class SamsungLegacyDevice extends BaseDevice {
 
     async onInit() {
         super.onInit('Samsung Legacy');
@@ -24,7 +23,8 @@ module.exports = class SamsungLegacyDevice extends SamDevice {
             delay_channel_keys: settings.delay_channel_keys || 1250,
             ip_address_homey: ip.address(),
             appString: 'iphone..iapp.samsung',
-            tvAppString: 'iphone.UN60D6000.iapp.samsung'
+            tvAppString: 'iphone.UN60D6000.iapp.samsung',
+            logger: this.logger
         });
 
         let self = this;
@@ -53,10 +53,10 @@ module.exports = class SamsungLegacyDevice extends SamDevice {
     async checkIPAddress(ipaddress) {
         let info = await this._samsung.pingPort(ipaddress);
         if (info) {
-            this.log('TV set available');
+            this.logger.info('TV set available');
             this.setAvailable();
         } else {
-            this.log('TV set unavailable');
+            this.logger.info('TV set unavailable');
             this.setUnavailable('TV not found. Check IP address.');
         }
     }
@@ -70,10 +70,10 @@ module.exports = class SamsungLegacyDevice extends SamDevice {
             this.setAvailable();
         }
         if (onOff !== this.getCapabilityValue('onoff')) {
-            this.setCapabilityValue('onoff', onOff).catch(console.error);
+            this.setCapabilityValue('onoff', onOff).catch(err => this.logger.error('Error setting onoff capability', err));
         }
         if (onOff) {
-            this.log('pollDevice: TV is on');
+            this.logger.info('pollDevice: TV is on');
         }
     }
 

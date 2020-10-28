@@ -206,6 +206,10 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.7.4
+
+- Use static list of apps if fetching apps from the TV fails
+
 #### 1.7.3
 
 - Fixed issue with Secure connection being reset.

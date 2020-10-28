@@ -1,9 +1,9 @@
 'use strict';
 
-const SamDriver = require('../../lib/SamDriver');
-const SamsungLegacy = require('../../lib/samsung_legacy');
+const BaseDriver = require('../../lib/BaseDriver');
+const SamsungLegacy = require('./SamsungLegacy');
 
-module.exports = class SamsungLegacyDriver extends SamDriver {
+module.exports = class SamsungLegacyDriver extends BaseDriver {
 
     onInit() {
         super.onInit('Samsung Legacy');
@@ -15,17 +15,18 @@ module.exports = class SamsungLegacyDriver extends SamDriver {
     }
 
     async checkForTV(ipAddr, devices, socket) {
-        this.log('searchForTVs', ipAddr);
+        this.logger.info('searchForTVs', ipAddr);
         let data = await this._samsung.pingPort(ipAddr);
         if (data) {
-            this.log('Found TV', ipAddr);
+            this.logger.info('Found TV', ipAddr);
             devices.push({
-                'name': 'Samsung TV',
-                'data': {
-                    'id': 'samsung_tv_' + ipAddr
+                name: 'Samsung TV',
+                data: {
+                    id: 'samsung_tv_' + ipAddr
                 },
-                'settings': {
-                    'ipaddress': ipAddr
+                settings: {
+                    ipaddress: ipAddr,
+                    modelName: 'legacy'
                 }
             });
             socket.emit('list_devices', devices);

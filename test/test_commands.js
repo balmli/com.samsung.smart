@@ -1,5 +1,5 @@
 const expect = require("chai").expect;
-const SamsungBase = require('../lib/samsung_base');
+const SamsungBase = require('../lib/SamsungBase');
 
 describe("_commands", function () {
     describe("simple", function () {

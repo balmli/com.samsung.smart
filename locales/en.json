@@ -6,9 +6,49 @@
     "add": "Add",
     "cancel": "Cancel",
     "valid_ip_address": "Enter a valid IP address (xxx.xxx.xxx.xxx)",
-    "invalid_ipaddress": "Invalid IP address"
+    "invalid_ipaddress": "Invalid IP address",
+    "no_tvs": "Found no Samsung TVs.",
+    "encrypted": {
+      "invalid_pin": "Invalid PIN entered",
+      "failed_ack_client": "Failed to acknowledge client"
+    }
   },
   "errors": {
-    "connection": "Connection could not be estabished."
+    "invalid_video_id": "Invalid video ID.  Must be 11 characters.",
+    "invalid_browse_url": "Invalid URL.",
+    "connection": "Connection could not be estabished.",
+    "wake_error": "Unable to wake up device.",
+    "invalid_channel_number": "Invalid channel number",
+    "invalid_key": "Invalid key: __key__",
+    "invalid_delay": "Delay must be between 1 and 9999",
+    "invalid_number_of_keys": "Max 100 keys are supported",
+    "frame_is_not_supported": "Frame is not supported",
+    "app_no_app_running": "No app is running...",
+    "app_app_not_running": "App is not running...",
+    "app_request_403": "The application request must be authorized",
+    "app_request_404": "Application not found",
+    "app_request_413": "Request entity too large",
+    "app_request_501": "Application does not support arguments or failed to process arguments",
+    "app_request_503": "Unable to start application",
+    "app_request_failed": "Operation failed (__statusCode__ __statusMessage__)",
+    "connection_refused": "Connection to TV is refused (__address__:__port__)",
+    "connection_hostunreachable": "Connection to TV is unreachable (__address__:__port__)",
+    "connection_netunreachable": "Connection to TV is unreachable (__address__:__port__)",
+    "connection_timeout": "Connection to TV timed out",
+    "connection_unknown": "Connection to TV failed (__message__)",
+    "onoff": {
+      "on_in_progress": "Power on in progress...",
+      "off_in_progress": "Power off in progress...",
+      "on_already": "Powered on already...",
+      "off_already": "Powered off already..."
+    },
+    "smartthings": {
+      "not_enabled": "The SmartThings API is not enabled in Adv. settings.",
+      "no_token": "The SmartThings API token is not set in Adv. settings.",
+      "incorrect_token": "The API token must be set correctly.",
+      "failed_fetching_devices": "Unable to fetch devices (__statusCode__ __statusMessage__)",
+      "no_tvs": "Found no TVs with the SmartThings API.",
+      "failed_changing_input_source": "Changing input source failed: __message__ (__statusCode__ __statusMessage__)"
+    }
   }
 }

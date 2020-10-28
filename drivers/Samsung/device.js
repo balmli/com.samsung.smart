@@ -1,11 +1,10 @@
 'use strict';
 
-const Homey = require('homey');
-const SamDevice = require('../../lib/SamDevice');
-const Samsung = require('../../lib/samsung');
+const BaseDevice = require('../../lib/BaseDevice');
+const Samsung = require('./Samsung');
 const ip = require('ip');
 
-module.exports = class SamsungDevice extends SamDevice {
+module.exports = class SamsungDevice extends BaseDevice {
 
     async onInit() {
         super.onInit('Samsung');
@@ -27,7 +26,8 @@ module.exports = class SamsungDevice extends SamDevice {
             ip_address_homey: ip.address(),
             tokenAuthSupport: settings.tokenAuthSupport,
             frameTVSupport: settings.frameTVSupport,
-            token: settings.token
+            token: settings.token,
+            logger: this.logger
         });
 
         this._pairRetries = 3;
@@ -59,7 +59,9 @@ module.exports = class SamsungDevice extends SamDevice {
             } else {
                 // Clear token
                 this._samsung.config()["token"] = undefined;
-                this.setSettings({"token": undefined});
+                setTimeout(() => {
+                    this.setSettings({ "token": undefined });
+                }, 1000);
             }
         }
         if (changedKeysArr.includes('frameTVSupport')) {
@@ -84,7 +86,7 @@ module.exports = class SamsungDevice extends SamDevice {
                 try {
                     await this._samsung.getStInputSources();
                 } catch (err) {
-                    this.log(err);
+                    this.logger.info('Fetching ST input sources failed', err);
                 }
             }
         }, 2000);
@@ -93,11 +95,11 @@ module.exports = class SamsungDevice extends SamDevice {
     async checkIPAddress(ipaddress) {
         let info = await this._samsung.getInfo(ipaddress)
             .catch(err => {
-                this.log('TV set unavailable');
+                this.logger.info('TV set unavailable');
                 this.setUnavailable('TV not found. Check IP address.');
             });
         if (info) {
-            this.log('TV set available');
+            this.logger.info('TV set available');
             this.setAvailable();
         }
     }
@@ -119,10 +121,11 @@ module.exports = class SamsungDevice extends SamDevice {
             this.setAvailable();
         }
         if (onOff !== this.getCapabilityValue('onoff')) {
-            this.setCapabilityValue('onoff', onOff).catch(console.error);
+            this.setCapabilityValue('onoff', onOff).catch(err => this.logger.error('Error setting onoff capability', err));
         }
         if (onOff) {
-            this.log('pollDevice: TV is on');
+            this.logger.verbose('pollDevice: TV is on');
+            this.shouldFetchModelName();
             this.shouldRefreshAppList();
         }
     }
@@ -135,10 +138,10 @@ module.exports = class SamsungDevice extends SamDevice {
 
         await this._delay(delay);
 
-        this.log('Pairing started...');
+        this.logger.info('Pairing started...');
         this._samsung.pair()
             .then(token => {
-                this.log(`pairDevice: got a new token: ${self._config.token}`);
+                this.logger.info(`pairDevice: got a new token: ${self._config.token}`);
                 this.setSettings({"token": token});
             })
             .catch(error => {
@@ -146,13 +149,32 @@ module.exports = class SamsungDevice extends SamDevice {
                     this.pairDevice(1000);
                     this._pairRetries--;
                 } else {
-                    this.log('pairDevice: failed', error);
+                    this.logger.info('pairDevice: failed', error);
                 }
             });
     }
 
+    async shouldFetchModelName() {
+        if (!this.getSetting('modelName')) {
+            let modelName = 'unknown';
+            try {
+                let data = await this._samsung.getInfo();
+                this.logger.verbose('shouldFetchModelName', data.data);
+                if (data && data.data) {
+                    modelName = data.data.device.modelName;
+                }
+            } catch (err) {
+                this.logger.info('Fetching modelName failed', err);
+            } finally {
+                await this.setSettings({ modelName: modelName });
+                this.logger.setTags({ modelName });
+                this.logger.info(`Modelname set to: ${modelName}`);
+            }
+        }
+    }
+
     async refreshAppList() {
-        this._samsung.getListOfApps().catch(err => this.log('refreshAppList ERROR', err));
+        this._samsung.getListOfApps().catch(err => this.logger.error('refreshAppList ERROR', err));
         this._lastAppsRefresh = new Date().getTime();
     }
 
@@ -161,46 +183,6 @@ module.exports = class SamsungDevice extends SamDevice {
         if (!this._lastAppsRefresh || (now - this._lastAppsRefresh) > 300000) {
             this.refreshAppList();
         }
-    }
-
-    registerFlowCards() {
-        super.registerFlowCards();
-
-        new Homey.FlowCardCondition('is_app_running')
-            .register()
-            .registerRunListener(args => args.device._samsung.isAppRunning(args.app_id.id))
-            .getArgument('app_id')
-            .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
-
-        new Homey.FlowCardAction('launch_app')
-            .register()
-            .registerRunListener(args => args.device._samsung.launchApp(args.app_id.id))
-            .getArgument('app_id')
-            .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
-
-        new Homey.FlowCardAction('youtube')
-            .register()
-            .registerRunListener(args => {
-                if (!args.videoId || args.videoId.length !== 11) {
-                    return Promise.reject('Invalid video id');
-                }
-                return args.device._samsung.launchYouTube(args.videoId);
-            });
-
-        new Homey.FlowCardAction('browse')
-            .register()
-            .registerRunListener(args => {
-                if (!args.url || args.url.length === 0) {
-                    return Promise.reject('Invalid URL');
-                }
-                return args.device._samsung.launchBrowser(args.url);
-            });
-
-        new Homey.FlowCardAction('set_input_source')
-          .register()
-          .registerRunListener(args => args.device._samsung.setInputSource(args.input_source.id))
-          .getArgument('input_source')
-          .registerAutocompleteListener((query, args) => args.device.onInputSourceAutocomplete(query, args));
     }
 
     onAppAutocomplete(query, args) {

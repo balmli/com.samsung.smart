@@ -1,5 +1,7 @@
 # Minimal HTTP client library
-[![NPM][npm-image]][npm-url] [![Build status][travis-image]][travis-url] [![Coverage Status][coverage-image]][coverage-url] [![js-standard-style][standard-image]][standard-url] [![Dependencies][david-image]][david-url] [![devDependencies][david-dev-image]][david-dev-url]
+
+
+[![NPM][npm-image]][npm-url] [![Build status][travis-image]][travis-url] [![Coverage Status][coverage-image]][coverage-url] [![js-standard-style][standard-image]][standard-url] [![Dependencies][david-image]][david-url] [![devDependencies][david-dev-image]][david-dev-url] [![Greenkeeper badge](https://badges.greenkeeper.io/matjaz/node-http.min.svg)](https://greenkeeper.io/)
 
 Minimal simple HTTP client with promises.  
 Supports HTTP, HTTPS and common methods GET, POST, PUT, PATCH, DELETE.  

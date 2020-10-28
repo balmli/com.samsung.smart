@@ -1,10 +1,9 @@
 'use strict';
 
-const Homey = require('homey');
-const SamDevice = require('../../lib/SamDevice');
-const SamsungEncrypted = require('../../lib/samsung_encrypted');
+const BaseDevice = require('../../lib/BaseDevice');
+const SamsungEncrypted = require('./SamsungEncrypted');
 
-module.exports = class SamsungEncryptedDevice extends SamDevice {
+module.exports = class SamsungEncryptedDevice extends BaseDevice {
 
     async onInit() {
         super.onInit('Samsung Encrypted');
@@ -25,10 +24,11 @@ module.exports = class SamsungEncryptedDevice extends SamDevice {
             modelName: settings.modelName,
             modelClass: settings.modelClass,
             identitySessionId: settings.identitySessionId || (identity ? identity.sessionId : undefined),
-            identityAesKey: settings.identityAesKey || (identity ? identity.aesKey : undefined)
+            identityAesKey: settings.identityAesKey || (identity ? identity.aesKey : undefined),
+            logger: this.logger
         });
 
-        this.log('onInit config:',
+        this.logger.verbose('onInit config:',
             this._samsung.config()['ip_address'],
             this._samsung.config()['identitySessionId'],
             this._samsung.config()['identityAesKey']
@@ -36,11 +36,11 @@ module.exports = class SamsungEncryptedDevice extends SamDevice {
     }
 
     async onAdded() {
-        this.log(`virtual device added: ${this.getData().id}`);
+        this.logger.info(`device added: ${this.getData().id}`);
 
         let identity = this.getDriver().getIdentity();
         if (!identity || !identity.sessionId || !identity.aesKey) {
-            this.log('TV set unavailable. Missing identity.');
+            this.logger.info('TV set unavailable. Missing identity.');
             this.setUnavailable('Pairing failed.');
 
         } else {
@@ -81,36 +81,31 @@ module.exports = class SamsungEncryptedDevice extends SamDevice {
             this.setAvailable();
         }
         if (onOff !== this.getCapabilityValue('onoff')) {
-            this.setCapabilityValue('onoff', onOff).catch(console.error);
+            this.setCapabilityValue('onoff', onOff).catch(err => this.logger.error('Error setting onoff capability', err));
         }
         if (onOff) {
-            this.log('pollDevice: TV is on');
+            this.logger.verbose('pollDevice: TV is on');
+            this.shouldFetchModelName();
         }
     }
 
-    registerFlowCards() {
-        super.registerFlowCards();
-
-        new Homey.FlowCardCondition('is_app_running')
-            .register()
-            .registerRunListener(args => args.device._samsung.isAppRunning(args.app_id.id))
-            .getArgument('app_id')
-            .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
-
-        new Homey.FlowCardAction('launch_app')
-            .register()
-            .registerRunListener(args => args.device._samsung.launchApp(args.app_id.id))
-            .getArgument('app_id')
-            .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
-
-        new Homey.FlowCardAction('youtube')
-            .register()
-            .registerRunListener(args => {
-                if (!args.videoId || args.videoId.length !== 11) {
-                    return Promise.reject('Invalid video id');
+    async shouldFetchModelName() {
+        if (!this.getSetting('modelName')) {
+            let modelName = 'unknown';
+            try {
+                let data = await this._samsung.getInfo();
+                this.logger.verbose('shouldFetchModelName', data.data);
+                if (data && data.data) {
+                    modelName = data.data.ModelName;
                 }
-                return args.device._samsung.launchYouTube(args.videoId);
-            });
+            } catch (err) {
+                this.logger.info('Fetching modelName failed', err);
+            } finally {
+                await this.setSettings({ modelName: modelName });
+                this.logger.setTags({ modelName });
+                this.logger.info(`Modelname set to: ${modelName}`);
+            }
+        }
     }
 
     onAppAutocomplete(query, args) {

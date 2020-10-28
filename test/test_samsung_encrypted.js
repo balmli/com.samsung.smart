@@ -1,5 +1,5 @@
 const expect = require("chai").expect;
-const SamsungEncrypted = require('../lib/samsung_encrypted');
+const SamsungEncrypted = require('../drivers/SamsungEncrypted/SamsungEncrypted');
 
 describe("samsung_encrypted", function () {
 

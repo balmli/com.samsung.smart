@@ -1,9 +1,9 @@
 'use strict';
 
-const SamDriver = require('../../lib/SamDriver');
-const Samsung = require('../../lib/samsung');
+const BaseDriver = require('../../lib/BaseDriver');
+const Samsung = require('./Samsung');
 
-module.exports = class SamsungDriver extends SamDriver {
+module.exports = class SamsungDriver extends BaseDriver {
 
     onInit() {
         super.onInit('Samsung');
@@ -15,19 +15,20 @@ module.exports = class SamsungDriver extends SamDriver {
     }
 
     async checkForTV(ipAddr, devices, socket) {
-        this.log('searchForTVs', ipAddr);
+        this.logger.info('searchForTVs', ipAddr);
         let data = await this._samsung.getInfo(ipAddr).catch(err => {});
         if (data && data.data) {
-            this.log('Found TV', ipAddr);
+            this.logger.info('Found TV', ipAddr);
             devices.push({
-                'name': data.data.name,
-                'data': {
-                    'id': data.data.id
+                name: data.data.name,
+                data: {
+                    id: data.data.id
                 },
-                'settings': {
-                    'ipaddress': ipAddr,
-                    'tokenAuthSupport': data.data.device.TokenAuthSupport === 'true',
-                    'frameTVSupport': data.data.device.FrameTVSupport === 'true'
+                settings: {
+                    ipaddress: ipAddr,
+                    modelName: data.data.device.modelName,
+                    tokenAuthSupport: data.data.device.TokenAuthSupport === 'true',
+                    frameTVSupport: data.data.device.FrameTVSupport === 'true'
                 }
             });
             socket.emit('list_devices', devices);
