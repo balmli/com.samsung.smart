@@ -22,6 +22,8 @@ const appCodes = [
     { "appId": "3201601007250", "name": "Movies & TV Google Play" },
     { "appId": "11101200001", "name": "Netflix" },
     { "appId": "Netflix", "name": "Netflix (2)" },
+    { "appId": "org.tizen.netflix-app", "name": "Netflix (3)" },
+    { "appId": "11101200001/org.tizen.netflix-app", "name": "Netflix (4)" },
     { "appId": "111477001222", "name": "NRK Super" },
     { "appId": "111477001221", "name": "NRK TV" },
     { "appId": "3201607009918", "name": "Onet VOD" },

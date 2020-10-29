@@ -206,6 +206,10 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.7.6
+
+- Added app IDs for Netflix
+
 #### 1.7.5
 
 - Added app ID for Apple TV
