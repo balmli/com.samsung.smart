@@ -10,7 +10,8 @@ module.exports = class SamsungDriver extends BaseDriver {
 
         this._samsung = new Samsung({
             port: 8001,
-            api_timeout: 100
+            api_timeout: 100,
+            logger: this.logger
         });
     }
 

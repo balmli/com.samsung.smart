@@ -14,7 +14,8 @@ module.exports = class SamsungEncryptedDriver extends BaseDriver {
             api_timeout: 125,
             appId: '721b6fce-4ee6-48ba-8045-955a539edadb',
             deviceId: undefined,
-            userId: '654321'
+            userId: '654321',
+            logger: this.logger
         });
 
         this._devices = [];

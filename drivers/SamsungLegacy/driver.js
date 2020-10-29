@@ -10,7 +10,8 @@ module.exports = class SamsungLegacyDriver extends BaseDriver {
 
         this._samsung = new SamsungLegacy({
             port: 55000,
-            api_timeout: 100
+            api_timeout: 100,
+            logger: this.logger
         });
     }
 
