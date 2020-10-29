@@ -1,5 +1,6 @@
 'use strict';
 
+const Homey = require('homey');
 const BaseDevice = require('../../lib/BaseDevice');
 const SamsungEncrypted = require('./SamsungEncrypted');
 
@@ -41,7 +42,7 @@ module.exports = class SamsungEncryptedDevice extends BaseDevice {
         let identity = this.getDriver().getIdentity();
         if (!identity || !identity.sessionId || !identity.aesKey) {
             this.logger.info('TV set unavailable. Missing identity.');
-            this.setUnavailable('Pairing failed.');
+            this.setUnavailable(Homey.__('errors.unavailable.pairing_failed'));
 
         } else {
             this.setSettings({
@@ -53,7 +54,7 @@ module.exports = class SamsungEncryptedDevice extends BaseDevice {
             if (settings.ipaddress) {
                 await this.updateMacAddress(settings.ipaddress);
             } else {
-                this.setUnavailable('IP address needs to be set.');
+                this.setUnavailable(Homey.__('errors.unavailable.ip_address_missing'));
             }
         }
 

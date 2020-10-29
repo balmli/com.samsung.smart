@@ -42,6 +42,11 @@
       "on_already": "Powered on already...",
       "off_already": "Powered off already..."
     },
+    "unavailable": {
+      "not_found": "TV not found. Check IP address.",
+      "pairing_failed": "Pairing failed.",
+      "ip_address_missing": "IP address needs to be set."
+    },
     "smartthings": {
       "not_enabled": "The SmartThings API is not enabled in Adv. settings.",
       "no_token": "The SmartThings API token is not set in Adv. settings.",

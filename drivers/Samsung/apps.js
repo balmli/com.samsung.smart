@@ -1,6 +1,7 @@
 'use strict';
 
 const appCodes = [
+    { "appId": "3201807016597", "name": "Apple TV" },
     { "appId": "3201708014673", "name": "Blockbuster" },
     { "appId": "3201505002690", "name": "CHILI" },
     { "appId": "111199000385", "name": "Digital Concert Hall" },
@@ -20,6 +21,7 @@ const appCodes = [
     { "appId": "3201612011418", "name": "McAfee Security for TV" },
     { "appId": "3201601007250", "name": "Movies & TV Google Play" },
     { "appId": "11101200001", "name": "Netflix" },
+    { "appId": "Netflix", "name": "Netflix (2)" },
     { "appId": "111477001222", "name": "NRK Super" },
     { "appId": "111477001221", "name": "NRK TV" },
     { "appId": "3201607009918", "name": "Onet VOD" },

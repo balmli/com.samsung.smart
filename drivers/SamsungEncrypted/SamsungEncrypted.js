@@ -117,7 +117,7 @@ module.exports = class SamsungEncrypted extends SamsungBase {
                         self.logger.info(`Application command failed: ${cmd} ${appId}`, msg);
                         reject(msg);
                     } else {
-                        self.logger.error('applicationCmd ERROR', data.data, data.response.statusMessage, data.response.statusCode);
+                        self.logger.error('Application command', data.data, data.response.statusMessage, data.response.statusCode);
                         reject(self.i18n.__('errors.app_request_failed', { statusCode: data.response.statusCode, statusMessage: data.response.statusMessage }));
                     }
                 })
@@ -138,7 +138,7 @@ module.exports = class SamsungEncrypted extends SamsungBase {
                         self.logger.info(`Application command timeout: ${cmd} ${appId}`);
                         reject(self.i18n.__('errors.connection_timeout'));
                     } else {
-                        self.logger.error('applicationCmd ERROR', err);
+                        self.logger.error('Application command', err);
                         reject(self.i18n.__('errors.connection_unknown', { message: err }));
                     }
                 });
@@ -213,7 +213,7 @@ module.exports = class SamsungEncrypted extends SamsungBase {
                         self.logger.info(`Socket connect failed`, msg);
                         reject(msg);
                     } else {
-                        self.logger.error('Socket connect ERROR', err);
+                        self.logger.error('Socket connect', err);
                         reject(self.i18n.__('errors.connection_unknown', { message: err }));
                     }
                 });

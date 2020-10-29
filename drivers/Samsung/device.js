@@ -1,5 +1,6 @@
 'use strict';
 
+const Homey = require('homey');
 const BaseDevice = require('../../lib/BaseDevice');
 const Samsung = require('./Samsung');
 const ip = require('ip');
@@ -96,7 +97,7 @@ module.exports = class SamsungDevice extends BaseDevice {
         let info = await this._samsung.getInfo(ipaddress)
             .catch(err => {
                 this.logger.info('TV set unavailable');
-                this.setUnavailable('TV not found. Check IP address.');
+                this.setUnavailable(Homey.__('errors.unavailable.not_found'));
             });
         if (info) {
             this.logger.info('TV set available');
@@ -125,8 +126,8 @@ module.exports = class SamsungDevice extends BaseDevice {
         }
         if (onOff) {
             this.logger.verbose('pollDevice: TV is on');
-            this.shouldFetchModelName();
-            this.shouldRefreshAppList();
+            await this.shouldFetchModelName();
+            await this.shouldRefreshAppList();
         }
     }
 
@@ -174,14 +175,18 @@ module.exports = class SamsungDevice extends BaseDevice {
     }
 
     async refreshAppList() {
-        this._samsung.getListOfApps().catch(err => this.logger.error('refreshAppList ERROR', err));
-        this._lastAppsRefresh = new Date().getTime();
+        try {
+            await this._samsung.getListOfApps()
+            this._lastAppsRefresh = new Date().getTime();
+        } catch (err) {
+            this.logger.info('refreshAppList ERROR', err);
+        }
     }
 
     async shouldRefreshAppList() {
         let now = new Date().getTime();
         if (!this._lastAppsRefresh || (now - this._lastAppsRefresh) > 300000) {
-            this.refreshAppList();
+            await this.refreshAppList();
         }
     }
 

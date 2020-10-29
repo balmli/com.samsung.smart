@@ -97,7 +97,7 @@ module.exports = class SamsungLegacy extends SamsungBase {
                     self.logger.info(`Socket connect failed`, msg);
                     reject(msg);
                 } else {
-                    self.logger.error('Socket connect ERROR', err);
+                    self.logger.error('Socket connect', err);
                     reject(self.i18n.__('errors.connection_unknown', { message: err }));
                 }
             });

@@ -1,4 +1,7 @@
 {
+  "1.7.5": {
+    "en": "Use static list of apps if fetching apps from the TV fails."
+  },
   "1.7.4": {
     "en": "Use static list of apps if fetching apps from the TV fails."
   },

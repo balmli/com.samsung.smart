@@ -24,7 +24,7 @@ module.exports = class SamsungSmartApp extends Homey.App {
 
             this.logger.verbose('SamsungSmartApp is running...');
         } catch (err) {
-            this.logger.error('onInit error', err);
+            this.logger.error('App onInit', err);
         }
     }
 

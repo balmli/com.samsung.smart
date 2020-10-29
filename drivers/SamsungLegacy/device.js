@@ -2,6 +2,7 @@
 
 const macaddress = require('macaddress');
 
+const Homey = require('homey');
 const BaseDevice = require('../../lib/BaseDevice');
 const SamsungLegacy = require('./SamsungLegacy');
 const ip = require('ip');
@@ -57,7 +58,7 @@ module.exports = class SamsungLegacyDevice extends BaseDevice {
             this.setAvailable();
         } else {
             this.logger.info('TV set unavailable');
-            this.setUnavailable('TV not found. Check IP address.');
+            this.setUnavailable(Homey.__('errors.unavailable.not_found'));
         }
     }
 
