@@ -206,6 +206,11 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.7.8
+
+- Fixed pairing bug
+- Added more app IDs
+
 #### 1.7.7
 
 - Minor bug fix

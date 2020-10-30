@@ -33,8 +33,7 @@ module.exports = class SamsungDevice extends BaseDevice {
 
         this._pairRetries = 3;
         this._lastAppsRefresh = undefined;
-        this.initSmartThings();
-        this.pairDevice();
+        await this.initSmartThings();
     }
 
     onSettings(oldSettingsObj, newSettingsObj, changedKeysArr, callback) {
@@ -56,7 +55,6 @@ module.exports = class SamsungDevice extends BaseDevice {
             if (newSettingsObj.tokenAuthSupport) {
                 // Will pair if tokenAuthSupport is set to TRUE
                 this._pairRetries = 3;
-                this.pairDevice();
             } else {
                 // Clear token
                 this._samsung.config()["token"] = undefined;
@@ -127,30 +125,32 @@ module.exports = class SamsungDevice extends BaseDevice {
         if (onOff) {
             this.logger.verbose('pollDevice: TV is on');
             await this.shouldFetchModelName();
+            await this.pairDevice();
             await this.shouldRefreshAppList();
         }
     }
 
     async pairDevice(delay = 5000) {
         let config = this._samsung.config();
-        if (config.tokenAuthSupport !== true || config.token) {
+        if (config.tokenAuthSupport !== true || config.token || this._pairRetries <= 0) {
             return;
         }
 
         await this._delay(delay);
 
-        this.logger.info('Pairing started...');
+        this.logger.info(`Pairing started, retry #${this._pairRetries}`);
         this._samsung.pair()
             .then(token => {
-                this.logger.info(`pairDevice: got a new token: ${self._config.token}`);
+                this._samsung.config()["token"] = token;
                 this.setSettings({"token": token});
+                this.logger.info(`Pairing: got a new token: ${token}`);
             })
             .catch(error => {
-                if (this._pairRetries > 1) {
+                this._pairRetries--;
+                if (this._pairRetries > 0) {
                     this.pairDevice(1000);
-                    this._pairRetries--;
                 } else {
-                    this.logger.info('pairDevice: failed', error);
+                    this.logger.info('Pairing failed');
                 }
             });
     }
