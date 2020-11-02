@@ -36,6 +36,10 @@
     "connection_netunreachable": "Connection to TV is unreachable (__address__:__port__)",
     "connection_timeout": "Connection to TV timed out",
     "connection_unknown": "Connection to TV failed (__message__)",
+    "conn": {
+      "readystate_not_open": "Connection to TV not open.",
+      "send_failed": "Sending command to the TV failed (__message__)."
+    },
     "onoff": {
       "on_in_progress": "Power on in progress...",
       "off_in_progress": "Power off in progress...",

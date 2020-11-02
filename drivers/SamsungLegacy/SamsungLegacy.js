@@ -86,18 +86,18 @@ module.exports = class SamsungLegacy extends SamsungBase {
             socket.on('error', function (err) {
                 if (err.code && err.code === 'ECONNREFUSED') {
                     const msg = self.i18n.__('errors.connection_refused', { address: err.address, port: err.port });
-                    self.logger.info(`Socket connect failed`, msg);
+                    self.logger.info(`Socket connect failed:`, msg);
                     reject(msg);
                 } else if (err.code && err.code === 'EHOSTUNREACH') {
                     const msg = self.i18n.__('errors.connection_hostunreachable', { address: err.address, port: err.port });
-                    self.logger.info(`Socket connect failed`, msg);
+                    self.logger.info(`Socket connect failed:`, msg);
                     reject(msg);
                 } else if (err.code && err.code === 'ENETUNREACH') {
                     const msg = self.i18n.__('errors.connection_netunreachable', { address: err.address, port: err.port });
-                    self.logger.info(`Socket connect failed`, msg);
+                    self.logger.info(`Socket connect failed:`, msg);
                     reject(msg);
                 } else {
-                    self.logger.error('Socket connect', err);
+                    self.logger.error('Socket connect:', err);
                     reject(self.i18n.__('errors.connection_unknown', { message: err }));
                 }
             });

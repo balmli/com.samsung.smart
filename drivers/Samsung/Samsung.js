@@ -213,23 +213,23 @@ module.exports = class Samsung extends SamsungBase {
                         resolve(data);
                     } else if (data.response && data.response.statusCode === 403) {
                         const msg = self.i18n.__('errors.app_request_403');
-                        self.logger.info(`Application command failed: ${cmd} ${appId}`, msg);
+                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
                         reject(msg);
                     } else if (data.response && data.response.statusCode === 404) {
                         const msg = self.i18n.__('errors.app_request_404');
-                        self.logger.info(`Application command failed: ${cmd} ${appId}`, msg);
+                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
                         reject(msg);
                     } else if (data.response && data.response.statusCode === 413) {
                         const msg = self.i18n.__('errors.app_request_413');
-                        self.logger.info(`Application command failed: ${cmd} ${appId}`, msg);
+                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
                         reject(msg);
                     } else if (data.response && data.response.statusCode === 501) {
                         const msg = self.i18n.__('errors.app_request_501');
-                        self.logger.info(`Application command failed: ${cmd} ${appId}`, msg);
+                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
                         reject(msg);
                     } else if (data.response && data.response.statusCode === 503) {
                         const msg = self.i18n.__('errors.app_request_503');
-                        self.logger.info(`Application command failed: ${cmd} ${appId}`, msg);
+                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
                         reject(msg);
                     } else {
                         self.logger.error('Application command', data.data, data.response.statusMessage, data.response.statusCode);
@@ -239,21 +239,21 @@ module.exports = class Samsung extends SamsungBase {
                 .catch(function (err) {
                     if (err.code && err.code === 'ECONNREFUSED') {
                         const msg = self.i18n.__('errors.connection_refused', { address: err.address, port: err.port });
-                        self.logger.info(`Application command failed: ${cmd} ${appId}`, msg);
+                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
                         reject(msg);
                     } else if (err.code && err.code === 'EHOSTUNREACH') {
                         const msg = self.i18n.__('errors.connection_hostunreachable', { address: err.address, port: err.port });
-                        self.logger.info(`Application command failed: ${cmd} ${appId}`, msg);
+                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
                         reject(msg);
                     } else if (err.code && err.code === 'ENETUNREACH') {
                         const msg = self.i18n.__('errors.connection_netunreachable', { address: err.address, port: err.port });
-                        self.logger.info(`Application command failed: ${cmd} ${appId}`, msg);
+                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
                         reject(msg);
                     } else if (err.message === 'timeout') {
                         self.logger.info(`Application command timeout: ${cmd} ${appId}`);
                         reject(self.i18n.__('errors.connection_timeout'));
                     } else {
-                        self.logger.error('Application command', err);
+                        self.logger.error('Application command:', err);
                         reject(self.i18n.__('errors.connection_unknown', { message: err }));
                     }
                 });
@@ -334,18 +334,18 @@ module.exports = class Samsung extends SamsungBase {
                 }).on('error', err => {
                     if (err.code && err.code === 'ECONNREFUSED') {
                         const msg = self.i18n.__('errors.connection_refused', { address: err.address, port: err.port });
-                        self.logger.info(`Socket connect failed`, msg);
+                        self.logger.info(`Socket connect failed:`, msg);
                         reject(msg);
                     } else if (err.code && err.code === 'EHOSTUNREACH') {
                         const msg = self.i18n.__('errors.connection_hostunreachable', { address: err.address, port: err.port });
-                        self.logger.info(`Socket connect failed`, msg);
+                        self.logger.info(`Socket connect failed:`, msg);
                         reject(msg);
                     } else if (err.code && err.code === 'ENETUNREACH') {
                         const msg = self.i18n.__('errors.connection_netunreachable', { address: err.address, port: err.port });
-                        self.logger.info(`Socket connect failed`, msg);
+                        self.logger.info(`Socket connect failed:`, msg);
                         reject(msg);
                     } else {
-                        self.logger.error('Socket connect', err);
+                        self.logger.error('Socket connect:', err);
                         reject(self.i18n.__('errors.connection_unknown', { message: err }));
                     }
                 });
@@ -377,17 +377,28 @@ module.exports = class Samsung extends SamsungBase {
         return new Promise(async (resolve, reject) => {
             try {
                 await this._connection();
-            } catch (error) {
-                return reject(error ? error : self.i18n.__('errors.connection'));
+            } catch (err) {
+                return reject(err);
+            }
+            if (this.socket.readyState !== WebSocket.OPEN) {
+                const msg = self.i18n.__('errors.conn.readystate_not_open');
+                self.logger.info('Socket not ready:', msg);
+                return reject(msg);
             }
             this.logger.info('connectAndSend', aCmd);
-            this.socket.send(JSON.stringify(aCmd), error => {
-                if (error) {
-                    reject(error)
-                } else {
-                    resolve(true);
-                }
-            })
+            try {
+                this.socket.send(JSON.stringify(aCmd), error => {
+                    if (error) {
+                        reject(error)
+                    } else {
+                        resolve(true);
+                    }
+                });
+            } catch (err) {
+                const msg = self.i18n.__('errors.conn.send_failed', { message: err.message });
+                self.logger.info(`Socket send failed:`, msg);
+                reject(msg);
+            }
         });
     }
 
