@@ -96,8 +96,16 @@ module.exports = class SamsungLegacy extends SamsungBase {
                     const msg = self.i18n.__('errors.connection_netunreachable', { address: err.address, port: err.port });
                     self.logger.info(`Socket connect failed:`, msg);
                     reject(msg);
+                } else if (err.code && err.code === 'ETIMEDOUT' || err.indexOf('ETIMEDOUT') >= 0) {
+                    const msg = self.i18n.__('errors.conn.connection_timedout');
+                    self.logger.info(`Socket timeout:`, msg);
+                    reject(msg);
+                } else if (err.code && err.code === 'ECONNRESET' || err.indexOf('ECONNRESET') >= 0) {
+                    const msg = self.i18n.__('errors.conn.connection_reset');
+                    self.logger.info(`Socket connection reset:`, msg);
+                    reject(msg);
                 } else {
-                    self.logger.error('Socket connect:', err);
+                    self.logger.error('Socket error:', err);
                     reject(self.i18n.__('errors.connection_unknown', { message: err }));
                 }
             });

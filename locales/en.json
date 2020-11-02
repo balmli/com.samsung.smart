@@ -38,7 +38,11 @@
     "connection_unknown": "Connection to TV failed (__message__)",
     "conn": {
       "readystate_not_open": "Connection to TV not open.",
-      "send_failed": "Sending command to the TV failed (__message__)."
+      "send_failed": "Sending command to the TV failed (__message__).",
+      "connection_timedout": "Connection to TV timed out.",
+      "connection_reset": "Connection to TV was reset.",
+      "token_missing": "The TV needs a secure connection. Enable 'Secure connection' in Adv. settings.",
+      "token_error": "The TV needs a secure connection."
     },
     "onoff": {
       "on_in_progress": "Power on in progress...",

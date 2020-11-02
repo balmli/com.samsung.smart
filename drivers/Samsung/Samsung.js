@@ -344,8 +344,26 @@ module.exports = class Samsung extends SamsungBase {
                         const msg = self.i18n.__('errors.connection_netunreachable', { address: err.address, port: err.port });
                         self.logger.info(`Socket connect failed:`, msg);
                         reject(msg);
+                    } else if (err.code && err.code === 'ETIMEDOUT' || err.indexOf('ETIMEDOUT') >= 0) {
+                        const msg = self.i18n.__('errors.conn.connection_timedout');
+                        self.logger.info(`Socket timeout:`, msg);
+                        reject(msg);
+                    } else if (err.code && err.code === 'ECONNRESET' || err.indexOf('ECONNRESET') >= 0) {
+                        const msg = self.i18n.__('errors.conn.connection_reset');
+                        self.logger.info(`Socket connection reset:`, msg);
+                        reject(msg);
+                    } else if (err.indexOf('invalid status code 1005') >= 0) {
+                        if (!this._config.tokenAuthSupport || !this._config.token) {
+                            const msg = self.i18n.__('errors.conn.token_missing');
+                            self.logger.info(`Socket token:`, msg);
+                            reject(msg);
+                        } else {
+                            const msg = self.i18n.__('errors.conn.token_error');
+                            self.logger.info(`Socket token:`, msg);
+                            reject(msg);
+                        }
                     } else {
-                        self.logger.error('Socket connect:', err);
+                        self.logger.error('Socket error:', err);
                         reject(self.i18n.__('errors.connection_unknown', { message: err }));
                     }
                 });
@@ -374,7 +392,7 @@ module.exports = class Samsung extends SamsungBase {
 
     async connectAndSend(aCmd) {
         const self = this;
-        return new Promise(async (resolve, reject) => {
+        return this._commandQueue.add(() => new Promise(async (resolve, reject) => {
             try {
                 await this._connection();
             } catch (err) {
@@ -399,7 +417,7 @@ module.exports = class Samsung extends SamsungBase {
                 self.logger.info(`Socket send failed:`, msg);
                 reject(msg);
             }
-        });
+        }));
     }
 
     getHostPort(tokenAuthSupport) {
