@@ -206,6 +206,10 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.7.11
+
+- Minor bug fix
+
 #### 1.7.10
 
 - Minor bug fix
