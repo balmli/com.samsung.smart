@@ -12,6 +12,10 @@
       {
         "$extends": "poll_interval",
         "id": "poll_interval"
+      },
+      {
+        "$extends": "max_volume",
+        "id": "max_volume"
       }
     ]
   },

@@ -1,0 +1,13 @@
+{
+  "id": "max_volume",
+  "type": "number",
+  "label": {
+    "en": "Max volume"
+  },
+  "value": 30,
+  "min": 1,
+  "max": 100,
+  "hint": {
+    "en": "Max. volume level"
+  }
+}

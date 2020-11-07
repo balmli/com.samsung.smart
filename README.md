@@ -206,6 +206,10 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.8.0
+
+- Fetching volume state for TVs that support UPnP
+
 #### 1.7.11
 
 - Minor bug fix

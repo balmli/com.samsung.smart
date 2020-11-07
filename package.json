@@ -1,6 +1,6 @@
 {
   "name": "com.samsung.smart",
-  "version": "1.7.11",
+  "version": "1.8.0",
   "description": "Samsung SmartTV",
   "main": "app.js",
   "scripts": {
@@ -26,6 +26,8 @@
     "macaddress": "0.5.1",
     "is-port-reachable": "3.0.0",
     "p-queue": "6.6.2",
+    "node-ssdp-lite": "0.2.0",
+    "xml2json-light": "1.0.6",
     "homey-log": "1.0.6"
   },
   "devDependencies": {

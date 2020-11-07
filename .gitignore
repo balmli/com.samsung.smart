@@ -13,6 +13,7 @@ node_modules/*
 !node_modules/lsmod
 !node_modules/macaddress
 !node_modules/minimist
+!node_modules/node-ssdp-lite
 !node_modules/p-finally
 !node_modules/p-queue
 !node_modules/p-timeout
@@ -21,3 +22,4 @@ node_modules/*
 !node_modules/uuid
 !node_modules/wake_on_lan
 !node_modules/ws
+!node_modules/xml2json-light

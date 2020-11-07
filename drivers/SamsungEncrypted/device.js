@@ -2,12 +2,13 @@
 
 const Homey = require('homey');
 const BaseDevice = require('../../lib/BaseDevice');
+const UPnPClient = require('../../lib/UPnPClient');
 const SamsungEncrypted = require('./SamsungEncrypted');
 
 module.exports = class SamsungEncryptedDevice extends BaseDevice {
 
     async onInit() {
-        super.onInit('Samsung Encrypted');
+        await super.onInit('Samsung Encrypted');
 
         let identity = this.getDriver().getIdentity();
 
@@ -28,6 +29,12 @@ module.exports = class SamsungEncryptedDevice extends BaseDevice {
             identityAesKey: settings.identityAesKey || (identity ? identity.aesKey : undefined),
             logger: this.logger
         });
+
+        this._upnpClient = new UPnPClient({
+            ip_address: settings.ipaddress,
+            logger: this.logger
+        });
+        this._upnpClient.on('available', this._onUPnPAvailable.bind(this));
 
         this.logger.verbose('onInit config:',
             this._samsung.config()['ip_address'],
@@ -73,31 +80,19 @@ module.exports = class SamsungEncryptedDevice extends BaseDevice {
         callback(null, true);
     }
 
-    async pollDevice() {
-        if (this._is_powering_onoff !== undefined) {
-            return;
-        }
-        let onOff = await this._samsung.apiActive();
-        if (onOff && this.getAvailable() === false) {
-            this.setAvailable();
-        }
-        if (onOff !== this.getCapabilityValue('onoff')) {
-            this.setCapabilityValue('onoff', onOff).catch(err => this.logger.error('Error setting onoff capability', err));
-        }
-        if (onOff) {
-            this.logger.verbose('pollDevice: TV is on');
-            this.shouldFetchModelName();
-        }
+    async onDeviceOnline() {
+        await this.shouldFetchModelName();
+        await this.fetchState();
     }
 
     async shouldFetchModelName() {
         if (!this.getSetting('modelName')) {
             let modelName = 'unknown';
             try {
-                let data = await this._samsung.getInfo();
-                this.logger.verbose('shouldFetchModelName', data.data);
-                if (data && data.data) {
-                    modelName = data.data.ModelName;
+                const info = await this._samsung.getInfo();
+                this.logger.verbose('shouldFetchModelName', info);
+                if (info) {
+                    modelName = info.ModelName;
                 }
             } catch (err) {
                 this.logger.info('Fetching modelName failed', err);

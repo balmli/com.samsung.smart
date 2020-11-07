@@ -7,6 +7,7 @@
   "class": "tv",
   "capabilities": [
     "onoff",
+    "volume_set",
     "volume_up",
     "channel_up",
     "volume_down",

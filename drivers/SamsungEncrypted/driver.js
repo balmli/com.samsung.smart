@@ -104,22 +104,21 @@ module.exports = class SamsungEncryptedDriver extends BaseDriver {
 
     async checkForTV(ipAddr, devices, socket) {
         this.logger.info('checkForTV:', ipAddr);
-        let data = await this._samsung.getInfo(ipAddr).catch(err => {
-        });
-        if (data && data.data) {
-            this.logger.info('checkForTV: found TV:', ipAddr, data.data);
+        const info = await this._samsung.getInfo(ipAddr);
+        if (info) {
+            this.logger.info('checkForTV: found TV:', ipAddr, info);
             this.clearSearchTimeout();
 
             devices.push({
-                name: data.data.DeviceName,
+                name: info.DeviceName,
                 data: {
-                    id: data.data.ModelName
+                    id: info.ModelName
                 },
                 settings: {
                     ipaddress: ipAddr,
-                    duid: this.getDuid(data.data),
-                    modelName: data.data.ModelName,
-                    modelClass: this._samsung.modelClass(data.data.ModelName)
+                    duid: this.getDuid(info),
+                    modelName: info.ModelName,
+                    modelClass: this._samsung.modelClass(info.ModelName)
                 }
             });
             this._devices = devices;

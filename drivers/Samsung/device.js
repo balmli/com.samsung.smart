@@ -2,13 +2,14 @@
 
 const Homey = require('homey');
 const BaseDevice = require('../../lib/BaseDevice');
+const UPnPClient = require('../../lib/UPnPClient');
 const Samsung = require('./Samsung');
 const ip = require('ip');
 
 module.exports = class SamsungDevice extends BaseDevice {
 
     async onInit() {
-        super.onInit('Samsung');
+        await super.onInit('Samsung');
 
         let settings = await this.getSettings();
         if (settings.tokenAuthSupport === undefined || settings.tokenAuthSupport === null) {
@@ -30,6 +31,12 @@ module.exports = class SamsungDevice extends BaseDevice {
             token: settings.token,
             logger: this.logger
         });
+
+        this._upnpClient = new UPnPClient({
+            ip_address: settings.ipaddress,
+            logger: this.logger
+        });
+        this._upnpClient.on('available', this._onUPnPAvailable.bind(this));
 
         this._pairRetries = 3;
         this._lastAppsRefresh = undefined;
@@ -72,15 +79,15 @@ module.exports = class SamsungDevice extends BaseDevice {
         callback(null, true);
     }
 
-    async isSmartThingsEnabled() {
-        let settings = await this.getSettings();
+    isSmartThingsEnabled() {
+        let settings = this.getSettings();
         return settings.smartthings && settings.smartthings_token && settings.smartthings_token.length > 0;
     }
 
     async initSmartThings() {
         setTimeout(async () => {
             this._samsung.clearStClient();
-            const stEnabled = await this.isSmartThingsEnabled();
+            const stEnabled = this.isSmartThingsEnabled();
             if (stEnabled) {
                 try {
                     await this._samsung.getStInputSources();
@@ -92,42 +99,29 @@ module.exports = class SamsungDevice extends BaseDevice {
     }
 
     async checkIPAddress(ipaddress) {
-        let info = await this._samsung.getInfo(ipaddress)
-            .catch(err => {
-                this.logger.info('TV set unavailable');
-                this.setUnavailable(Homey.__('errors.unavailable.not_found'));
-            });
+        let info = await this._samsung.getInfo(ipaddress);
         if (info) {
             this.logger.info('TV set available');
             this.setAvailable();
+        } else {
+            this.logger.info('TV set unavailable');
+            this.setUnavailable(Homey.__('errors.unavailable.not_found'));
         }
     }
 
-    async pollDevice() {
-        if (this._is_powering_onoff !== undefined) {
-            return;
-        }
-        let onOff;
-        const stEnabled = await this.isSmartThingsEnabled();
-        if (stEnabled) {
-            onOff = await this._samsung.getStHealth();
-        }
-        if (!stEnabled || (onOff !== false && onOff !== true)) {
-            onOff = await this._samsung.apiActive();
-        }
+    pollMethods() {
+        return [
+            this._samsung.apiActive(),
+            this._upnpClient ? this._upnpClient.apiActive() : undefined,
+            this.isSmartThingsEnabled() ? this._samsung.getStHealth() : undefined
+        ];
+    }
 
-        if (onOff && this.getAvailable() === false) {
-            this.setAvailable();
-        }
-        if (onOff !== this.getCapabilityValue('onoff')) {
-            this.setCapabilityValue('onoff', onOff).catch(err => this.logger.error('Error setting onoff capability', err));
-        }
-        if (onOff) {
-            this.logger.verbose('pollDevice: TV is on');
-            await this.shouldFetchModelName();
-            await this.pairDevice();
-            await this.shouldRefreshAppList();
-        }
+    async onDeviceOnline() {
+        await this.shouldFetchModelName();
+        await this.pairDevice();
+        await this.shouldRefreshAppList();
+        await this.fetchState();
     }
 
     async pairDevice(delay = 5000) {
@@ -159,10 +153,10 @@ module.exports = class SamsungDevice extends BaseDevice {
         if (!this.getSetting('modelName')) {
             let modelName = 'unknown';
             try {
-                let data = await this._samsung.getInfo();
-                this.logger.verbose('shouldFetchModelName', data.data);
-                if (data && data.data) {
-                    modelName = data.data.device.modelName;
+                const info = await this._samsung.getInfo();
+                this.logger.verbose('shouldFetchModelName', info);
+                if (info) {
+                    modelName = info.device.modelName;
                 }
             } catch (err) {
                 this.logger.info('Fetching modelName failed', err);

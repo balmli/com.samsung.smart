@@ -4,13 +4,14 @@ const macaddress = require('macaddress');
 
 const Homey = require('homey');
 const BaseDevice = require('../../lib/BaseDevice');
+const UPnPClient = require('../../lib/UPnPClient');
 const SamsungLegacy = require('./SamsungLegacy');
 const ip = require('ip');
 
 module.exports = class SamsungLegacyDevice extends BaseDevice {
 
     async onInit() {
-        super.onInit('Samsung Legacy');
+        await super.onInit('Samsung Legacy');
 
         let settings = await this.getSettings();
         this._samsung = new SamsungLegacy({
@@ -27,6 +28,12 @@ module.exports = class SamsungLegacyDevice extends BaseDevice {
             tvAppString: 'iphone.UN60D6000.iapp.samsung',
             logger: this.logger
         });
+
+        this._upnpClient = new UPnPClient({
+            ip_address: settings.ipaddress,
+            logger: this.logger
+        });
+        this._upnpClient.on('available', this._onUPnPAvailable.bind(this));
 
         let self = this;
         macaddress.one(function (err, mac) {
@@ -62,20 +69,8 @@ module.exports = class SamsungLegacyDevice extends BaseDevice {
         }
     }
 
-    async pollDevice() {
-        if (this._is_powering_onoff !== undefined) {
-            return;
-        }
-        let onOff = await this._samsung.apiActive();
-        if (onOff && this.getAvailable() === false) {
-            this.setAvailable();
-        }
-        if (onOff !== this.getCapabilityValue('onoff')) {
-            this.setCapabilityValue('onoff', onOff).catch(err => this.logger.error('Error setting onoff capability', err));
-        }
-        if (onOff) {
-            this.logger.info('pollDevice: TV is on');
-        }
+    async onDeviceOnline() {
+        await this.fetchState();
     }
 
 };

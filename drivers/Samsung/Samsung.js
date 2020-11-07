@@ -18,37 +18,18 @@ module.exports = class Samsung extends SamsungBase {
         return `http://${(ipAddress || this._config.ip_address)}:${this._config.port}/api/v2/`;
     }
 
-    async getInfo(addr) {
-        return new Promise((resolve, reject) => {
-            http.get({ uri: this.getUri(addr), timeout: this._config.api_timeout, json: true })
-                .then(function (data) {
-                    if (data.data && data.response.statusCode === 200) {
-                        resolve(data);
-                    } else {
-                        reject(false);
-                    }
-                })
-                .catch(function (err) {
-                    reject(false);
-                });
-        });
-    }
-
     async apiActive(timeout) {
-        return new Promise((resolve, reject) => {
-            http.get({ uri: this.getUri(), timeout: (timeout || this._config.api_timeout), json: true })
-                .then(function (data) {
-                    if (data.data && data.response.statusCode === 200) {
-                        resolve(true);
-                    } else {
-                        this.logger.info('apiActive: ERROR', data.response.statusCode, data.response.statusMessage);
-                    }
-                    resolve(false);
-                })
-                .catch(function (err) {
-                    resolve(false);
-                });
-        });
+        try {
+            const result = await http.get({
+                uri: this.getUri(),
+                timeout: (timeout || this._config.api_timeout)
+            });
+            const ret = result.response && result.response.statusCode === 200;
+            this.logger.verbose(`Samsung apiActive: ${ret}`);
+            return ret;
+        } catch (err) {
+        }
+        return false;
     }
 
     async turnOff() {
@@ -261,23 +242,21 @@ module.exports = class Samsung extends SamsungBase {
     }
 
     async launchYouTube(videoId) {
-        const launchData = 'v=' + videoId;
-        return new Promise((resolve, reject) => {
-            http.post({
+        try {
+            const launchData = 'v=' + videoId;
+            const result = await http.post({
                 uri: 'http://' + this._config.ip_address + ':8080/ws/apps/YouTube',
                 headers: {
                     'Content-Type': 'text/plain',
                     'Content-Length': Buffer.byteLength(launchData)
                 },
                 timeout: 10000
-            }, launchData)
-                .then(function (data) {
-                    resolve(true);
-                })
-                .catch(function (err) {
-                    reject(false);
-                });
-        });
+            }, launchData);
+            this.logger.verbose(`launchYouTube: started YouTube with video ID: ${videoId}`);
+        } catch (err) {
+            this.logger.info(`launchYouTube: error starting Youtube for video ID: ${videoId}`, err);
+            throw new Error(this.i18n.__('errors.app.start_youtube', { message: err.message } ));
+        }
     }
 
     async _connection() {
@@ -549,10 +528,11 @@ module.exports = class Samsung extends SamsungBase {
         try {
             const deviceId = await this.getStTvDevice();
             const response = await this.stDevice(deviceId, '/health');
-            this.logger.verbose('getStHealth', response.data, response.response.statusCode, response.response.statusMessage);
-            return response && response.data && response.data.state === 'ONLINE';
+            this.logger.debug('getStHealth', response.data, response.response.statusCode, response.response.statusMessage);
+            const ret = response && response.data && response.data.state === 'ONLINE';
+            this.logger.verbose(`SmartThings Health: ${ret}`);
+            return ret;
         } catch (err) {
-            return null;
         }
     }
 

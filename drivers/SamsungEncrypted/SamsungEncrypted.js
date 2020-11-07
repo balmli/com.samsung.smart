@@ -15,22 +15,6 @@ module.exports = class SamsungEncrypted extends SamsungBase {
         return `http://${(ipAddress || this._config.ip_address)}:${this._config.port}/ms/1.0/`;
     }
 
-    async getInfo(addr) {
-        return new Promise((resolve, reject) => {
-            http.get({uri: this.getUri(addr), timeout: this._config.api_timeout, json: true})
-                .then(function (data) {
-                    if (data.data && data.response.statusCode === 200) {
-                        resolve(data);
-                    } else {
-                        reject(false);
-                    }
-                })
-                .catch(function (err) {
-                    reject(false);
-                });
-        });
-    }
-
     async turnOn() {
         return this.sendKey(this._config.modelClass === 'sakep' ? 'KEY_POWERON' : 'KEY_POWER');
     }
