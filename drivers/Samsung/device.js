@@ -1,6 +1,5 @@
 'use strict';
 
-const Homey = require('homey');
 const BaseDevice = require('../../lib/BaseDevice');
 const UPnPClient = require('../../lib/UPnPClient');
 const Samsung = require('./Samsung');
@@ -96,25 +95,6 @@ module.exports = class SamsungDevice extends BaseDevice {
                 }
             }
         }, 2000);
-    }
-
-    async checkIPAddress(ipaddress) {
-        let info = await this._samsung.getInfo(ipaddress);
-        if (info) {
-            this.logger.info('TV set available');
-            this.setAvailable();
-        } else {
-            this.logger.info('TV set unavailable');
-            this.setUnavailable(Homey.__('errors.unavailable.not_found'));
-        }
-    }
-
-    pollMethods() {
-        return [
-            this._samsung.apiActive(),
-            this._upnpClient ? this._upnpClient.apiActive() : undefined,
-            this.isSmartThingsEnabled() ? this._samsung.getStHealth() : undefined
-        ];
     }
 
     async onDeviceOnline() {

@@ -31,7 +31,7 @@ module.exports = class SamsungSmartApp extends Homey.App {
     async initFlows() {
         new Homey.FlowCardCondition('on')
             .register()
-            .registerRunListener(args => args.device._samsung.apiActive());
+            .registerRunListener(args => args.device.isDeviceOnline());
 
         new Homey.FlowCardCondition('is_power_onoff')
             .register()

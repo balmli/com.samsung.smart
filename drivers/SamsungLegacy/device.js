@@ -2,7 +2,6 @@
 
 const macaddress = require('macaddress');
 
-const Homey = require('homey');
 const BaseDevice = require('../../lib/BaseDevice');
 const UPnPClient = require('../../lib/UPnPClient');
 const SamsungLegacy = require('./SamsungLegacy');
@@ -58,15 +57,11 @@ module.exports = class SamsungLegacyDevice extends BaseDevice {
         callback(null, true);
     }
 
-    async checkIPAddress(ipaddress) {
-        let info = await this._samsung.pingPort(ipaddress);
-        if (info) {
-            this.logger.info('TV set available');
-            this.setAvailable();
-        } else {
-            this.logger.info('TV set unavailable');
-            this.setUnavailable(Homey.__('errors.unavailable.not_found'));
-        }
+    pollMethods(timeout) {
+        return [
+            { id: 'ping', method: this._samsung.pingPort(undefined, undefined, timeout) },
+            { id: 'upnp', method: this._upnpClient ? this._upnpClient.apiActive(timeout) : undefined }
+        ];
     }
 
     async onDeviceOnline() {

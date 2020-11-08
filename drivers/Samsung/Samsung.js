@@ -18,20 +18,6 @@ module.exports = class Samsung extends SamsungBase {
         return `http://${(ipAddress || this._config.ip_address)}:${this._config.port}/api/v2/`;
     }
 
-    async apiActive(timeout) {
-        try {
-            const result = await http.get({
-                uri: this.getUri(),
-                timeout: (timeout || this._config.api_timeout)
-            });
-            const ret = result.response && result.response.statusCode === 200;
-            this.logger.verbose(`Samsung apiActive: ${ret}`);
-            return ret;
-        } catch (err) {
-        }
-        return false;
-    }
-
     async turnOff() {
         return this._config.frameTVSupport ? this.holdKey('KEY_POWER', 5000) : this.sendKey('KEY_POWER');
     }
