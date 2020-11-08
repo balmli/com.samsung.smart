@@ -104,6 +104,25 @@ module.exports = class SamsungDevice extends BaseDevice {
         await this.fetchState();
     }
 
+    async shouldFetchModelName() {
+        if (!this.getSetting('modelName')) {
+            let modelName = 'unknown';
+            try {
+                const info = await this._samsung.getInfo();
+                this.logger.verbose('shouldFetchModelName', info);
+                if (info) {
+                    modelName = info.device.modelName;
+                }
+            } catch (err) {
+                this.logger.info('Fetching modelName failed', err);
+            } finally {
+                await this.setSettings({ modelName: modelName });
+                this.logger.setTags({ modelName });
+                this.logger.info(`Modelname set to: ${modelName}`);
+            }
+        }
+    }
+
     async pairDevice(delay = 5000) {
         let config = this._samsung.config();
         if (config.tokenAuthSupport !== true || config.token || this._pairRetries <= 0) {
@@ -129,25 +148,6 @@ module.exports = class SamsungDevice extends BaseDevice {
             });
     }
 
-    async shouldFetchModelName() {
-        if (!this.getSetting('modelName')) {
-            let modelName = 'unknown';
-            try {
-                const info = await this._samsung.getInfo();
-                this.logger.verbose('shouldFetchModelName', info);
-                if (info) {
-                    modelName = info.device.modelName;
-                }
-            } catch (err) {
-                this.logger.info('Fetching modelName failed', err);
-            } finally {
-                await this.setSettings({ modelName: modelName });
-                this.logger.setTags({ modelName });
-                this.logger.info(`Modelname set to: ${modelName}`);
-            }
-        }
-    }
-
     async refreshAppList() {
         try {
             await this._samsung.getListOfApps()
@@ -162,22 +162,6 @@ module.exports = class SamsungDevice extends BaseDevice {
         if (!this._lastAppsRefresh || (now - this._lastAppsRefresh) > 300000) {
             await this.refreshAppList();
         }
-    }
-
-    onAppAutocomplete(query, args) {
-        let apps = this._samsung.getApps();
-        return Promise.resolve((apps === undefined ? [] : apps).map(app => {
-            return {
-                id: app.appId,
-                name: app.name
-            };
-        }).filter(result => {
-            return result.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
-        }).sort((a, b) => {
-            if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-            if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-            return 0;
-        }));
     }
 
     async onInputSourceAutocomplete(query, args) {
@@ -195,4 +179,5 @@ module.exports = class SamsungDevice extends BaseDevice {
             return 0;
         }));
     }
+
 };

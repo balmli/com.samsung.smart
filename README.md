@@ -16,6 +16,7 @@ For newer TVs, that respond to http://TV-IP-ADDRESS:8001/api/v2/
 
 - TV turned on
 - TV turned off
+- Volume changed (requires UPnP support)
 
 #### Conditions
 
@@ -31,6 +32,7 @@ For newer TVs, that respond to http://TV-IP-ADDRESS:8001/api/v2/
 - Unmute the volume
 - Turn the volume up
 - Turn the volume down
+- Set volume to (requires UPnP support)
 - One channel up
 - One channel down
 - Change channel
@@ -48,6 +50,7 @@ For H, HU, J, JU and JS models, that respond to http://TV-IP-ADDRESS:8001/ms/1.0
 
 - TV turned on
 - TV turned off
+- Volume changed (requires UPnP support)
 
 #### Conditions
 
@@ -63,6 +66,7 @@ For H, HU, J, JU and JS models, that respond to http://TV-IP-ADDRESS:8001/ms/1.0
 - Unmute the volume
 - Turn the volume up
 - Turn the volume down
+- Set volume to (requires UPnP support)
 - One channel up
 - One channel down
 - Change channel
@@ -79,6 +83,7 @@ For older TVs, that respond to port 55000.
 
 - TV turned on
 - TV turned off
+- Volume changed (requires UPnP support)
 
 #### Conditions
 
@@ -93,6 +98,7 @@ For older TVs, that respond to port 55000.
 - Unmute the volume
 - Turn the volume up
 - Turn the volume down
+- Set volume to (requires UPnP support)
 - One channel up
 - One channel down
 - Change channel
@@ -161,6 +167,10 @@ To be able to turn off 'The Frame', enable this.
 Interval between each time the status of the TV (on / off) is checked, in seconds.
 
 A value lower than 10 seconds will disable the polling.
+
+#### Maximum volume level
+
+Set the maximum volume level used for UPnP get and set volume.  Default value is 30.
 
 #### Delay between keys
 

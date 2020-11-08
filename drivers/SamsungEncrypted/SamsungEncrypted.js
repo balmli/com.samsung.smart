@@ -4,11 +4,13 @@ const WebSocket = require('ws');
 const http = require('http.min');
 const SamsungBase = require('../../lib/SamsungBase');
 const Encryption = require('../../lib/Encryption/');
+const appCodes = require('./apps');
 
 module.exports = class SamsungEncrypted extends SamsungBase {
 
     constructor(config) {
         super(config);
+        this._apps = appCodes;
     }
 
     getUri(ipAddress) {
@@ -21,23 +23,6 @@ module.exports = class SamsungEncrypted extends SamsungBase {
 
     async turnOff() {
         return this.sendKey(this._config.modelClass === 'sakep' ? 'KEY_POWEROFF' : 'KEY_POWER');
-    }
-
-    getApps() {
-        return [
-            {
-                appId: 'YouTube',
-                name: 'YouTube'
-            },
-            {
-                appId: 'Netflix',
-                name: 'Netflix'
-            },
-            {
-                appId: 'Plex',
-                name: 'Plex'
-            }
-        ];
     }
 
     async getApp(appId) {

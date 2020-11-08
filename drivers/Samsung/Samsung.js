@@ -95,10 +95,6 @@ module.exports = class Samsung extends SamsungBase {
         });
     }
 
-    getApps() {
-        return this._apps;
-    }
-
     async launchBrowser(url) {
         return this.connectAndSend({
             method: 'ms.channel.emit',
