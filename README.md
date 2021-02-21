@@ -219,6 +219,8 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 #### 1.8.0
 
 - Fetching volume state for TVs that support UPnP
+- Fixes for 'Is app running' condition
+- Fixes for 'Launch app' action
 
 #### 1.7.11
 

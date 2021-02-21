@@ -4,13 +4,11 @@ const WebSocket = require('ws');
 const http = require('http.min');
 const SamsungBase = require('../../lib/SamsungBase');
 const Encryption = require('../../lib/Encryption/');
-const appCodes = require('./apps');
 
 module.exports = class SamsungEncrypted extends SamsungBase {
 
     constructor(config) {
         super(config);
-        this._apps = appCodes;
     }
 
     getUri(ipAddress) {
@@ -25,97 +23,8 @@ module.exports = class SamsungEncrypted extends SamsungBase {
         return this.sendKey(this._config.modelClass === 'sakep' ? 'KEY_POWEROFF' : 'KEY_POWER');
     }
 
-    async getApp(appId) {
-        return this.applicationCmd(appId, 'get');
-    }
-
-    async isAppRunning(appId) {
-        let response = await this.getApp(appId).catch(err => {
-        });
-        return this.isRunning(response);
-    }
-
-    isRunning(response) {
-        return response && response.data && response.data.indexOf('running') >= 0;
-    }
-
-    async launchApp(appId, launchData) {
-        let response = await this.getApp(appId);
-        if (this.isRunning(response)) {
-            return true;
-        }
-        this._onSocketTimeout();
-        let data = await this.applicationCmd(appId, 'post', launchData);
-        return data && data.response && (data.response.statusCode === 200 || data.response.statusCode === 201);
-    }
-
-    async applicationCmd(appId, cmd, launchData) {
-        let lData = launchData || '';
-        const self = this;
-        return new Promise((resolve, reject) => {
-            http[cmd]({
-                uri: 'http://' + this._config.ip_address + ':8080/ws/apps/' + appId + (cmd === 'delete' ? '/run' : ''),
-                headers: {
-                    'Content-Type': 'text/plain',
-                    'Content-Length': Buffer.byteLength(lData)
-                },
-                timeout: 10000
-            }, lData)
-                .then(function (data) {
-                    if (data.response && (data.response.statusCode === 200 || data.response.statusCode === 201)) {
-                        self.logger.info(`Application command OK: ${cmd} ${appId}`);
-                        resolve(data);
-                    } else if (data.response && data.response.statusCode === 403) {
-                        const msg = self.i18n.__('errors.app_request_403');
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else if (data.response && data.response.statusCode === 404) {
-                        const msg = self.i18n.__('errors.app_request_404');
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else if (data.response && data.response.statusCode === 413) {
-                        const msg = self.i18n.__('errors.app_request_413');
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else if (data.response && data.response.statusCode === 501) {
-                        const msg = self.i18n.__('errors.app_request_501');
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else if (data.response && data.response.statusCode === 503) {
-                        const msg = self.i18n.__('errors.app_request_503');
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else {
-                        self.logger.error('Application command', data.data, data.response.statusMessage, data.response.statusCode);
-                        reject(self.i18n.__('errors.app_request_failed', { statusCode: data.response.statusCode, statusMessage: data.response.statusMessage }));
-                    }
-                })
-                .catch(function (err) {
-                    if (err.code && err.code === 'ECONNREFUSED') {
-                        const msg = self.i18n.__('errors.connection_refused', { address: err.address, port: err.port });
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else if (err.code && err.code === 'EHOSTUNREACH') {
-                        const msg = self.i18n.__('errors.connection_hostunreachable', { address: err.address, port: err.port });
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else if (err.code && err.code === 'ENETUNREACH') {
-                        const msg = self.i18n.__('errors.connection_netunreachable', { address: err.address, port: err.port });
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else if (err.message === 'timeout') {
-                        self.logger.info(`Application command timeout: ${cmd} ${appId}`);
-                        reject(self.i18n.__('errors.connection_timeout'));
-                    } else {
-                        self.logger.error('Application command:', err);
-                        reject(self.i18n.__('errors.connection_unknown', { message: err }));
-                    }
-                });
-        });
-    }
-
-    async launchYouTube(videoId) {
-        return this.launchApp('YouTube', 'v=' + videoId);
+    getApps() {
+        return this._apps.filter(a => !!a.dialId);
     }
 
     async sendKey(aKey) {
@@ -174,11 +83,17 @@ module.exports = class SamsungEncrypted extends SamsungBase {
                         self.logger.info(`Socket connect failed:`, msg);
                         reject(msg);
                     } else if (err.code && err.code === 'EHOSTUNREACH') {
-                        const msg = self.i18n.__('errors.connection_hostunreachable', { address: err.address, port: err.port });
+                        const msg = self.i18n.__('errors.connection_hostunreachable', {
+                            address: err.address,
+                            port: err.port
+                        });
                         self.logger.info(`Socket connect failed:`, msg);
                         reject(msg);
                     } else if (err.code && err.code === 'ENETUNREACH') {
-                        const msg = self.i18n.__('errors.connection_netunreachable', { address: err.address, port: err.port });
+                        const msg = self.i18n.__('errors.connection_netunreachable', {
+                            address: err.address,
+                            port: err.port
+                        });
                         self.logger.info(`Socket connect failed:`, msg);
                         reject(msg);
                     } else if (err.code && err.code === 'ETIMEDOUT' || err.toString().indexOf('ETIMEDOUT') >= 0) {
@@ -295,7 +210,7 @@ module.exports = class SamsungEncrypted extends SamsungBase {
 
     async getStartService() {
         return new Promise((resolve, reject) => {
-            http.get({uri: `${this.getHostPort(false)}/common/1.0.0/service/startService?appID=com.samsung.companion`})
+            http.get({ uri: `${this.getHostPort(false)}/common/1.0.0/service/startService?appID=com.samsung.companion` })
                 .then(function (data) {
                     resolve(true);
                 })
@@ -307,7 +222,7 @@ module.exports = class SamsungEncrypted extends SamsungBase {
 
     async getHandshake() {
         return new Promise((resolve, reject) => {
-            http.get({uri: `${this.getHostPort(false)}/socket.io/1`})
+            http.get({ uri: `${this.getHostPort(false)}/socket.io/1` })
                 .then(function (data) {
                     const handshake = data.data.split(':');
                     //this.logger.info('getHandshake:', handshake[0]);
@@ -336,13 +251,13 @@ module.exports = class SamsungEncrypted extends SamsungBase {
     }
 
     async showPinPage() {
-        let data = await this.applicationCmd('CloudPINPage', 'post');
+        let data = await this.applicationCmd({ name: "CloudPINPage", appId: "", dialId: "CloudPINPage" }, 'post');
         //this.logger.info('showPinPage', data.response.statusCode);
         return data && data.response && (data.response.statusCode === 200 || data.response.statusCode === 201);
     }
 
     async hidePinPage() {
-        let data = await this.applicationCmd('CloudPINPage', 'delete');
+        let data = await this.applicationCmd({ name: "CloudPINPage", appId: "", dialId: "CloudPINPage" }, 'delete');
         //this.logger.info('hidePinPage', data.response.statusCode);
         return data && data.response && (data.response.statusCode === 200 || data.response.statusCode === 201);
     }

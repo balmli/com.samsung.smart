@@ -1,6 +1,6 @@
 {
   "1.8.0": {
-    "en": "Fetching volume state for TVs that support UPnP."
+    "en": "Fetching volume state for TVs that support UPnP. Fixes for 'Is app running' condition. Fixes for 'Launch app' action. "
   },
   "1.7.11": {
     "en": "Minor bug fix."

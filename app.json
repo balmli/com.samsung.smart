@@ -84,19 +84,6 @@
             "filter": "driver_id=Samsung|SamsungEncrypted|SamsungLegacy"
           }
         ]
-      },
-      {
-        "id": "on",
-        "title": {
-          "en": "Is turned !{{on|off}}"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "filter": "driver_id=Samsung|SamsungEncrypted|SamsungLegacy"
-          }
-        ]
       }
     ],
     "actions": [
@@ -160,32 +147,6 @@
             "placeholder": {
               "en": "Search for app..."
             }
-          }
-        ]
-      },
-      {
-        "id": "off",
-        "title": {
-          "en": "Turn off"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=Samsung|SamsungEncrypted|SamsungLegacy"
-          }
-        ]
-      },
-      {
-        "id": "on",
-        "title": {
-          "en": "Turn on"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=Samsung|SamsungEncrypted|SamsungLegacy"
           }
         ]
       },

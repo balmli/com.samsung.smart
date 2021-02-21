@@ -4,14 +4,11 @@ const WebSocket = require('ws');
 const http = require('http.min');
 const SamsungBase = require('../../lib/SamsungBase');
 const SMARTTHINGS_API = 'https://api.smartthings.com/v1';
-const appCodes = require('./apps');
 
 module.exports = class Samsung extends SamsungBase {
 
     constructor(config) {
         super(config);
-        this._current_app = undefined;
-        this._apps = appCodes;
     }
 
     getUri(ipAddress) {
@@ -130,117 +127,6 @@ module.exports = class Samsung extends SamsungBase {
         });
     }
 
-    async getApp(appId) {
-        return this.applicationCmd(appId, 'get');
-    }
-
-    async isAppRunning(appId) {
-        let response = await this.getApp(appId).catch(err => {
-        });
-        return response && response.data && response.data.visible;
-    }
-
-    async launchApp(appId) {
-        let data = await this.applicationCmd(appId, 'post');
-        let result = data && data.response && (data.response.statusCode === 200 || data.response.statusCode === 201);
-        this._current_app = appId;
-        return result;
-    }
-
-    async closeApp(appId) {
-        let data = await this.applicationCmd(appId, 'delete');
-        return data && data.response && (data.response.statusCode === 200 || data.response.statusCode === 201);
-    }
-
-    async closeCurrentApp() {
-        if (!this._current_app) {
-            throw new Error(this.i18n.__('errors.app_no_app_running'));
-        }
-        let running = await this.isAppRunning(this._current_app);
-        if (!running) {
-            this._current_app = undefined;
-            throw new Error(this.i18n.__('errors.app_app_not_running'));
-        }
-        let appId = this._current_app;
-        this._current_app = undefined;
-        return this.closeApp(appId);
-    }
-
-    async applicationCmd(appId, cmd) {
-        const self = this;
-        return new Promise((resolve, reject) => {
-            http[cmd]({ uri: this.getUri() + 'applications/' + appId, timeout: 10000, json: true })
-                .then(function (data) {
-                    if (data.response && (data.response.statusCode === 200 || data.response.statusCode === 201)) {
-                        self.logger.info(`Application command OK: ${cmd} ${appId}`);
-                        resolve(data);
-                    } else if (data.response && data.response.statusCode === 403) {
-                        const msg = self.i18n.__('errors.app_request_403');
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else if (data.response && data.response.statusCode === 404) {
-                        const msg = self.i18n.__('errors.app_request_404');
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else if (data.response && data.response.statusCode === 413) {
-                        const msg = self.i18n.__('errors.app_request_413');
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else if (data.response && data.response.statusCode === 501) {
-                        const msg = self.i18n.__('errors.app_request_501');
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else if (data.response && data.response.statusCode === 503) {
-                        const msg = self.i18n.__('errors.app_request_503');
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else {
-                        self.logger.error('Application command', data.data, data.response.statusMessage, data.response.statusCode);
-                        reject(self.i18n.__('errors.app_request_failed', { statusCode: data.response.statusCode, statusMessage: data.response.statusMessage }));
-                    }
-                })
-                .catch(function (err) {
-                    if (err.code && err.code === 'ECONNREFUSED') {
-                        const msg = self.i18n.__('errors.connection_refused', { address: err.address, port: err.port });
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else if (err.code && err.code === 'EHOSTUNREACH') {
-                        const msg = self.i18n.__('errors.connection_hostunreachable', { address: err.address, port: err.port });
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else if (err.code && err.code === 'ENETUNREACH') {
-                        const msg = self.i18n.__('errors.connection_netunreachable', { address: err.address, port: err.port });
-                        self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
-                        reject(msg);
-                    } else if (err.message === 'timeout') {
-                        self.logger.info(`Application command timeout: ${cmd} ${appId}`);
-                        reject(self.i18n.__('errors.connection_timeout'));
-                    } else {
-                        self.logger.error('Application command:', err);
-                        reject(self.i18n.__('errors.connection_unknown', { message: err }));
-                    }
-                });
-        });
-    }
-
-    async launchYouTube(videoId) {
-        try {
-            const launchData = 'v=' + videoId;
-            const result = await http.post({
-                uri: 'http://' + this._config.ip_address + ':8080/ws/apps/YouTube',
-                headers: {
-                    'Content-Type': 'text/plain',
-                    'Content-Length': Buffer.byteLength(launchData)
-                },
-                timeout: 10000
-            }, launchData);
-            this.logger.verbose(`launchYouTube: started YouTube with video ID: ${videoId}`);
-        } catch (err) {
-            this.logger.info(`launchYouTube: error starting Youtube for video ID: ${videoId}`, err);
-            throw new Error(this.i18n.__('errors.app.start_youtube', { message: err.message } ));
-        }
-    }
-
     async _connection() {
         return new Promise((resolve, reject) => {
 
@@ -280,9 +166,9 @@ module.exports = class Samsung extends SamsungBase {
                         try {
                             const apps = data.data.data;
                             if (apps && apps.length > 0) {
-                                this._apps = apps.map(a => ({ appId: a.appId, name: a.name }));
-                                this.logger.info(`_connection: has ${this._apps ? this._apps.length : 0} apps`);
-                                this.logger.verbose(`_connection:`, this._apps);
+                                this.logger.info(`_connection: got ${apps.length} apps`);
+                                this.mergeApps(apps.map(a => ({ appId: a.appId, name: a.name })));
+                                this.logger.verbose(`_connection: after merge:`, this.getApps());
                             }
                         } catch (err) {
                         }

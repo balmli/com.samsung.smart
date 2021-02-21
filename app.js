@@ -29,21 +29,9 @@ module.exports = class SamsungSmartApp extends Homey.App {
     }
 
     async initFlows() {
-        new Homey.FlowCardCondition('on')
-            .register()
-            .registerRunListener(args => args.device.isDeviceOnline());
-
         new Homey.FlowCardCondition('is_power_onoff')
             .register()
             .registerRunListener(args => args.device._is_powering_onoff !== undefined);
-
-        new Homey.FlowCardAction('on')
-            .register()
-            .registerRunListener(args => args.device.turnOnOff(true));
-
-        new Homey.FlowCardAction('off')
-            .register()
-            .registerRunListener(args => args.device.turnOnOff(false));
 
         new Homey.FlowCardAction('send_key')
             .register()
@@ -61,13 +49,13 @@ module.exports = class SamsungSmartApp extends Homey.App {
 
         new Homey.FlowCardCondition('is_app_running')
             .register()
-            .registerRunListener(args => args.device._samsung.isAppRunning(args.app_id.id))
+            .registerRunListener(args => args.device._samsung.isAppRunning(args.app_id))
             .getArgument('app_id')
             .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
 
         new Homey.FlowCardAction('launch_app')
             .register()
-            .registerRunListener(args => args.device._samsung.launchApp(args.app_id.id))
+            .registerRunListener(args => args.device._samsung.launchApp(args.app_id))
             .getArgument('app_id')
             .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
 
