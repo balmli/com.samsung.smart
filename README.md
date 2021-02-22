@@ -216,6 +216,10 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.8.1
+
+- Fixes for power on / off
+
 #### 1.8.0
 
 - Fetching volume state for TVs that support UPnP
