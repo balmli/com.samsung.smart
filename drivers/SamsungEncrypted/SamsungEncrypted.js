@@ -65,10 +65,10 @@ module.exports = class SamsungEncrypted extends SamsungBase {
                     rejectUnauthorized: false
                 });
 
-                this.logger.verbose('_connection', uri);
+                self.logger.verbose('_connection', uri);
 
                 this.socket.on('message', data => {
-                    //this.logger.info('_connection:', data);
+                    //self.logger.info('_connection:', data);
                     this._onMessage(data);
 
                     resolve();
@@ -191,7 +191,7 @@ module.exports = class SamsungEncrypted extends SamsungBase {
                 self.logger.info('Socket not ready:', msg);
                 return reject(msg);
             }
-            this.logger.info('connectAndSend', aMsg);
+            self.logger.info('connectAndSend', aMsg);
             try {
                 this.socket.send(aMsg, error => {
                     if (error) {
@@ -295,17 +295,17 @@ module.exports = class SamsungEncrypted extends SamsungBase {
             })
                 .then(function (data) {
                     const authData = JSON.parse(data.data.auth_data);
-                    //this.logger.info('Received server hello', data.data);
-                    //this.logger.info('Validating server hello auth data', authData.GeneratorClientHello);
+                    //self.logger.info('Received server hello', data.data);
+                    //self.logger.info('Validating server hello auth data', authData.GeneratorClientHello);
                     if (Encryption.parseClientHello(authData.GeneratorClientHello) !== 0) {
                         reject(self.i18n.__('pair.encrypted.invalid_pin'));
                     }
 
-                    //this.logger.info('Obtained requestId', authData.request_id);
+                    //self.logger.info('Obtained requestId', authData.request_id);
                     resolve(authData.request_id);
                 })
                 .catch(function (err) {
-                    this.logger.info('confirmPin ERROR', err);
+                    self.logger.info('confirmPin ERROR', err);
                     reject(err);
                 });
         });
@@ -328,27 +328,27 @@ module.exports = class SamsungEncrypted extends SamsungBase {
                 }
             })
                 .then(function (data) {
-                    //this.logger.info('Received client acknowledge', data.data);
+                    //self.logger.info('Received client acknowledge', data.data);
                     const authData = JSON.parse(data.data.auth_data);
-                    //this.logger.info('Validating acknowledge auth data', authData.ClientAckMsg);
+                    //self.logger.info('Validating acknowledge auth data', authData.ClientAckMsg);
                     const clientAck = Encryption.parseClientAcknowledge(authData.ClientAckMsg);
 
                     if (!clientAck) {
                         reject(self.i18n.__('pair.encrypted.failed_ack_client'));
                     }
 
-                    //this.logger.info('acknowledgeRequestId clientAck', authData, clientAck);
+                    //self.logger.info('acknowledgeRequestId clientAck', authData, clientAck);
 
                     const identity = {
                         sessionId: authData.session_id,
                         aesKey: Encryption.getKey()
                     };
 
-                    //this.logger.info('Identity:', identity);
+                    //self.logger.info('Identity:', identity);
                     resolve(identity);
                 })
                 .catch(function (err) {
-                    this.logger.info('acknowledgeRequestId ERROR', err);
+                    self.logger.info('acknowledgeRequestId ERROR', err);
                     reject(false);
                 });
         });

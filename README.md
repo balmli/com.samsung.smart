@@ -217,6 +217,10 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.8.3
+
+- Minor bug fix
+
 #### 1.8.2
 
 - Added action to manually set the power state

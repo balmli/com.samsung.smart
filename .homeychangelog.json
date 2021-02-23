@@ -1,4 +1,7 @@
 {
+  "1.8.3": {
+    "en": "Fetching volume state for TVs that support UPnP. Fixes for 'Is app running' condition. Fixes for 'Launch app' action. Fixes for power on / off. Added action to manually set the power state. "
+  },
   "1.8.2": {
     "en": "Fetching volume state for TVs that support UPnP. Fixes for 'Is app running' condition. Fixes for 'Launch app' action. Fixes for power on / off. Added action to manually set the power state. "
   },
