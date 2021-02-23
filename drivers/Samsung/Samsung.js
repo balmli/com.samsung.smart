@@ -392,18 +392,6 @@ module.exports = class Samsung extends SamsungBase {
         return this._config.stTvDeviceId;
     }
 
-    async getStHealth() {
-        try {
-            const deviceId = await this.getStTvDevice();
-            const response = await this.stDevice(deviceId, '/health');
-            this.logger.debug('getStHealth', response.data, response.response.statusCode, response.response.statusMessage);
-            const ret = response && response.data && response.data.state === 'ONLINE';
-            this.logger.verbose(`SmartThings Health: ${ret}`);
-            return ret;
-        } catch (err) {
-        }
-    }
-
     async getStInputSources() {
         try {
             const deviceId = await this.getStTvDevice();

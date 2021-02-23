@@ -220,6 +220,7 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 #### 1.8.3
 
 - Minor bug fix
+- Do not use SmartThings to check if the TV is on or off
 
 #### 1.8.2
 
