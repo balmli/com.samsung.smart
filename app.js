@@ -82,6 +82,10 @@ module.exports = class SamsungSmartApp extends Homey.App {
             .registerRunListener(args => args.device._samsung.setInputSource(args.input_source.id))
             .getArgument('input_source')
             .registerAutocompleteListener((query, args) => args.device.onInputSourceAutocomplete(query, args));
+
+        new Homey.FlowCardAction('set_power_state')
+            .register()
+            .registerRunListener(args => args.device.setPowerState(args.power_state === 'on'));
     }
 
 };

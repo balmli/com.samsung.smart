@@ -1,0 +1,37 @@
+{
+  "id": "set_power_state",
+  "title": {
+    "en": "Set power state"
+  },
+  "hint": {
+    "en": "Use this to override the polling of the power state, eg. if you use a wall plug to check if the TV is on or off."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=Samsung"
+    },
+    {
+      "name": "power_state",
+      "title": {
+        "en": "Power state"
+      },
+      "type": "dropdown",
+      "values": [
+        {
+          "id": "off",
+          "label": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "on",
+          "label": {
+            "en": "On"
+          }
+        }
+      ]
+    }
+  ]
+}

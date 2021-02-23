@@ -1,0 +1,11 @@
+{
+	"id": "power_state_polling",
+	"type": "checkbox",
+	"label": {
+		"en": "Power state polling"
+	},
+	"value": true,
+	"hint": {
+		"en": "Uncheck if you set the power state manually with the 'Set power state' action card."
+	}
+}

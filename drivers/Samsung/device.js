@@ -164,6 +164,17 @@ module.exports = class SamsungDevice extends BaseDevice {
         }
     }
 
+    async setPowerState(powerState) {
+        try {
+            const power_state_polling = false;
+            await this.setSettings({ power_state_polling });
+            await this.setCapabilityValue('onoff', powerState);
+            this.logger.info('setPowerState', powerState);
+        } catch (err) {
+            this.logger.info('setPowerState ERROR', err);
+        }
+    }
+
     async onInputSourceAutocomplete(query, args) {
         let inputSources = await this._samsung.getStInputSources();
         return Promise.resolve((inputSources === undefined ? [] : inputSources).map(is => {

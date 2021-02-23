@@ -22,6 +22,10 @@
         "id": "poll_interval"
       },
       {
+        "$extends": "power_state_polling",
+        "id": "power_state_polling"
+      },
+      {
         "$extends": "max_volume",
         "id": "max_volume"
       }

@@ -41,6 +41,7 @@ For newer TVs, that respond to http://TV-IP-ADDRESS:8001/api/v2/
 - Launch browser
 - Send key
 - Send list of keys
+- Set power state
 
 ## Device: Samsung (encrypted)
 
@@ -215,6 +216,10 @@ Use at your own risk. I accept no responsibility for any damages caused by using
 Some TVs use a different type of pairing, and are therefore not supported at the moment.
 
 ## Release Notes:
+
+#### 1.8.2
+
+- Added action to manually set the power state
 
 #### 1.8.1
 
