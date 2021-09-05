@@ -98,10 +98,24 @@ module.exports = class SamsungDevice extends BaseDevice {
     }
 
     async onDeviceOnline() {
+        await this.shouldFetchPowerState();
         await this.shouldFetchModelName();
         await this.pairDevice();
         await this.shouldRefreshAppList();
         await this.fetchState();
+    }
+
+    async shouldFetchPowerState() {
+        if (this.getSetting('power_state') === null) {
+            try {
+                const info = await this._samsung.getInfo();
+                const hasPowerState = !!(info.device && info.device.PowerState);
+                await this.setSettings({ power_state: hasPowerState });
+                this.logger.info(`Has PowerState set to: ${hasPowerState}`);
+            } catch (err) {
+                this.logger.info('Fetching PowerState failed', err);
+            }
+        }
     }
 
     async shouldFetchModelName() {

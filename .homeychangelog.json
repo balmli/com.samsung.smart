@@ -1,4 +1,7 @@
 {
+  "1.8.4": {
+    "en": "Improvements for power state. "
+  },
   "1.8.3": {
     "en": "Fetching volume state for TVs that support UPnP. Fixes for 'Is app running' condition. Fixes for 'Launch app' action. Fixes for power on / off. Added action to manually set the power state. Do not use SmartThings to check if the TV is on or off. "
   },
