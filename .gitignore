@@ -23,3 +23,7 @@ node_modules/*
 !node_modules/wake_on_lan
 !node_modules/ws
 !node_modules/xml2json-light
+
+
+# Added by Homey CLI
+/.homeybuild/

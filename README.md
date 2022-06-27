@@ -217,6 +217,10 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.8.5
+
+- Discover MAC address on boot (thanks to Martijn Poppen)
+
 #### 1.8.4
 
 - Improvements for power state
