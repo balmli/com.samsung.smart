@@ -217,7 +217,7 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
-#### 1.8.5
+#### 1.8.6
 
 - Discover MAC address on boot (thanks to Martijn Poppen)
 

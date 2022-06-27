@@ -16,8 +16,6 @@ module.exports = class SamsungDevice extends BaseDevice {
             settings.tokenAuthSupport = false;
         }
         
-        await this.updateIPAddress(settings.ipaddress);
-        
         this._samsung = new Samsung({
             device: this,
             name: "homey",
@@ -33,6 +31,8 @@ module.exports = class SamsungDevice extends BaseDevice {
             token: settings.token,
             logger: this.logger
         });
+
+        await this.updateIPAddress(settings.ipaddress);
 
         this._upnpClient = new UPnPClient({
             ip_address: settings.ipaddress,
