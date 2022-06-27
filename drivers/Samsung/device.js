@@ -15,6 +15,9 @@ module.exports = class SamsungDevice extends BaseDevice {
             this.setSettings({"tokenAuthSupport": false});
             settings.tokenAuthSupport = false;
         }
+        
+        await this.updateIPAddress(settings.ipaddress);
+        
         this._samsung = new Samsung({
             device: this,
             name: "homey",
