@@ -49,7 +49,7 @@ module.exports = class SamsungEncryptedDevice extends BaseDevice {
         let identity = this.getDriver().getIdentity();
         if (!identity || !identity.sessionId || !identity.aesKey) {
             this.logger.info('TV set unavailable. Missing identity.');
-            this.setUnavailable(Homey.__('errors.unavailable.pairing_failed'));
+            await this.setUnavailable(Homey.__('errors.unavailable.pairing_failed'));
 
         } else {
             this.setSettings({
@@ -61,7 +61,7 @@ module.exports = class SamsungEncryptedDevice extends BaseDevice {
             if (settings.ipaddress) {
                 await this.updateMacAddress(settings.ipaddress);
             } else {
-                this.setUnavailable(Homey.__('errors.unavailable.ip_address_missing'));
+                await this.setUnavailable(Homey.__('errors.unavailable.ip_address_missing'));
             }
         }
 
