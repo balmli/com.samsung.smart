@@ -10,15 +10,10 @@ module.exports = class SamsungSmartApp extends Homey.App {
     async onInit() {
         try {
             this.logger = new Logger({
+                homey: this.homey,
                 logFunc: this.log,
                 errorFunc: this.error,
             }, Homey.env);
-
-            process.on('unhandledRejection', (reason, p) => {
-                this.logger.error('Unhandled rejection', reason, p);
-            }).on('uncaughtException', err => {
-                this.logger.error('Uncaught exception', err);
-            });
 
             await this.initFlows();
 
@@ -29,62 +24,52 @@ module.exports = class SamsungSmartApp extends Homey.App {
     }
 
     async initFlows() {
-        new Homey.FlowCardCondition('is_power_onoff')
-            .register()
+        this.homey.flow.getConditionCard('is_power_onoff')
             .registerRunListener(args => args.device._is_powering_onoff !== undefined);
 
-        new Homey.FlowCardAction('send_key')
-            .register()
+        this.homey.flow.getActionCard('send_key')
             .registerRunListener(args => args.device._samsung.sendKey(args.key.id))
             .getArgument('key')
             .registerAutocompleteListener((query, args) => args.device.onKeyAutocomplete(query, args));
 
-        new Homey.FlowCardAction('send_keys')
-            .register()
+        this.homey.flow.getActionCard('send_keys')
             .registerRunListener(args => args.device._samsung.sendKeys([args.keys1]));
 
-        new Homey.FlowCardAction('change_channel')
-            .register()
+        this.homey.flow.getActionCard('change_channel')
             .registerRunListener(args => args.device._samsung.setChannel(args.channel));
 
-        new Homey.FlowCardCondition('is_app_running')
-            .register()
+        this.homey.flow.getConditionCard('is_app_running')
             .registerRunListener(args => args.device._samsung.isAppRunning(args.app_id))
             .getArgument('app_id')
             .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
 
-        new Homey.FlowCardAction('launch_app')
-            .register()
+        this.homey.flow.getActionCard('launch_app')
             .registerRunListener(args => args.device._samsung.launchApp(args.app_id))
             .getArgument('app_id')
             .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
 
-        new Homey.FlowCardAction('youtube')
-            .register()
+        this.homey.flow.getActionCard('youtube')
             .registerRunListener(args => {
                 if (!args.videoId || args.videoId.length !== 11) {
-                    return Promise.reject(Homey.__('errors.invalid_video_id'));
+                    return Promise.reject(this.homey.__('errors.invalid_video_id'));
                 }
                 return args.device._samsung.launchYouTube(args.videoId);
             });
 
-        new Homey.FlowCardAction('browse')
-            .register()
+        this.homey.flow.getActionCard('browse')
             .registerRunListener(args => {
                 if (!args.url || args.url.length === 0) {
-                    return Promise.reject(Homey.__('errors.invalid_browse_url'));
+                    return Promise.reject(this.homey.__('errors.invalid_browse_url'));
                 }
                 return args.device._samsung.launchBrowser(args.url);
             });
 
-        new Homey.FlowCardAction('set_input_source')
-            .register()
+        this.homey.flow.getActionCard('set_input_source')
             .registerRunListener(args => args.device._samsung.setInputSource(args.input_source.id))
             .getArgument('input_source')
             .registerAutocompleteListener((query, args) => args.device.onInputSourceAutocomplete(query, args));
 
-        new Homey.FlowCardAction('set_power_state')
-            .register()
+        this.homey.flow.getActionCard('set_power_state')
             .registerRunListener(args => args.device.setPowerState(args.power_state === 'on'));
     }
 

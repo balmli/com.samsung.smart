@@ -10,6 +10,7 @@ module.exports = class SamsungEncryptedDriver extends BaseDriver {
         super.onInit('Samsung Encrypted');
 
         this._samsung = new SamsungEncrypted({
+            homey: this.homey,
             port: 8001,
             api_timeout: 125,
             appId: '721b6fce-4ee6-48ba-8045-955a539edadb',
@@ -26,83 +27,83 @@ module.exports = class SamsungEncryptedDriver extends BaseDriver {
         return this._identity;
     }
 
-    onPair(socket) {
+    async onPair(session) {
         let self = this;
-        socket.on('list_devices', function (data, callback) {
+
+        session.setHandler('list_devices', async (data) => {
 
             self._samsung.config()['api_timeout'] = 125;
-            self.searchForTVs(ip.address(), socket)
+            self.searchForTVs(ip.address(), session)
                 .then(devices => {
                     if (devices.length === 0) {
-                        socket.showView('ip_address');
+                        session.showView('ip_address');
                     } else {
-                        callback(null, devices);
+                        return devices;
                     }
                 })
                 .catch(err => {
-                    callback(new Error(Homey.__('pair.no_tvs')));
+                    throw new Error(this.homey.__('pair.no_tvs'));
                 });
 
         });
 
-        socket.on('pincode', async (pincode, callback) => {
+        session.setHandler('pincode', async (pincode) => {
             try {
                 await self.setPinCode(pincode);
                 if (self._identity) {
-                    callback(null, true);
+                    return true;
                 } else {
-                    self.log('socket pincode error: no identify');
-                    callback(null, false);
+                    self.log('pincode error: no identify');
+                    return false;
                 }
             } catch (err) {
-                self.log('socket pincode error:', err);
-                callback(null, false);
+                self.log('pincode error:', err);
+                return false;
             } finally {
                 const hidePinPage = await self._samsung.hidePinPage();
-                self.log('socket pincode hidePinPage:', hidePinPage);
+                self.log('pincode hidePinPage:', hidePinPage);
             }
         });
 
-        socket.on('manual_input', async (userdata, callback) => {
+        session.setHandler('manual_input', async (userdata) => {
             try {
                 self._samsung.config()['api_timeout'] = 2000;
                 let data = await self._samsung.getInfo(userdata.ipaddress);
                 if (data) {
                     let devices = [];
-                    await self.checkForTV(userdata.ipaddress, devices, socket);
+                    await self.checkForTV(userdata.ipaddress, devices, session);
                     if (self._devices.length > 0) {
-                        callback(null, self._devices[0]);
+                        return self._devices[0];
                     } else {
-                        callback('error', null);
+                        throw new Error('error');
                     }
                 } else {
-                    callback('error', null);
+                    throw new Error('error');
                 }
             } catch (err) {
-                callback('error', null);
+                throw new Error('error');
             }
         });
 
-        socket.on('showView', async (viewId, callback) => {
+        session.setHandler('showView', async (viewId) => {
             if (viewId === 'pin_wait') {
                 await self._samsung.showPinPage();
                 await self._samsung.startPairing();
-                socket.showView('set_pin_code');
+                session.showView('set_pin_code');
             }
-            callback();
         });
 
-        socket.on('add_device', (device, callback) => {
-            self.log('socket add_device:', device);
+        session.setHandler('add_device', async (device) => {
+            self.log('add_device:', device);
         });
 
-        socket.on('disconnect', function () {
-            self.log('socket disconnect');
+        session.setHandler('disconnect', async () => {
+            self.log('disconnect');
             self.clearSearchTimeout();
         });
     }
 
-    async checkForTV(ipAddr, devices, socket) {
+    async checkForTV(ipAddr, devices, session) {
         this.logger.info('checkForTV:', ipAddr);
         const info = await this._samsung.getInfo(ipAddr);
         if (info) {
@@ -122,7 +123,7 @@ module.exports = class SamsungEncryptedDriver extends BaseDriver {
                 }
             });
             this._devices = devices;
-            socket.emit('list_devices', this._devices);
+            session.emit('list_devices', this._devices);
             this._samsung.config()['ip_address'] = ipAddr;
         }
     }
@@ -141,7 +142,7 @@ module.exports = class SamsungEncryptedDriver extends BaseDriver {
 
         let device = this._devices.length > 0 ? this._devices[0] : undefined;
         if (!device) {
-            throw new Error(Homey.__('pair.no_tvs'));
+            throw new Error(this.homey.__('pair.no_tvs'));
         }
 
         let requestId = await this._samsung.confirmPin(pin);

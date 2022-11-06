@@ -9,13 +9,14 @@ module.exports = class SamsungLegacyDriver extends BaseDriver {
         super.onInit('Samsung Legacy');
 
         this._samsung = new SamsungLegacy({
+            homey: this.homey,
             port: 55000,
             api_timeout: 100,
             logger: this.logger
         });
     }
 
-    async checkForTV(ipAddr, devices, socket) {
+    async checkForTV(ipAddr, devices, session) {
         this.logger.info('searchForTVs', ipAddr);
         let data = await this._samsung.pingPort(ipAddr);
         if (data) {
@@ -30,7 +31,7 @@ module.exports = class SamsungLegacyDriver extends BaseDriver {
                     modelName: 'legacy'
                 }
             });
-            socket.emit('list_devices', devices);
+            session.emit('list_devices', devices);
         }
     }
 

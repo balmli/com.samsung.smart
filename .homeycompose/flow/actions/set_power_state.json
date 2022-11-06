@@ -3,6 +3,9 @@
   "title": {
     "en": "Set power state"
   },
+  "titleFormatted": {
+    "en": "Set power state to [[power_state]]"
+  },
   "hint": {
     "en": "Use this to override the polling of the power state, eg. if you use a wall plug to check if the TV is on or off."
   },

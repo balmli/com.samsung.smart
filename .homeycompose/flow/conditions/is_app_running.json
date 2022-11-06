@@ -3,6 +3,9 @@
   "title": {
     "en": "Is app !{{running|not running}}"
   },
+  "titleFormatted": {
+    "en": "Is app [[app_id]] !{{running|not running}}"
+  },
   "args": [
     {
       "name": "device",

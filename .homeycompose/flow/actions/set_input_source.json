@@ -3,6 +3,9 @@
   "title": {
     "en": "Set input source"
   },
+  "titleFormatted": {
+    "en": "Set input source to [[input_source]]"
+  },
   "args": [
     {
       "type": "device",

@@ -161,12 +161,12 @@ module.exports = class SamsungEncrypted extends SamsungBase {
 
     _addSocketTimeout() {
         this._clearSocketTimeout();
-        this.socketTimeout = setTimeout(() => this._onSocketTimeout(), 1000 * 60 * 2);
+        this.socketTimeout = this._config.homey.setTimeout(() => this._onSocketTimeout(), 1000 * 60 * 2);
     }
 
     _clearSocketTimeout() {
         if (this.socketTimeout) {
-            clearTimeout(this.socketTimeout);
+            this._config.homey.clearTimeout(this.socketTimeout);
             this.socketTimeout = undefined;
         }
     }

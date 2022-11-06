@@ -10,17 +10,18 @@ module.exports = class SamsungDevice extends BaseDevice {
     async onInit() {
         await super.onInit('Samsung');
 
-        let settings = await this.getSettings();
+        let settings = this.getSettings();
         if (settings.tokenAuthSupport === undefined || settings.tokenAuthSupport === null) {
-            this.setSettings({"tokenAuthSupport": false});
+            await this.setSettings({"tokenAuthSupport": false}).catch(err => this.logger.error(err));
             settings.tokenAuthSupport = false;
         }
 
         await this.updateMacAddress(settings.ipaddress);
-        settings = await this.getSettings();
+        settings = this.getSettings();
 
         this._samsung = new Samsung({
             device: this,
+            homey: this.homey,
             name: "homey",
             ip_address: settings.ipaddress,
             mac_address: settings.mac_address,
@@ -46,40 +47,39 @@ module.exports = class SamsungDevice extends BaseDevice {
         await this.initSmartThings();
     }
 
-    onSettings(oldSettingsObj, newSettingsObj, changedKeysArr, callback) {
-        if (changedKeysArr.includes('ipaddress')) {
-            this.updateIPAddress(newSettingsObj.ipaddress);
+    async onSettings({ oldSettings, newSettings, changedKeys }) {
+        if (changedKeys.includes('ipaddress')) {
+            this.updateIPAddress(newSettings.ipaddress);
             this._lastAppsRefresh = undefined; // Force app list refresh
         }
-        if (changedKeysArr.includes('poll_interval')) {
-            this.addPollDevice(newSettingsObj.poll_interval);
+        if (changedKeys.includes('poll_interval')) {
+            this.addPollDevice(newSettings.poll_interval);
         }
-        if (changedKeysArr.includes('delay_keys')) {
-            this._samsung.config()["delay_keys"] = newSettingsObj.delay_keys;
+        if (changedKeys.includes('delay_keys')) {
+            this._samsung.config()["delay_keys"] = newSettings.delay_keys;
         }
-        if (changedKeysArr.includes('delay_channel_keys')) {
-            this._samsung.config()["delay_channel_keys"] = newSettingsObj.delay_channel_keys;
+        if (changedKeys.includes('delay_channel_keys')) {
+            this._samsung.config()["delay_channel_keys"] = newSettings.delay_channel_keys;
         }
-        if (changedKeysArr.includes('tokenAuthSupport')) {
-            this._samsung.config()["tokenAuthSupport"] = newSettingsObj.tokenAuthSupport;
-            if (newSettingsObj.tokenAuthSupport) {
+        if (changedKeys.includes('tokenAuthSupport')) {
+            this._samsung.config()["tokenAuthSupport"] = newSettings.tokenAuthSupport;
+            if (newSettings.tokenAuthSupport) {
                 // Will pair if tokenAuthSupport is set to TRUE
                 this._pairRetries = 3;
             } else {
                 // Clear token
                 this._samsung.config()["token"] = undefined;
-                setTimeout(() => {
-                    this.setSettings({ "token": undefined });
+                this.homey.setTimeout(() => {
+                    this.setSettings({ "token": undefined }).catch(err => this.logger.error(err));
                 }, 1000);
             }
         }
-        if (changedKeysArr.includes('frameTVSupport')) {
-            this._samsung.config()["frameTVSupport"] = newSettingsObj.frameTVSupport;
+        if (changedKeys.includes('frameTVSupport')) {
+            this._samsung.config()["frameTVSupport"] = newSettings.frameTVSupport;
         }
-        if (changedKeysArr.includes('smartthings') || changedKeysArr.includes('smartthings_token')) {
+        if (changedKeys.includes('smartthings') || changedKeys.includes('smartthings_token')) {
             this.initSmartThings();
         }
-        callback(null, true);
     }
 
     isSmartThingsEnabled() {
@@ -88,7 +88,7 @@ module.exports = class SamsungDevice extends BaseDevice {
     }
 
     async initSmartThings() {
-        setTimeout(async () => {
+        this.homey.setTimeout(async () => {
             this._samsung.clearStClient();
             const stEnabled = this.isSmartThingsEnabled();
             if (stEnabled) {
@@ -114,7 +114,7 @@ module.exports = class SamsungDevice extends BaseDevice {
             try {
                 const info = await this._samsung.getInfo();
                 const hasPowerState = !!(info.device && info.device.PowerState);
-                await this.setSettings({ power_state: hasPowerState });
+                await this.setSettings({ power_state: hasPowerState }).catch(err => this.logger.error(err));
                 this.logger.info(`Has PowerState set to: ${hasPowerState}`);
             } catch (err) {
                 this.logger.info('Fetching PowerState failed', err);
@@ -134,7 +134,7 @@ module.exports = class SamsungDevice extends BaseDevice {
             } catch (err) {
                 this.logger.info('Fetching modelName failed', err);
             } finally {
-                await this.setSettings({ modelName: modelName });
+                await this.setSettings({ modelName: modelName }).catch(err => this.logger.error(err));
                 this.logger.setTags({ modelName });
                 this.logger.info(`Modelname set to: ${modelName}`);
             }
@@ -153,7 +153,7 @@ module.exports = class SamsungDevice extends BaseDevice {
         this._samsung.pair()
             .then(token => {
                 this._samsung.config()["token"] = token;
-                this.setSettings({"token": token});
+                this.setSettings({"token": token}).catch(err => this.logger.error(err));
                 this.logger.info(`Pairing: got a new token: ${token}`);
             })
             .catch(error => {
@@ -185,8 +185,8 @@ module.exports = class SamsungDevice extends BaseDevice {
     async setPowerState(powerState) {
         try {
             const power_state_polling = false;
-            await this.setSettings({ power_state_polling });
-            await this.setCapabilityValue('onoff', powerState);
+            await this.setSettings({ power_state_polling }).catch(err => this.logger.error(err));
+            await this.setCapabilityValue('onoff', powerState).catch(err => this.logger.error(err));
             this.logger.info('setPowerState', powerState);
         } catch (err) {
             this.logger.info('setPowerState ERROR', err);

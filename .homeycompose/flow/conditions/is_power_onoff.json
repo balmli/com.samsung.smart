@@ -3,6 +3,9 @@
   "title": {
     "en": "Power on/off !{{is|is not}} in progress"
   },
+  "titleFormatted": {
+    "en": "Power on/off !{{is|is not}} in progress"
+  },
   "args": [
     {
       "name": "device",

@@ -12,9 +12,10 @@ module.exports = class SamsungEncryptedDevice extends BaseDevice {
 
         let identity = this.getDriver().getIdentity();
 
-        let settings = await this.getSettings();
+        let settings = this.getSettings();
         this._samsung = new SamsungEncrypted({
             device: this,
+            homey: this.homey,
             name: "homey",
             ip_address: settings.ipaddress,
             mac_address: settings.mac_address,
@@ -49,35 +50,34 @@ module.exports = class SamsungEncryptedDevice extends BaseDevice {
         let identity = this.getDriver().getIdentity();
         if (!identity || !identity.sessionId || !identity.aesKey) {
             this.logger.info('TV set unavailable. Missing identity.');
-            await this.setUnavailable(Homey.__('errors.unavailable.pairing_failed'));
+            await this.setUnavailable(this.homey.__('errors.unavailable.pairing_failed')).catch(err => this.logger.error(err));
 
         } else {
-            this.setSettings({
+            await this.setSettings({
                 identitySessionId: identity.sessionId,
                 identityAesKey: identity.aesKey
             });
 
-            let settings = await this.getSettings();
+            let settings = this.getSettings();
             if (settings.ipaddress) {
                 await this.updateMacAddress(settings.ipaddress);
             } else {
-                await this.setUnavailable(Homey.__('errors.unavailable.ip_address_missing'));
+                await this.setUnavailable(this.homey.__('errors.unavailable.ip_address_missing')).catch(err => this.logger.error(err));
             }
         }
 
     }
 
-    onSettings(oldSettingsObj, newSettingsObj, changedKeysArr, callback) {
-        if (changedKeysArr.includes('poll_interval')) {
-            this.addPollDevice(newSettingsObj.poll_interval);
+    async onSettings({ oldSettings, newSettings, changedKeys }) {
+        if (changedKeys.includes('poll_interval')) {
+            this.addPollDevice(newSettings.poll_interval);
         }
-        if (changedKeysArr.includes('delay_keys')) {
-            this._samsung.config()["delay_keys"] = newSettingsObj.delay_keys;
+        if (changedKeys.includes('delay_keys')) {
+            this._samsung.config()["delay_keys"] = newSettings.delay_keys;
         }
-        if (changedKeysArr.includes('delay_channel_keys')) {
-            this._samsung.config()["delay_channel_keys"] = newSettingsObj.delay_channel_keys;
+        if (changedKeys.includes('delay_channel_keys')) {
+            this._samsung.config()["delay_channel_keys"] = newSettings.delay_channel_keys;
         }
-        callback(null, true);
     }
 
     async onDeviceOnline() {

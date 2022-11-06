@@ -3,6 +3,9 @@
   "title": {
     "en": "Change channel"
   },
+  "titleFormatted": {
+    "en": "Change channel to [[channel]]"
+  },
   "args": [
     {
       "type": "device",

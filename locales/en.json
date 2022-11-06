@@ -18,6 +18,7 @@
     "invalid_browse_url": "Invalid URL.",
     "connection": "Connection could not be estabished.",
     "wake_error": "Unable to wake up device.",
+    "missing_mac_address": "Unable to wake up device. The MAC address is missing.",
     "invalid_channel_number": "Invalid channel number",
     "invalid_key": "Invalid key: __key__",
     "invalid_delay": "Delay must be between 1 and 9999",

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<form action="#">
     <table style="width: 100%;">
         <tr style="height: 100px">
             <td colspan="3"></td>
@@ -41,7 +40,7 @@
             <td>&nbsp;</td>
             <td>
                 <div>
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary" data-i18n="pair.add"></button>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary" id="submit" data-i18n="pair.add"></button>
                 </div>
             </td>
             <td>&nbsp;</td>
@@ -49,40 +48,27 @@
         </tbody>
 
     </table>
-</form>
 
 <script type="text/javascript">
-    class SamsungEncryptedManualInput {
-        constructor() {
-            Homey.setTitle(Homey.__('pair.title'));
+  Homey.setTitle(Homey.__('pair.title'));
 
-            const form = document.querySelector('form');
-            form.addEventListener('submit', e => this.onSubmit(e, this.device));
-        }
-
-        onSubmit(e, device) {
-            e.preventDefault();
-
-            const formData = new FormData(e.target);
-            const data = {
-                ipaddress: formData.get('ipAddress'),
-            };
-
-            Homey.showLoadingOverlay();
-            Homey.emit('manual_input', data, (err, device) => {
-                if (device) {
-                    Homey.setViewStoreValue('add_my_devices', 'devices', [device], (err, device) => {
-                        Homey.showView('pin_wait');
-                    });
-                } else  {
-                    Homey.hideLoadingOverlay();
-                    return Homey.alert(Homey.__('errors.connection'));
-                }
-            });
-        }
-    }
-
-    const samsungEncryptedManualInput = new SamsungEncryptedManualInput();
+  document.getElementById('submit').onclick = (e) => {
+    e.preventDefault();
+    Homey.showLoadingOverlay();
+    const ipaddress = document.getElementById("ipaddress").value;
+    Homey.emit('manual_input', { ipaddress: ipaddress })
+      .then((device) => {
+        Homey.hideLoadingOverlay();
+        Homey.setViewStoreValue('add_my_devices', 'devices', [device])
+        .then(() => {
+          Homey.showView('pin_wait');
+        });
+      })
+      .catch((err) => {
+        Homey.hideLoadingOverlay();
+        Homey.alert(this.homey.__('errors.connection'));
+      });
+  };
 </script>
 <script src="material.min.js"></script>
 </body>

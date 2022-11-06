@@ -3,6 +3,9 @@
   "title": {
     "en": "Launch browser"
   },
+  "titleFormatted": {
+    "en": "Launch browser on [[url]]"
+  },
   "args": [
     {
       "type": "device",

@@ -1,9 +1,9 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.samsung.smart",
-  "version": "1.8.7",
-  "compatibility": ">=2.0.0",
-  "sdk": 2,
+  "version": "1.9.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
   "brandColor": "#206ADF",
   "name": {
     "en": "Samsung SmartTV"
@@ -57,6 +57,9 @@
         "title": {
           "en": "Is app !{{running|not running}}"
         },
+        "titleFormatted": {
+          "en": "Is app [[app_id]] !{{running|not running}}"
+        },
         "args": [
           {
             "name": "device",
@@ -77,6 +80,9 @@
         "title": {
           "en": "Power on/off !{{is|is not}} in progress"
         },
+        "titleFormatted": {
+          "en": "Power on/off !{{is|is not}} in progress"
+        },
         "args": [
           {
             "name": "device",
@@ -91,6 +97,9 @@
         "id": "browse",
         "title": {
           "en": "Launch browser"
+        },
+        "titleFormatted": {
+          "en": "Launch browser on [[url]]"
         },
         "args": [
           {
@@ -111,6 +120,9 @@
         "id": "change_channel",
         "title": {
           "en": "Change channel"
+        },
+        "titleFormatted": {
+          "en": "Change channel to [[channel]]"
         },
         "args": [
           {
@@ -135,6 +147,9 @@
         "title": {
           "en": "Launch app"
         },
+        "titleFormatted": {
+          "en": "Launch app [[app_id]]"
+        },
         "args": [
           {
             "type": "device",
@@ -155,8 +170,8 @@
         "title": {
           "en": "Send key"
         },
-        "hint": {
-          "en": "Send key"
+        "titleFormatted": {
+          "en": "Send key [[key]]"
         },
         "args": [
           {
@@ -178,6 +193,9 @@
         "title": {
           "en": "Send list of keys"
         },
+        "titleFormatted": {
+          "en": "Send list of keys [[keys1]]"
+        },
         "args": [
           {
             "type": "device",
@@ -198,6 +216,9 @@
         "title": {
           "en": "Set input source"
         },
+        "titleFormatted": {
+          "en": "Set input source to [[input_source]]"
+        },
         "args": [
           {
             "type": "device",
@@ -217,6 +238,9 @@
         "id": "set_power_state",
         "title": {
           "en": "Set power state"
+        },
+        "titleFormatted": {
+          "en": "Set power state to [[power_state]]"
         },
         "hint": {
           "en": "Use this to override the polling of the power state, eg. if you use a wall plug to check if the TV is on or off."
@@ -254,6 +278,9 @@
         "id": "youtube",
         "title": {
           "en": "Launch video on YouTube"
+        },
+        "titleFormatted": {
+          "en": "Launch video [[videoId]] on YouTube"
         },
         "args": [
           {

@@ -3,8 +3,8 @@
   "title": {
     "en": "Send key"
   },
-  "hint": {
-    "en": "Send key"
+  "titleFormatted": {
+    "en": "Send key [[key]]"
   },
   "args": [
     {

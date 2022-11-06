@@ -3,6 +3,9 @@
   "title": {
     "en": "Launch app"
   },
+  "titleFormatted": {
+    "en": "Launch app [[app_id]]"
+  },
   "args": [
     {
       "type": "device",

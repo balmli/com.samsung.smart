@@ -217,6 +217,10 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.9.0
+
+- Migrated to SDK3
+
 #### 1.8.7
 
 - Improvements to discover MAC address on boot (thanks to Martijn Poppen)

@@ -3,6 +3,9 @@
   "title": {
     "en": "Send list of keys"
   },
+  "titleFormatted": {
+    "en": "Send list of keys [[keys1]]"
+  },
   "args": [
     {
       "type": "device",

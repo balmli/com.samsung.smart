@@ -3,6 +3,9 @@
   "title": {
     "en": "Launch video on YouTube"
   },
+  "titleFormatted": {
+    "en": "Launch video [[videoId]] on YouTube"
+  },
   "args": [
     {
       "type": "device",

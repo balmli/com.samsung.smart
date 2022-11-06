@@ -12,9 +12,10 @@ module.exports = class SamsungLegacyDevice extends BaseDevice {
     async onInit() {
         await super.onInit('Samsung Legacy');
 
-        let settings = await this.getSettings();
+        let settings = this.getSettings();
         this._samsung = new SamsungLegacy({
             device: this,
+            homey: this.homey,
             name: "homey",
             ip_address: settings.ipaddress,
             mac_address: settings.mac_address,
@@ -41,20 +42,19 @@ module.exports = class SamsungLegacyDevice extends BaseDevice {
         });
     }
 
-    onSettings(oldSettingsObj, newSettingsObj, changedKeysArr, callback) {
-        if (changedKeysArr.includes('ipaddress')) {
-            this.updateIPAddress(newSettingsObj.ipaddress);
+    async onSettings({ oldSettings, newSettings, changedKeys }) {
+        if (changedKeys.includes('ipaddress')) {
+            this.updateIPAddress(newSettings.ipaddress);
         }
-        if (changedKeysArr.includes('poll_interval')) {
-            this.addPollDevice(newSettingsObj.poll_interval);
+        if (changedKeys.includes('poll_interval')) {
+            this.addPollDevice(newSettings.poll_interval);
         }
-        if (changedKeysArr.includes('delay_keys')) {
-            this._samsung.config()["delay_keys"] = newSettingsObj.delay_keys;
+        if (changedKeys.includes('delay_keys')) {
+            this._samsung.config()["delay_keys"] = newSettings.delay_keys;
         }
-        if (changedKeysArr.includes('delay_channel_keys')) {
-            this._samsung.config()["delay_channel_keys"] = newSettingsObj.delay_channel_keys;
+        if (changedKeys.includes('delay_channel_keys')) {
+            this._samsung.config()["delay_channel_keys"] = newSettings.delay_channel_keys;
         }
-        callback(null, true);
     }
 
     pollMethods(timeout) {

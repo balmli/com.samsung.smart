@@ -9,13 +9,14 @@ module.exports = class SamsungDriver extends BaseDriver {
         super.onInit('Samsung');
 
         this._samsung = new Samsung({
+            homey: this.homey,
             port: 8001,
             api_timeout: 100,
             logger: this.logger
         });
     }
 
-    async checkForTV(ipAddr, devices, socket) {
+    async checkForTV(ipAddr, devices, session) {
         this.logger.info('checkForTV', ipAddr);
         const info = await this._samsung.getInfo(ipAddr);
         if (info) {
@@ -32,7 +33,7 @@ module.exports = class SamsungDriver extends BaseDriver {
                     frameTVSupport: info.device.FrameTVSupport === 'true'
                 }
             });
-            socket.emit('list_devices', devices);
+            session.emit('list_devices', devices);
         }
     }
 
