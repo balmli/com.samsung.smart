@@ -33,17 +33,17 @@ module.exports = class SamsungEncryptedDriver extends BaseDriver {
         session.setHandler('list_devices', async (data) => {
 
             self._samsung.config()['api_timeout'] = 125;
-            self.searchForTVs(ip.address(), session)
-                .then(devices => {
-                    if (devices.length === 0) {
-                        session.showView('ip_address');
-                    } else {
-                        return devices;
-                    }
-                })
-                .catch(err => {
-                    throw new Error(this.homey.__('pair.no_tvs'));
-                });
+
+            try {
+              const devices = await this.searchForTVs(ip.address(), session);
+              if (devices.length === 0) {
+                session.showView('ip_address');
+              } else {
+                return devices;
+              }
+            } catch (err) {
+                throw new Error(this.homey.__('pair.no_tvs'));
+            }
 
         });
 
