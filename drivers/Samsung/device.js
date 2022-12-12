@@ -36,6 +36,10 @@ module.exports = class SamsungDevice extends BaseDevice {
             logger: this.logger
         });
 
+        await this.migrate();
+        await this.registerCapListeners();
+        this.addPollDevice();
+
         this._upnpClient = new UPnPClient({
             ip_address: settings.ipaddress,
             logger: this.logger
@@ -45,6 +49,8 @@ module.exports = class SamsungDevice extends BaseDevice {
         this._pairRetries = 3;
         this._lastAppsRefresh = undefined;
         await this.initSmartThings();
+
+        this.logger.verbose(`Device initialized`, this.getData());
     }
 
     async onSettings({ oldSettings, newSettings, changedKeys }) {

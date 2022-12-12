@@ -31,6 +31,10 @@ module.exports = class SamsungEncryptedDevice extends BaseDevice {
             logger: this.logger
         });
 
+        await this.migrate();
+        await this.registerCapListeners();
+        this.addPollDevice();
+
         this._upnpClient = new UPnPClient({
             ip_address: settings.ipaddress,
             logger: this.logger
@@ -42,6 +46,8 @@ module.exports = class SamsungEncryptedDevice extends BaseDevice {
             this._samsung.config()['identitySessionId'],
             this._samsung.config()['identityAesKey']
         );
+
+        this.logger.verbose(`Device initialized`, this.getData());
     }
 
     async onAdded() {

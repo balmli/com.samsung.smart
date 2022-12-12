@@ -29,6 +29,10 @@ module.exports = class SamsungLegacyDevice extends BaseDevice {
             logger: this.logger
         });
 
+        await this.migrate();
+        await this.registerCapListeners();
+        this.addPollDevice();
+
         this._upnpClient = new UPnPClient({
             ip_address: settings.ipaddress,
             logger: this.logger
@@ -40,6 +44,8 @@ module.exports = class SamsungLegacyDevice extends BaseDevice {
             self._samsung.config()["mac_address_homey"] = mac;
             self.log(`Found MAC address for Homey -> ${mac}`, self._samsung.config());
         });
+
+        this.logger.verbose(`Device initialized`, this.getData());
     }
 
     async onSettings({ oldSettings, newSettings, changedKeys }) {
