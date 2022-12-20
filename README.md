@@ -217,6 +217,10 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 1.9.2
+
+- Bugfix for SDK3
+
 #### 1.9.1
 
 - Bugfix for SDK3

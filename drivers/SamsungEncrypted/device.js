@@ -10,7 +10,7 @@ module.exports = class SamsungEncryptedDevice extends BaseDevice {
     async onInit() {
         await super.onInit('Samsung Encrypted');
 
-        let identity = this.getDriver().getIdentity();
+        let identity = this.driver.getIdentity();
 
         let settings = this.getSettings();
         this._samsung = new SamsungEncrypted({
@@ -53,7 +53,7 @@ module.exports = class SamsungEncryptedDevice extends BaseDevice {
     async onAdded() {
         this.logger.info(`device added: ${this.getData().id}`);
 
-        let identity = this.getDriver().getIdentity();
+        let identity = this.driver.getIdentity();
         if (!identity || !identity.sessionId || !identity.aesKey) {
             this.logger.info('TV set unavailable. Missing identity.');
             await this.setUnavailable(this.homey.__('errors.unavailable.pairing_failed')).catch(err => this.logger.error(err));
