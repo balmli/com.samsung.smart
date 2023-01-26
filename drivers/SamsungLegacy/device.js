@@ -5,7 +5,6 @@ const macaddress = require('macaddress');
 const BaseDevice = require('../../lib/BaseDevice');
 const UPnPClient = require('../../lib/UPnPClient');
 const SamsungLegacy = require('./SamsungLegacy');
-const ip = require('ip');
 
 module.exports = class SamsungLegacyDevice extends BaseDevice {
 
@@ -13,6 +12,9 @@ module.exports = class SamsungLegacyDevice extends BaseDevice {
         await super.onInit('Samsung Legacy');
 
         let settings = this.getSettings();
+        const ipAddressResponse = await this.homey.cloud.getLocalAddress();
+        const homeyIpAddress = ipAddressResponse.split(':')[0]
+
         this._samsung = new SamsungLegacy({
             device: this,
             homey: this.homey,
@@ -23,7 +25,7 @@ module.exports = class SamsungLegacyDevice extends BaseDevice {
             api_timeout: 2000,
             delay_keys: settings.delay_keys || 100,
             delay_channel_keys: settings.delay_channel_keys || 1250,
-            ip_address_homey: ip.address(),
+            ip_address_homey: homeyIpAddress,
             appString: 'iphone..iapp.samsung',
             tvAppString: 'iphone.UN60D6000.iapp.samsung',
             logger: this.logger

@@ -2,7 +2,6 @@
 
 const BaseDriver = require('../../lib/BaseDriver');
 const SamsungEncrypted = require('./SamsungEncrypted');
-const ip = require('ip');
 
 module.exports = class SamsungEncryptedDriver extends BaseDriver {
 
@@ -33,9 +32,11 @@ module.exports = class SamsungEncryptedDriver extends BaseDriver {
         session.setHandler('list_devices', async (data) => {
 
             self._samsung.config()['api_timeout'] = 125;
+            const ipAddressResponse = await this.homey.cloud.getLocalAddress();
+            const homeyIpAddress = ipAddressResponse.split(':')[0]
 
             try {
-              const devices = await this.searchForTVs(ip.address(), session);
+              const devices = await this.searchForTVs(homeyIpAddress, session);
               if (devices.length === 0) {
                 session.showView('ip_address');
               } else {

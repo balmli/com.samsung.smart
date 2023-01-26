@@ -3,7 +3,6 @@
 const BaseDevice = require('../../lib/BaseDevice');
 const UPnPClient = require('../../lib/UPnPClient');
 const Samsung = require('./Samsung');
-const ip = require('ip');
 
 module.exports = class SamsungDevice extends BaseDevice {
 
@@ -18,6 +17,8 @@ module.exports = class SamsungDevice extends BaseDevice {
 
         await this.updateMacAddress(settings.ipaddress);
         settings = this.getSettings();
+        const ipAddressResponse = await this.homey.cloud.getLocalAddress();
+        const homeyIpAddress = ipAddressResponse.split(':')[0]
 
         this._samsung = new Samsung({
             device: this,
@@ -29,7 +30,7 @@ module.exports = class SamsungDevice extends BaseDevice {
             api_timeout: 2000,
             delay_keys: settings.delay_keys || 100,
             delay_channel_keys: settings.delay_channel_keys || 1250,
-            ip_address_homey: ip.address(),
+            ip_address_homey: homeyIpAddress,
             tokenAuthSupport: settings.tokenAuthSupport,
             frameTVSupport: settings.frameTVSupport,
             token: settings.token,
