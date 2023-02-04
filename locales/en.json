@@ -1,19 +1,31 @@
 {
   "pair": {
-    "title": "Samsung (encrypted)",
-    "ipaddress_label": "ENTER THE IP ADDRESS FOR YOUR TV",
     "ipaddress": "IP address",
     "add": "Add",
     "cancel": "Cancel",
+    "submit": "Submit",
     "valid_ip_address": "Enter a valid IP address (xxx.xxx.xxx.xxx)",
     "invalid_ipaddress": "Invalid IP address",
-    "no_tvs": "Found no Samsung TVs.",
+    "no_tvs": "Unable to find Samsung TVs.",
+    "no_tvs_on_ip": "Unable to find a Samsung TV on that IP address.",
+    "standard": {
+      "title": "Samsung",
+      "subtitle": "Enter the IP address of the TV"
+    },
     "encrypted": {
+      "title": "Samsung (encrypted)",
+      "subtitle": "Support for H, HU, J, JU and JS models",
+      "invalid_model": "This is a __modelName__ model. Only H, HU, J, JU and JS models are supported with this driver.",
       "invalid_pin": "Invalid PIN entered",
       "failed_ack_client": "Failed to acknowledge client"
+    },
+    "legacy": {
+      "subtitle": "Support for F models",
+      "title": "Samsung (legacy)"
     }
   },
   "errors": {
+    "missing_settings": "Missing settings, please re-pair the device",
     "invalid_video_id": "Invalid video ID.  Must be 11 characters.",
     "invalid_browse_url": "Invalid URL.",
     "connection": "Connection could not be estabished.",

@@ -4,5 +4,8 @@
 	"label": {
 		"en": "IP address"
 	},
-	"value": ""
+	"value": "",
+	"hint": {
+		"en": "Reserve an IP address for the TV in your network / Wi-Fi router. "
+	}
 }

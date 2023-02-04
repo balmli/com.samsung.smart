@@ -1,0 +1,9 @@
+.git
+.gitignore
+.eslintrc.json
+*.iml
+.idea
+/cmd
+/docs
+/test
+/test2

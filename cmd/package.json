@@ -1,0 +1,58 @@
+{
+  "name": "com.samsung.smart.cmd",
+  "version": "1.0.0",
+  "description": "Samsung SmartTV CLI",
+  "main": "./build/cmd/cli.js",
+  "bin": {
+    "sfp": "./build/cmd/cli.js"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "/assets",
+    "/build"
+  ],
+  "scripts": {
+    "build": "yarn clean && yarn compile && chmod +x ./build/cmd/cli.js",
+    "clean": "rm -fr build/*",
+    "compile": "tsc"
+  },
+  "dependencies": {
+    "axios": "^0.25.0",
+    "boxen": "^6.2.1",
+    "chalk": "^5.0.0",
+    "cli-table": "0.3.6",
+    "colors": "^1.4.0",
+    "enquirer": "2.3.6",
+    "figures": "^3.2.0",
+    "fs-extra": "10.0.0",
+    "moment": "^2.29.1",
+    "yargs": "^17.3.1",
+    "yup": "0.32.9"
+  },
+  "devDependencies": {
+    "@types/cli-table": "0.3.0",
+    "@types/faker": "5.5.7",
+    "@types/fs-extra": "9.0.12",
+    "@types/node": "^16.3.3",
+    "@types/prettier": "^2.4.3",
+    "@types/yargs": "17.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
+    "eslint": "^8.7.0",
+    "eslint-config-prettier": "^8.3.0",
+    "faker": "5.5.3",
+    "nyc": "15.1.0",
+    "pkg": "5.3.0",
+    "prettier": "^2.5.1",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.9.4"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "pkg": {
+    "scripts": "build/**/*.js"
+  }
+}

@@ -1,1 +1,0 @@
-This code comes from https://github.com/Ape/samsungctl/issues/22#issuecomment-359063253

@@ -197,17 +197,9 @@ Go to advanced settings for the Samsung device, enable SmartThings API and enter
 
 This will enable the 'Set input source' - action.
 
-## Acknowledgements:
-
-Thanks to https://github.com/natalan/samsung-remote for solution to support older Samsung TVs.
-
-Thanks to https://github.com/tavicu/homebridge-samsung-tizen for solution to pair with newer Samsung TVs.
-
-Thanks to https://github.com/tdudek/samsung-remote-models-2014-and-newer and https://github.com/kkapitan/homebridge-homesung for solution to pair with H, HU, J, JU and JS models. 
-
 ## Feedback:
 
-Please report issues at the [issues section on Github](https://github.com/balmli/com.samsung.smart/issues).
+Please report issues by visiting the communtity topic: https://community.homey.app/t/10019
 
 ## Disclaimer
 
@@ -216,6 +208,10 @@ Use at your own risk. I accept no responsibility for any damages caused by using
 Some TVs use a different type of pairing, and are therefore not supported at the moment.
 
 ## Release Notes:
+
+#### 2.0.0
+
+- Updated pairing
 
 #### 1.9.3
 

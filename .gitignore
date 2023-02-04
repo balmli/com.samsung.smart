@@ -1,6 +1,8 @@
 env.json
 *.iml
 .idea
+build/
+docs/
 info/*
 node_modules/
 

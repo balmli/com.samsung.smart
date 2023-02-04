@@ -1,0 +1,17 @@
+.logo {
+  width: 160px
+}
+
+.grid_center {
+  text-align: center;
+}
+
+.input_ip_address {
+  background-color: #fafafa;
+  font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+  font-size: 14pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400;
+  width: 100%;
+}

@@ -1,7 +1,7 @@
 {
   "id": "com.samsung.smart",
-  "version": "1.9.3",
-  "compatibility": ">=5.0.0",
+  "version": "2.0.0",
+  "compatibility": ">=8.1.2",
   "sdk": 3,
   "brandColor": "#206ADF",
   "name": {
@@ -44,9 +44,5 @@
       }
     }
   },
-  "bugs": {
-    "url": "https://github.com/balmli/com.samsung.smart/issues"
-  },
-  "homeyCommunityTopicId": 10019,
-  "source": "https://github.com/balmli/com.samsung.smart"
+  "homeyCommunityTopicId": 10019
 }

@@ -8,16 +8,6 @@
   ],
   "pair": [
     {
-      "id": "list_devices",
-      "template": "list_devices",
-      "navigation": {
-        "next": "pin_wait"
-      },
-      "options": {
-        "singular": true
-      }
-    },
-    {
       "id": "ip_address"
     },
     {
@@ -29,6 +19,16 @@
       "template": "pincode",
       "options": {
         "type": "number"
+      },
+      "navigation": {
+        "next": "list_devices"
+      }
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_my_devices"
       }
     },
     {

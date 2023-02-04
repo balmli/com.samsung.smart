@@ -7,7 +7,7 @@
 <body>
 
 <header class="homey-header">
-    <p class="homey-subtitle" data-i18n="pair.encrypted.subtitle">
+    <p class="homey-subtitle" data-i18n="pair.legacy.subtitle">
     </p>
 </header>
 
@@ -28,7 +28,7 @@
 </form>
 
 <script type="text/javascript">
-  Homey.setTitle(Homey.__('pair.encrypted.title'));
+  Homey.setTitle(Homey.__('pair.legacy.title'));
 
   document.getElementById('submit').onclick = (e) => {
     e.preventDefault();
@@ -40,6 +40,14 @@
       if (err) {
         Homey.alert(err, 'error', () => {
         });
+      } else if (result) {
+        Homey.createDevice(result)
+          .then(function (result) {
+            Homey.done();
+          })
+          .catch(function (error) {
+            Homey.alert(err);
+          });
       }
     });
   };
