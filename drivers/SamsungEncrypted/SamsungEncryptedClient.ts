@@ -37,6 +37,12 @@ export interface SamsungEncryptedClient extends SamsungClient {
      * @param requestId
      */
     acknowledgeRequestId(requestId: any): Promise<any>;
+
+    /**
+     *
+     * @param val
+     */
+    getDuidFromInfo(val: any): string | undefined;
 }
 
 export class SamsungEncryptedClientImpl extends SamsungBase implements SamsungEncryptedClient {
@@ -404,6 +410,13 @@ export class SamsungEncryptedClientImpl extends SamsungBase implements SamsungEn
 
     private getDuid(): string {
         return this.config.getSetting(DeviceSettings.duid);
+    }
+
+    getDuidFromInfo(val: any): string | undefined {
+        const duid = val?.DUID || val?.device?.duid;
+        return duid ?
+            (duid.indexOf(':') >= 0 && duid.split(':').length > 1 ? duid.split(':')[1] : duid) :
+            undefined;
     }
 
 }

@@ -129,6 +129,12 @@ export interface SamsungClient {
      * @param url
      */
     launchBrowser(url: string): Promise<any>;
+
+    /**
+     * Checks the model class for Encrypted Samsung TVs.
+     * @param model
+     */
+    modelClass(model: string): string | undefined;
 }
 
 
@@ -519,6 +525,12 @@ export class SamsungBase implements SamsungClient {
 
     base64Encode(aStr: string) {
         return Buffer.from(aStr).toString('base64');
+    }
+
+    modelClass(model: string): string | undefined {
+        const tizenPattern = new RegExp('[U|E|N]+\\d+[J]([S|U|No|P])?\\d+([W|K|B|U|T])?');
+        const sakepPattern = new RegExp('[U|E|N]+\\d+[H]([S|U|No|P])?\\d+([W|K|B|U|T])?');
+        return tizenPattern.test(model) ? 'tizen' : sakepPattern.test(model) ? 'sakep' : undefined;
     }
 
     _delay(ms: number) {

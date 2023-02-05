@@ -1,13 +1,20 @@
 const expect = require("chai").expect;
-const SamsungBase = require('../lib/SamsungBase');
+
+import {createSamsungClient} from "./test_create_samsung_client";
+const samsungClient = createSamsungClient();
 
 describe("modelClass", function () {
-    let samsungBase = new SamsungBase({});
 
     describe("modelClass", function () {
 
         it("undefined", function () {
-            expect(samsungBase.modelClass('UE55KS8005')).to.eql(undefined);
+            [
+                'QE65QN95BATXXC',
+                'UE55KS8005',
+                'UE46F8000'
+            ].forEach(model => {
+                expect(samsungClient.modelClass(model)).to.eql(undefined);
+            });
         });
 
         it("sakep", function () {
@@ -18,7 +25,7 @@ describe("modelClass", function () {
                 'UE50HU6900',
                 'UE55HU7500'
             ].forEach(model => {
-                expect(samsungBase.modelClass(model)).to.eql('sakep');
+                expect(samsungClient.modelClass(model)).to.eql('sakep');
             });
         });
 
@@ -34,7 +41,7 @@ describe("modelClass", function () {
                 'UE55JS8500',
                 'UE48JS9000'
             ].forEach(model => {
-                expect(samsungBase.modelClass(model)).to.eql('tizen');
+                expect(samsungClient.modelClass(model)).to.eql('tizen');
             });
         });
     });

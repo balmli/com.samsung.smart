@@ -40,7 +40,7 @@ module.exports = class SamsungEncryptedDriver extends BaseDriver {
 
             const deviceName = info.DeviceName;
             const modelName = info.ModelName;
-            const modelClass = this.modelClass(modelName);
+            const modelClass = this.samsungClient.modelClass(modelName);
             if (!modelClass) {
                 throw new Error(this.homey.__('pair.encrypted.invalid_model', {modelName} ));
             }
@@ -52,7 +52,7 @@ module.exports = class SamsungEncryptedDriver extends BaseDriver {
                 },
                 settings: {
                     ipaddress,
-                    duid: this.getDuidFromInfo(info),
+                    duid: this.samsungEncryptedClient.getDuidFromInfo(info),
                     modelName,
                     modelClass
                 }
@@ -103,17 +103,6 @@ module.exports = class SamsungEncryptedDriver extends BaseDriver {
         });
     }
 
-    getDuidFromInfo(val: any) {
-        const duid = val?.DUID || val?.device?.duid;
-        return duid ?
-            (duid.indexOf(':') >= 0 && duid.split(':').length > 1 ? duid.split(':')[1] : duid) :
-            undefined;
-    }
 
-    modelClass(model: string): string | undefined {
-        const tizenPattern = new RegExp('[U|E|N]+\\d+[J]([S|U|No|P])?\\d+([W|K|B|U|T])?');
-        const sakepPattern = new RegExp('[U|E|N]+\\d+[H]([S|U|No|P])?\\d+([W|K|B|U|T])?');
-        return tizenPattern.test(model) ? 'tizen' : sakepPattern.test(model) ? 'sakep' : undefined;
-    }
 
 };

@@ -119,7 +119,9 @@ module.exports = class SamsungDriver extends BaseDriver {
     }
 
     private isValidDevice(info: any) {
-        return info && (!info.type || info.type !== 'Samsung Speaker');
+        return info &&
+            (!info.type || info.type !== 'Samsung Speaker') &&
+            this.samsungClient.modelClass(info.device.modelName) === undefined;
     }
 
 };
