@@ -4,7 +4,6 @@ import {SamsungClient} from "../lib/SamsungBase";
 import {HomeyIpUtilImpl} from "../lib/HomeyIpUtil";
 import {UPnPClientImpl} from "../lib/UPnPClient";
 import {SamsungClientImpl} from "../drivers/Samsung/SamsungClient";
-import {HomeyDeviceMock} from "./HomeyDevice";
 
 import {settings} from "./index";
 import {DeviceSettings, HomeyDevice} from "../lib/types";
@@ -52,8 +51,7 @@ export const initSamsungClient = async () => {
         errorFunc: console.error,
     }, {});
 
-    device = new HomeyDeviceMock({logger});
-    config = new SamsungConfigImpl({device, logger});
+    config = new SamsungConfigImpl({logger});
     let homeyIpUtil = new HomeyIpUtilImpl();
 
     let upnpClient = new UPnPClientImpl({config, logger});
@@ -63,8 +61,6 @@ export const initSamsungClient = async () => {
 
     if (client === "Samsung") {
         samsungClient = new SamsungClientImpl({
-            // @ts-ignore
-            device,
             config,
             port: 8001,
             connectionTimeout: 10,
@@ -77,17 +73,20 @@ export const initSamsungClient = async () => {
 
     } else if (client === "Samsung Encrypted") {
         samsungClient = new SamsungEncryptedClientImpl({
-            // @ts-ignore
-            device,
             config,
             port: 8001,
             homeyIpUtil,
             logger
         });
+        getConfig().setSetting(DeviceSettings.ipaddress, await getSetting(DeviceSettings.ipaddress));
+        getConfig().setSetting(DeviceSettings.modelName, await getSetting(DeviceSettings.modelName));
+        getConfig().setSetting(DeviceSettings.modelClass, await getSetting(DeviceSettings.modelClass));
+        getConfig().setSetting(DeviceSettings.duid, await getSetting(DeviceSettings.duid));
+        getConfig().setSetting(DeviceSettings.identitySessionId, await getSetting(DeviceSettings.identitySessionId));
+        getConfig().setSetting(DeviceSettings.identityAesKey, await getSetting(DeviceSettings.identityAesKey));
+
     } else if (client === "Samsung Legacy") {
         samsungClient = new SamsungLegacyClientImpl({
-            // @ts-ignore
-            device,
             config,
             port: 55000,
             homeyIpUtil,
