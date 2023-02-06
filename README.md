@@ -37,6 +37,7 @@ For newer TVs, that respond to http://TV-IP-ADDRESS:8001/api/v2/
 - One channel down
 - Change channel
 - Launch app
+- Close app
 - Launch video on YouTube
 - Launch browser
 - Send key
@@ -72,6 +73,7 @@ For H, HU, J, JU and JS models, that respond to http://TV-IP-ADDRESS:8001/ms/1.0
 - One channel down
 - Change channel
 - Launch app (J/JU/JS-models)
+- Close app (J/JU/JS-models)
 - Launch video on YouTube (J/JU/JS-models)
 - Send key
 - Send list of keys
