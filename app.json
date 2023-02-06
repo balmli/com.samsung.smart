@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.samsung.smart",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "compatibility": ">=8.1.2",
   "sdk": 3,
   "brandColor": "#206ADF",
@@ -97,6 +97,9 @@
         "titleFormatted": {
           "en": "Launch browser on [[url]]"
         },
+        "hint": {
+          "en": "Use this action to launch the browser. Not all TVs support this action."
+        },
         "args": [
           {
             "type": "device",
@@ -139,12 +142,41 @@
         ]
       },
       {
+        "id": "close_app",
+        "title": {
+          "en": "Close app"
+        },
+        "titleFormatted": {
+          "en": "Close app [[app_id]]"
+        },
+        "hint": {
+          "en": "Use this action to close a running app."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=Samsung|SamsungEncrypted"
+          },
+          {
+            "name": "app_id",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Search for app..."
+            }
+          }
+        ]
+      },
+      {
         "id": "launch_app",
         "title": {
           "en": "Launch app"
         },
         "titleFormatted": {
           "en": "Launch app [[app_id]]"
+        },
+        "hint": {
+          "en": "Use this action to launch an app. In order to start the app, it must be installed on the TV."
         },
         "args": [
           {
@@ -215,6 +247,9 @@
         "titleFormatted": {
           "en": "Set input source to [[input_source]]"
         },
+        "hint": {
+          "en": "Use this action to select the input source (HDMI1, HDMI2, etc.). It requires that the SmartThings API has been enabled in Adv. settings."
+        },
         "args": [
           {
             "type": "device",
@@ -278,6 +313,9 @@
         "titleFormatted": {
           "en": "Launch video [[videoId]] on YouTube"
         },
+        "hint": {
+          "en": "Use this action to launch YouTube. Not all TVs support this action."
+        },
         "args": [
           {
             "type": "device",
@@ -305,7 +343,6 @@
       "class": "tv",
       "capabilities": [
         "onoff",
-        "volume_set",
         "volume_up",
         "channel_up",
         "volume_down",
@@ -474,7 +511,6 @@
       "class": "tv",
       "capabilities": [
         "onoff",
-        "volume_set",
         "volume_up",
         "channel_up",
         "volume_down",
@@ -600,7 +636,6 @@
       "class": "tv",
       "capabilities": [
         "onoff",
-        "volume_set",
         "volume_up",
         "channel_up",
         "volume_down",

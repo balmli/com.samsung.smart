@@ -6,6 +6,9 @@
   "titleFormatted": {
     "en": "Launch video [[videoId]] on YouTube"
   },
+  "hint": {
+    "en": "Use this action to launch YouTube. Not all TVs support this action."
+  },
   "args": [
     {
       "type": "device",

@@ -9,10 +9,13 @@ import {settings} from "./index";
 import {DeviceSettings, HomeyDevice} from "../lib/types";
 import {SamsungEncryptedClientImpl} from "../drivers/SamsungEncrypted/SamsungEncryptedClient";
 import {SamsungLegacyClientImpl} from "../drivers/SamsungLegacy/SamsungLegacyClient";
+import {SmartThingsClient, SmartThingsClientImpl} from "../lib/SmartThings";
+import {HomeyDeviceMock} from "./HomeyDevice";
 
 let device: HomeyDevice;
 let config: SamsungConfig;
 let samsungClient: SamsungClient;
+let smartThingsClient: SmartThingsClient;
 
 export const getDevice = (): HomeyDevice => {
     return device;
@@ -95,6 +98,30 @@ export const initSamsungClient = async () => {
     }
 
     return samsungClient;
+}
+
+export const initSmartThingsClient = async () => {
+    let logger = new Logger({
+        logLevel: 3,
+        logFunc: console.log,
+        errorFunc: console.error,
+    }, {});
+
+    let device = new HomeyDeviceMock({logger});
+    if (!config) {
+        config = new SamsungConfigImpl({logger});
+    }
+
+    getConfig().setSetting(DeviceSettings.smartthings, true);
+
+    smartThingsClient = new SmartThingsClientImpl({
+        // @ts-ignore
+        device,
+        config,
+        logger,
+    });
+
+    return smartThingsClient;
 }
 
 const initialize = async (toClient?: string) => {

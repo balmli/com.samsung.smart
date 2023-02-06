@@ -6,6 +6,9 @@
   "titleFormatted": {
     "en": "Launch browser on [[url]]"
   },
+  "hint": {
+    "en": "Use this action to launch the browser. Not all TVs support this action."
+  },
   "args": [
     {
       "type": "device",

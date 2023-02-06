@@ -50,6 +50,11 @@ class SamsungSmartApp extends Homey.App {
             .getArgument('app_id')
             .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
 
+        this.homey.flow.getActionCard('close_app')
+            .registerRunListener(args => args.device.samsungClient.closeApp(args.app_id))
+            .getArgument('app_id')
+            .registerAutocompleteListener((query, args) => args.device.onAppAutocomplete(query, args));
+
         this.homey.flow.getActionCard('youtube')
             .registerRunListener(args => {
                 if (!args.videoId || args.videoId.length !== 11) {

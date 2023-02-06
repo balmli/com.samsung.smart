@@ -1,6 +1,7 @@
 export const DEFAULT_NAME = "homey";
 
 export enum DeviceSettings {
+    name = "name",
     delay_channel_keys = "delay_channel_keys",
     delay_keys = "delay_keys",
     frameTVSupport = "frameTVSupport",

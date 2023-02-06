@@ -1,9 +1,8 @@
 import Device from "homey/lib/Device";
-
-const http = require('http.min');
-
 import {DeviceSettings} from "./types";
 import {SamsungConfig} from "./SamsungConfig";
+
+const http = require('http.min');
 
 const SMARTTHINGS_API = 'https://api.smartthings.com/v1';
 
@@ -24,6 +23,18 @@ export interface SmartThingsClient {
      * @param inputSource
      */
     setStInputSource(inputSource: string): Promise<void>;
+
+    /**
+     * Fetch list of SmartThings TV devices.
+     */
+    fetchSmartThingsDevices(): Promise<any>;
+
+    /**
+     * Fetch a SmartThings TV device.
+     * @param deviceId
+     * @param path
+     */
+    fetchSmartThingsDevice(deviceId: string, path: string): Promise<any>;
 }
 
 export class SmartThingsClientImpl implements SmartThingsClient {
@@ -49,10 +60,9 @@ export class SmartThingsClientImpl implements SmartThingsClient {
 
     async getStInputSources(): Promise<any> {
         try {
-            const deviceId = await this.getStTvDevice();
-            const response = await this.stDevice(deviceId, '/status');
-            this.logger.verbose('getStInputSources', JSON.stringify(response.data), response.response.statusCode, response.response.statusMessage);
-            return response.data.components.main.mediaInputSource.supportedInputSources.value;
+            const deviceId = await this.getSmartThingsDevice();
+            const device = await this.fetchSmartThingsDevice(deviceId, '/status');
+            return device.components.main.mediaInputSource.supportedInputSources.value;
         } catch (err) {
             this.logger.info('getStInputSources failed', err);
             return [];
@@ -60,8 +70,8 @@ export class SmartThingsClientImpl implements SmartThingsClient {
     }
 
     async setStInputSource(input_source: any): Promise<void> {
-        const deviceId = await this.getStTvDevice();
-        const response = await this.stCommand(deviceId, [{
+        const deviceId = await this.getSmartThingsDevice();
+        const response = await this.sendSmartThingsCommand(deviceId, [{
             component: 'main',
             capability: 'mediaInputSource',
             command: 'setInputSource',
@@ -77,26 +87,7 @@ export class SmartThingsClientImpl implements SmartThingsClient {
         }
     }
 
-    private async getStTvDevice(): Promise<string> {
-        if (this.stTvDeviceId) {
-            return this.stTvDeviceId;
-        }
-
-        const devices = await this.stDevices();
-        const tvDevices = devices
-            .filter((d: any) => d.components.filter((c: any) => c.capabilities.filter((cap: any) => cap.id === 'tvChannel') > 0))
-            .map((d: any) => d.deviceId);
-
-        if (tvDevices.length === 0) {
-            throw new Error(this.device.homey.__('errors.smartthings.no_tvs'));
-        }
-
-        // TODO support multiple TVs
-        this.stTvDeviceId = tvDevices[0];
-        return this.stTvDeviceId!!;
-    }
-
-    private async stDevices() {
+    async fetchSmartThingsDevices(): Promise<any> {
         const token = await this.getStToken();
         const response = await http({
             uri: `${SMARTTHINGS_API}/devices`,
@@ -106,6 +97,7 @@ export class SmartThingsClientImpl implements SmartThingsClient {
         });
         if (response.response.statusCode === 200) {
             const json = JSON.parse(response.data);
+            this.logger.debug('fetchSmartThingsDevices:', JSON.stringify(json));
             return json.items;
         }
         this.logger.info('stDevices error', response.response.statusCode, response.response.statusMessage);
@@ -116,6 +108,44 @@ export class SmartThingsClientImpl implements SmartThingsClient {
             statusCode: response.response.statusCode,
             statusMessage: response.response.statusMessage
         }));
+    }
+
+    async fetchSmartThingsDevice(deviceId: string, path: string = ''): Promise<any> {
+        const token = await this.getStToken();
+        const response = await http({
+            uri: `${SMARTTHINGS_API}/devices/${deviceId}${path}`,
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            json: true
+        });
+        this.logger.debug('fetchSmartThingsDevice', JSON.stringify(response.data), response.response.statusCode, response.response.statusMessage);
+        return response.data;
+    };
+
+    private async getSmartThingsDevice(): Promise<string> {
+        if (this.stTvDeviceId) {
+            return this.stTvDeviceId;
+        }
+
+        const tvName = this.config.getSetting(DeviceSettings.name);
+        const tvModelName = this.config.getSetting(DeviceSettings.modelName);
+
+        const devices = await this.fetchSmartThingsDevices();
+        const tvDevices = devices
+            .filter((d: any) => d.name === tvName && d.ocf.modelNumber === tvModelName)
+            .filter((d: any) => d.components.filter((c: any) => c.capabilities.filter((cap: any) => cap.id === 'tvChannel') > 0))
+            .map((d: any) => d.deviceId);
+
+        if (tvDevices.length === 0) {
+            throw new Error(this.device.homey.__('errors.smartthings.no_tvs'));
+        }
+        if (tvDevices.length > 1) {
+            this.logger.info(`Found multiple SmartThings TV devices for ${tvName} (${tvModelName})`);
+        }
+
+        this.stTvDeviceId = tvDevices[0];
+        return this.stTvDeviceId!!;
     }
 
     private async getStToken(): Promise<string> {
@@ -129,20 +159,9 @@ export class SmartThingsClientImpl implements SmartThingsClient {
         return token;
     }
 
-    private async stDevice(deviceId: string, path = '') {
+    private async sendSmartThingsCommand(deviceId: string, commands: any) {
         const token = await this.getStToken();
-        return http({
-            uri: `${SMARTTHINGS_API}/devices/${deviceId}${path}`,
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            json: true
-        });
-    };
-
-    private async stCommand(deviceId: string, commands: any) {
-        const token = await this.getStToken();
-        this.logger.info('stCommand', commands);
+        this.logger.debug('sendSmartThingsCommand', commands);
         return http.post({
                 uri: `${SMARTTHINGS_API}/devices/${deviceId}/commands`,
                 headers: {
@@ -153,7 +172,5 @@ export class SmartThingsClientImpl implements SmartThingsClient {
             {"commands": commands}
         );
     };
-
-
 
 }

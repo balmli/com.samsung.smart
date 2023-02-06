@@ -434,22 +434,28 @@ export class BaseDevice extends Homey.Device {
     }
 
     async shouldFetchModelName() {
-        if (!this.getSetting(DeviceSettings.modelName)) {
+        if (!this.getSetting(DeviceSettings.name) ||
+            !this.getSetting(DeviceSettings.modelName)) {
+            let name = 'notset';
             let modelName = 'unknown';
             try {
                 const info = await this.samsungClient.getInfo();
                 this.logger.verbose('shouldFetchModelName', info);
+                if (info && info.name) {
+                    name = info.name;
+                }
                 if (info && info.device && info.device.modelName) {
                     modelName = info.device.modelName;
                 } else if (info && info.device && info.device.ModelName) {
                     modelName = info.device.ModelName;
                 }
             } catch (err) {
-                this.logger.info('Fetching modelName failed', err);
+                this.logger.info('Fetching device info failed', err);
             } finally {
+                await this.config.setSetting(DeviceSettings.name, name).catch((err: any) => this.logger.error(err));
                 await this.config.setSetting(DeviceSettings.modelName, modelName).catch((err: any) => this.logger.error(err));
                 this.logger.setTags({modelName});
-                this.logger.info(`Modelname set to: ${modelName}`);
+                this.logger.info(`Device settings updated. name: ${name}, modelName: ${modelName}`);
             }
         }
     }

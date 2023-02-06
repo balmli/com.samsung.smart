@@ -6,6 +6,9 @@
   "titleFormatted": {
     "en": "Set input source to [[input_source]]"
   },
+  "hint": {
+    "en": "Use this action to select the input source (HDMI1, HDMI2, etc.). It requires that the SmartThings API has been enabled in Adv. settings."
+  },
   "args": [
     {
       "type": "device",

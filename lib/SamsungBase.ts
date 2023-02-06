@@ -114,7 +114,14 @@ export interface SamsungClient {
      * @param app
      * @param launchData
      */
-    launchApp(app: any, launchData: any): Promise<any>;
+    launchApp(app: any, launchData?: any): Promise<any>;
+
+    /**
+     * Close a running app on the TV.
+     *
+     * @param app
+     */
+    closeApp(app: any): Promise<any>;
 
     /**
      * Launch the YouTube app on the TV, with a specific video.
@@ -329,11 +336,18 @@ export class SamsungBase implements SamsungClient {
         throw new Error(notFoundError);
     }
 
-    async launchApp(app: any, launchData: any): Promise<any> {
+    async launchApp(app: any, launchData?: any): Promise<any> {
         if (!!app.id) {
             app = this.findApp(app.id);
         }
         return this.applicationCmd(app, 'post', launchData);
+    }
+
+    async closeApp(app: any): Promise<any> {
+        if (!!app.id) {
+            app = this.findApp(app.id);
+        }
+        return this.applicationCmd(app, 'delete');
     }
 
     async launchYouTube(videoId: string): Promise<void> {

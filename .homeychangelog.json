@@ -1,4 +1,7 @@
 {
+  "2.1.0": {
+    "en": "Added action to close running app. Improvements to SmartThings API. "
+  },
   "2.0.1": {
     "en": "Updated pairing. "
   },

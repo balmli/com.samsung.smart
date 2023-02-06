@@ -209,6 +209,11 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 2.1.0
+
+- Added action to close running app
+- Improvements to SmartThings API
+
 #### 2.0.0
 
 - Updated pairing

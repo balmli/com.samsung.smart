@@ -1,13 +1,13 @@
 {
-  "id": "launch_app",
+  "id": "close_app",
   "title": {
-    "en": "Launch app"
+    "en": "Close app"
   },
   "titleFormatted": {
-    "en": "Launch app [[app_id]]"
+    "en": "Close app [[app_id]]"
   },
   "hint": {
-    "en": "Use this action to launch an app. In order to start the app, it must be installed on the TV."
+    "en": "Use this action to close a running app."
   },
   "args": [
     {
