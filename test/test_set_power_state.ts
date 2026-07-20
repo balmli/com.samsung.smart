@@ -206,11 +206,81 @@ function createTransitionDevice() {
         wake: async () => undefined,
         turnOff: async () => undefined,
     };
+    device.getSetting = () => undefined;
     device.clearPowerStatePolling = () => undefined;
     return {device, timers};
 }
 
 describe("SamsungDevice power transitions", function () {
+    it("does not send a power command when the TV is already known to be off", async function () {
+        const {device} = createTransitionDevice();
+        device.getCapabilityValue = () => false;
+        device.samsungClient.turnOff = async () => {
+            throw new Error("redundant power-off command was sent");
+        };
+
+        await device.turnOnOff(false);
+
+        expect(device.turning_onoff_process).to.equal(undefined);
+        expect(device.onOffPollingTimeout).to.equal(undefined);
+        expect(device.onOffCheckTimeout).to.equal(undefined);
+    });
+
+    it("sends the off command when the TV is known to be on", async function () {
+        const {device} = createTransitionDevice();
+        let offCommands = 0;
+        device.getCapabilityValue = () => true;
+        device.samsungClient.turnOff = async () => {
+            offCommands++;
+        };
+        device.isDeviceOnline = async () => false;
+
+        const command = device.turnOnOff(false);
+        await new Promise(resolve => setImmediate(resolve));
+        await device.doOnOffPollDevice();
+        await command;
+
+        expect(offCommands).to.equal(1);
+    });
+
+    it("preserves the off command when the current state is unknown", async function () {
+        const {device} = createTransitionDevice();
+        let offCommands = 0;
+        device.getCapabilityValue = () => undefined;
+        device.samsungClient.turnOff = async () => {
+            offCommands++;
+        };
+        device.isDeviceOnline = async () => false;
+
+        const command = device.turnOnOff(false);
+        await new Promise(resolve => setImmediate(resolve));
+        await device.doOnOffPollDevice();
+        await command;
+
+        expect(offCommands).to.equal(1);
+    });
+
+    it("preserves the separate Frame TV power-off path", async function () {
+        const {device} = createTransitionDevice();
+        let offCommands = 0;
+        device.getCapabilityValue = () => false;
+        device.getSetting = function () {
+            const [key] = arguments;
+            return key === DeviceSettings.frameTVSupport ? true : undefined;
+        };
+        device.samsungClient.turnOff = async () => {
+            offCommands++;
+        };
+        device.isDeviceOnline = async () => false;
+
+        const command = device.turnOnOff(false);
+        await new Promise(resolve => setImmediate(resolve));
+        await device.doOnOffPollDevice();
+        await command;
+
+        expect(offCommands).to.equal(1);
+    });
+
     it("cleans up after a rejected power command", async function () {
         const {device} = createTransitionDevice();
         device.samsungClient.wake = async () => {
