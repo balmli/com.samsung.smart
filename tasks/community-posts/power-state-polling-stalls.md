@@ -2,6 +2,8 @@
 
 Status: Fix implemented — [GitHub issue #56](https://github.com/balmli/com.samsung.smart/issues/56)
 
+Pull request: [#57](https://github.com/balmli/com.samsung.smart/pull/57)
+
 Area: Maintained `Samsung` driver and shared polling lifecycle
 
 ## Problem
