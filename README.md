@@ -168,6 +168,28 @@ Interval between each time the status of the TV (on / off) is checked, in second
 
 A value lower than 10 seconds will disable the polling.
 
+#### Unexpected on/off Flow triggers
+
+The app determines whether the TV is on from the status and network services reported by the TV. Some Samsung TVs
+and projectors temporarily wake their network services while the display remains off, for example during standby
+maintenance or SmartThings activity. Some models may also report that they are on while the screen or projector lamp
+is not active.
+
+Homey can therefore briefly show the TV as on and run a "TV turned on" Flow, followed later by a "TV turned off"
+Flow, even though nobody visibly turned on the display. This behavior depends on the model and firmware. The app
+cannot reliably distinguish an active display from an awake network connection on every Samsung device. Frame TV
+and projector power states may also not fit a simple on/off value.
+
+If unexpected power triggers cause unwanted actions:
+
+- Disable **Power state polling** in the device's Advanced settings. Use the **Set power state** action from a Flow
+  driven by a more reliable source, such as power consumption measured by a smart plug or another integration.
+- Alternatively, add a delay and confirm that the TV still reports as on before operating curtains, lights, or other
+  devices. This may filter short standby wakeups, but it is not a guarantee.
+
+Changing only the polling interval changes how often the state is checked; it does not make the reported state more
+reliable.
+
 #### Maximum volume level
 
 Set the maximum volume level used for UPnP get and set volume. Default value is 30.
