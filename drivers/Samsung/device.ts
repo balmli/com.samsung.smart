@@ -41,6 +41,15 @@ module.exports = class SamsungDevice extends BaseDevice {
         }
     }
 
+    async setPowerState(powerState: boolean): Promise<void> {
+        try {
+            await this.setCapabilityValue('onoff', powerState).catch((err: any) => this.logger.error(err));
+            this.logger.info('setPowerState', powerState);
+        } catch (err) {
+            this.logger.info('setPowerState ERROR', err);
+        }
+    }
+
     async onSettings({
         oldSettings,
         newSettings,
