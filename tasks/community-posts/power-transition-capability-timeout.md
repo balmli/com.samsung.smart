@@ -2,6 +2,8 @@
 
 Status: Fix implemented — [GitHub issue #66](https://github.com/balmli/com.samsung.smart/issues/66)
 
+Pull request: [#67](https://github.com/balmli/com.samsung.smart/pull/67)
+
 Area: Maintained `Samsung` driver power transition lifecycle
 
 ## Problem
