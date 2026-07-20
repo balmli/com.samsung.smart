@@ -2,6 +2,8 @@
 
 Status: Limitation documented — [GitHub issue #62](https://github.com/balmli/com.samsung.smart/issues/62)
 
+Pull request: [#63](https://github.com/balmli/com.samsung.smart/pull/63)
+
 Area: Maintained `Samsung` driver and shared power-state reconciliation
 
 ## Problem
