@@ -7,8 +7,6 @@ module.exports = class SamsungDevice extends BaseDevice {
     pairRetries: number = 3;
     lastAppsRefreshTs: number = 0;
     private onlineRefreshPromise?: Promise<void>;
-    private powerTransitionResolve?: () => void;
-    private powerTransitionReject?: (error: Error) => void;
 
     async onInit(): Promise<void> {
         this.deleted = false;
@@ -69,12 +67,6 @@ module.exports = class SamsungDevice extends BaseDevice {
             return;
         }
 
-        const transition = new Promise<void>((resolve, reject) => {
-            this.powerTransitionResolve = resolve;
-            this.powerTransitionReject = reject;
-        });
-        transition.catch(() => undefined);
-
         try {
             this.turning_onoff_process = onOff;
             this.scheduleOnOffPolling();
@@ -85,7 +77,7 @@ module.exports = class SamsungDevice extends BaseDevice {
             }
             const command = onOff ? this.samsungClient.wake() : this.samsungClient.turnOff();
             this.logger.info('turnOnOff: in progress: ' + (onOff ? 'on' : 'off'));
-            await Promise.race([command.then(() => transition), transition]);
+            await command;
         } catch (err) {
             this.finishPowerTransition();
             this.logger.info('turnOnOff: failed: ', err);
@@ -124,7 +116,8 @@ module.exports = class SamsungDevice extends BaseDevice {
             return;
         }
 
-        this.finishPowerTransition(new Error(this.homey.__('errors.connection_timeout')));
+        this.logger.info('turnOnOff: transition timed out');
+        this.finishPowerTransition();
     }
 
     onDeleted() {
@@ -132,21 +125,11 @@ module.exports = class SamsungDevice extends BaseDevice {
         super.onDeleted();
     }
 
-    private finishPowerTransition(error?: Error) {
-        const resolve = this.powerTransitionResolve;
-        const reject = this.powerTransitionReject;
-        this.powerTransitionResolve = undefined;
-        this.powerTransitionReject = undefined;
+    private finishPowerTransition() {
         this.turning_onoff_process = undefined;
         this.wakeRetries = 0;
         this.clearOnOffPolling();
         this.clearOnOffTimeout();
-
-        if (error) {
-            reject?.(error);
-        } else {
-            resolve?.();
-        }
     }
 
     async onSettings({
