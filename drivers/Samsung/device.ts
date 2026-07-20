@@ -64,6 +64,11 @@ module.exports = class SamsungDevice extends BaseDevice {
             );
         }
 
+        if (!onOff && !this.getSetting(DeviceSettings.frameTVSupport) && this.getCapabilityValue('onoff') === false) {
+            this.logger.info('turnOnOff: TV is already off');
+            return;
+        }
+
         const transition = new Promise<void>((resolve, reject) => {
             this.powerTransitionResolve = resolve;
             this.powerTransitionReject = reject;
