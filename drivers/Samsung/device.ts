@@ -7,8 +7,12 @@ module.exports = class SamsungDevice extends BaseDevice {
     pairRetries: number = 3;
     lastAppsRefreshTs: number = 0;
     private onlineRefreshPromise?: Promise<void>;
+    private powerTransitionResolve?: () => void;
+    private powerTransitionReject?: (error: Error) => void;
 
     async onInit(): Promise<void> {
+        this.deleted = false;
+        this.finishPowerTransition();
         await super.initDevice('Samsung');
 
         await this.initSettings();
@@ -48,6 +52,95 @@ module.exports = class SamsungDevice extends BaseDevice {
             this.logger.info('setPowerState', powerState);
         } catch (err) {
             this.logger.info('setPowerState ERROR', err);
+        }
+    }
+
+    async turnOnOff(onOff: boolean): Promise<void> {
+        if (this.turning_onoff_process !== undefined) {
+            throw new Error(
+                this.homey.__(
+                    this.turning_onoff_process ? 'errors.onoff.on_in_progress' : 'errors.onoff.off_in_progress',
+                ),
+            );
+        }
+
+        const transition = new Promise<void>((resolve, reject) => {
+            this.powerTransitionResolve = resolve;
+            this.powerTransitionReject = reject;
+        });
+        transition.catch(() => undefined);
+
+        try {
+            this.turning_onoff_process = onOff;
+            this.scheduleOnOffPolling();
+            this.scheduleOnOffTimeout();
+
+            if (onOff) {
+                this.wakeRetries = 5;
+            }
+            const command = onOff ? this.samsungClient.wake() : this.samsungClient.turnOff();
+            this.logger.info('turnOnOff: in progress: ' + (onOff ? 'on' : 'off'));
+            await Promise.race([command.then(() => transition), transition]);
+        } catch (err) {
+            this.finishPowerTransition();
+            this.logger.info('turnOnOff: failed: ', err);
+            throw err;
+        }
+    }
+
+    async doOnOffPollDevice() {
+        if (this.deleted || this.turning_onoff_process === undefined) {
+            return;
+        }
+
+        try {
+            const onOff = await this.isDeviceOnline(500);
+            if (this.turning_onoff_process === onOff) {
+                this.logger.info('doOnOffPollDevice: finished');
+                this.finishPowerTransition();
+                return;
+            }
+            if (this.turning_onoff_process && !onOff && this.wakeRetries > 0) {
+                this.wakeRetries--;
+                await this.samsungClient.wake();
+            }
+        } catch (err) {
+            this.logger.info(err);
+        } finally {
+            if (!this.deleted && this.turning_onoff_process !== undefined) {
+                this.scheduleOnOffPolling();
+            }
+        }
+    }
+
+    onOnOffTimeout() {
+        if (this.turning_onoff_process === undefined) {
+            this.clearOnOffTimeout();
+            return;
+        }
+
+        this.finishPowerTransition(new Error(this.homey.__('errors.connection_timeout')));
+    }
+
+    onDeleted() {
+        this.finishPowerTransition();
+        super.onDeleted();
+    }
+
+    private finishPowerTransition(error?: Error) {
+        const resolve = this.powerTransitionResolve;
+        const reject = this.powerTransitionReject;
+        this.powerTransitionResolve = undefined;
+        this.powerTransitionReject = undefined;
+        this.turning_onoff_process = undefined;
+        this.wakeRetries = 0;
+        this.clearOnOffPolling();
+        this.clearOnOffTimeout();
+
+        if (error) {
+            reject?.(error);
+        } else {
+            resolve?.();
         }
     }
 

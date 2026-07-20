@@ -12,6 +12,7 @@ Module._load = function () {
 const SamsungDevice = require("../drivers/Samsung/device");
 Module._load = originalLoad;
 const {DeviceSettings} = require("../lib/types");
+const BaseDevice = Object.getPrototypeOf(SamsungDevice.prototype).constructor;
 
 describe("SamsungDevice.setPowerState", function () {
     it("preserves the power-state polling preference", async function () {
@@ -174,5 +175,188 @@ describe("SamsungDevice power-state polling", function () {
         await device.doPowerStatePolling();
         expect(state.onOff).to.equal(true);
         expect(state.scheduledPolls).to.equal(2);
+    });
+});
+
+function createTransitionDevice() {
+    let timerId = 0;
+    const timers = new Map();
+    const device = Object.create(SamsungDevice.prototype);
+    device.homey = {
+        __: function () {
+            return arguments[0];
+        },
+        setTimeout: function () {
+            const [callback, delay] = arguments;
+            const timer = {callback, delay, id: ++timerId};
+            timers.set(timer.id, timer);
+            return timer;
+        },
+        clearTimeout: function () {
+            const [timer] = arguments;
+            timers.delete(timer.id);
+        },
+    };
+    device.logger = {
+        error: () => undefined,
+        info: () => undefined,
+        verbose: () => undefined,
+    };
+    device.samsungClient = {
+        wake: async () => undefined,
+        turnOff: async () => undefined,
+    };
+    device.clearPowerStatePolling = () => undefined;
+    return {device, timers};
+}
+
+describe("SamsungDevice power transitions", function () {
+    it("cleans up after a rejected power command", async function () {
+        const {device} = createTransitionDevice();
+        device.samsungClient.wake = async () => {
+            throw new Error("wake failed");
+        };
+        let commandErrorMessage;
+
+        try {
+            await device.turnOnOff(true);
+        } catch (err) {
+            commandErrorMessage = err instanceof Error ? err.message : String(err);
+        }
+
+        expect(commandErrorMessage).to.equal("wake failed");
+        expect(device.turning_onoff_process).to.equal(undefined);
+        expect(device.onOffPollingTimeout).to.equal(undefined);
+        expect(device.onOffCheckTimeout).to.equal(undefined);
+    });
+
+    it("cleans up after a successful transition", async function () {
+        const {device} = createTransitionDevice();
+        device.isDeviceOnline = async () => true;
+
+        const command = device.turnOnOff(true);
+        await new Promise(resolve => setImmediate(resolve));
+        await device.doOnOffPollDevice();
+        await command;
+
+        expect(device.turning_onoff_process).to.equal(undefined);
+        expect(device.onOffPollingTimeout).to.equal(undefined);
+        expect(device.onOffCheckTimeout).to.equal(undefined);
+    });
+
+    it("retries after a failed poll and then completes", async function () {
+        const {device} = createTransitionDevice();
+        const pollResults = [new Error("temporary poll failure"), true];
+        device.isDeviceOnline = async () => {
+            const result = pollResults.shift();
+            if (result instanceof Error) {
+                throw result;
+            }
+            return result;
+        };
+
+        const command = device.turnOnOff(true);
+        await new Promise(resolve => setImmediate(resolve));
+        await device.doOnOffPollDevice();
+        expect(device.turning_onoff_process).to.equal(true);
+        expect(device.onOffPollingTimeout).to.not.equal(undefined);
+
+        await device.doOnOffPollDevice();
+        await command;
+        expect(device.turning_onoff_process).to.equal(undefined);
+        expect(device.onOffPollingTimeout).to.equal(undefined);
+        expect(device.onOffCheckTimeout).to.equal(undefined);
+    });
+
+    it("returns a timeout error and allows a later command", async function () {
+        const {device} = createTransitionDevice();
+        let commandErrorMessage;
+        const command = device.turnOnOff(true).catch(function () {
+            const [err] = arguments;
+            commandErrorMessage = err instanceof Error ? err.message : String(err);
+        });
+        await new Promise(resolve => setImmediate(resolve));
+
+        device.onOnOffTimeout();
+        await command;
+
+        expect(commandErrorMessage).to.equal("errors.connection_timeout");
+        expect(device.turning_onoff_process).to.equal(undefined);
+        expect(device.onOffPollingTimeout).to.equal(undefined);
+        expect(device.onOffCheckTimeout).to.equal(undefined);
+
+        device.samsungClient.wake = async () => {
+            throw new Error("next command reached TV");
+        };
+        let nextCommandErrorMessage;
+        try {
+            await device.turnOnOff(true);
+        } catch (err) {
+            nextCommandErrorMessage = err instanceof Error ? err.message : String(err);
+        }
+        expect(nextCommandErrorMessage).to.equal("next command reached TV");
+    });
+
+    it("blocks duplicate commands only while a transition is active", async function () {
+        const {device} = createTransitionDevice();
+        device.isDeviceOnline = async () => true;
+
+        const command = device.turnOnOff(true);
+        await new Promise(resolve => setImmediate(resolve));
+        let duplicateErrorMessage;
+        try {
+            await device.turnOnOff(false);
+        } catch (err) {
+            duplicateErrorMessage = err instanceof Error ? err.message : String(err);
+        }
+
+        expect(duplicateErrorMessage).to.equal("errors.onoff.on_in_progress");
+        await device.doOnOffPollDevice();
+        await command;
+    });
+
+    it("clears stale transition state during initialization", async function () {
+        const {device} = createTransitionDevice();
+        const originalInitDevice = BaseDevice.prototype.initDevice;
+        device.deleted = true;
+        device.turning_onoff_process = true;
+        device.scheduleOnOffPolling();
+        device.scheduleOnOffTimeout();
+        BaseDevice.prototype.initDevice = async () => undefined;
+        device.initSettings = async () => undefined;
+        device.migrate = async () => undefined;
+        device.registerCapListeners = async () => undefined;
+        device.schedulePowerStatePolling = () => undefined;
+        device.initSmartThings = async () => undefined;
+        device.config = {
+            getSetting: () => undefined,
+        };
+        device.homeyIpUtil = {};
+        device.getData = () => ({id: "test-tv"});
+
+        try {
+            await device.onInit();
+        } finally {
+            BaseDevice.prototype.initDevice = originalInitDevice;
+        }
+
+        expect(device.turning_onoff_process).to.equal(undefined);
+        expect(device.deleted).to.equal(false);
+        expect(device.onOffPollingTimeout).to.equal(undefined);
+        expect(device.onOffCheckTimeout).to.equal(undefined);
+    });
+
+    it("clears transition state when the device is deleted", function () {
+        const {device} = createTransitionDevice();
+        device.turning_onoff_process = false;
+        device.scheduleOnOffPolling();
+        device.scheduleOnOffTimeout();
+
+        device.onDeleted();
+
+        expect(device.turning_onoff_process).to.equal(undefined);
+        expect(device.deleted).to.equal(true);
+        expect(device.onOffPollingTimeout).to.equal(undefined);
+        expect(device.onOffCheckTimeout).to.equal(undefined);
     });
 });
