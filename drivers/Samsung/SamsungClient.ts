@@ -4,6 +4,10 @@ import {SamsungBase, SamsungClient} from '../../lib/SamsungBase';
 const WebSocket = require('ws');
 
 export class SamsungClientImpl extends SamsungBase implements SamsungClient {
+    protected getApplicationRequestError(statusCode: number): string | undefined {
+        return statusCode === 401 ? this.device?.homey.__('errors.app_request_401') : undefined;
+    }
+
     getUri(ipAddress?: string) {
         return `http://${ipAddress || this.config.getSetting(DeviceSettings.ipaddress)}:${this.port}/api/v2/`;
     }
@@ -132,6 +136,17 @@ export class SamsungClientImpl extends SamsungBase implements SamsungClient {
                 },
             },
         });
+    }
+
+    async launchYouTube(videoId: string): Promise<void> {
+        try {
+            await this.launchApp({name: 'YouTube', appId: '', dialId: 'YouTube'}, 'v=' + videoId);
+            this.logger.verbose(`launchYouTube: started YouTube with video ID: ${videoId}`);
+        } catch (err: any) {
+            this.logger.info(`launchYouTube: error starting Youtube for video ID: ${videoId}`, err);
+            const message = err instanceof Error ? err.message : String(err);
+            throw new Error(this.device?.homey.__('errors.app.start_youtube', {message}));
+        }
     }
 
     async artMode(onOff: boolean): Promise<any> {

@@ -159,6 +159,10 @@ export class SamsungBase implements SamsungClient {
     socket: any;
     socketTimeout?: NodeJS.Timeout;
 
+    protected getApplicationRequestError(statusCode: number): string | undefined {
+        return undefined;
+    }
+
     constructor({
         device,
         config,
@@ -540,6 +544,12 @@ export class SamsungBase implements SamsungClient {
                         self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
                         reject(msg);
                     } else {
+                        const msg = self.getApplicationRequestError(data.response.statusCode);
+                        if (msg) {
+                            self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
+                            reject(msg);
+                            return;
+                        }
                         self.logger.error(
                             'Application command',
                             data.data,

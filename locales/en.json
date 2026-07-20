@@ -38,6 +38,7 @@
     "frame_is_not_supported": "Frame is not supported",
     "app_no_app_running": "No app is running...",
     "app_app_not_running": "App is not running...",
+    "app_request_401": "The TV rejected the application request. Make sure the app is installed and supported on this TV",
     "app_request_403": "The application request must be authorized",
     "app_request_404": "Application not found",
     "app_request_413": "Request entity too large",
