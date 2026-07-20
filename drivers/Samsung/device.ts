@@ -6,6 +6,7 @@ import {SamsungClientImpl} from './SamsungClient';
 module.exports = class SamsungDevice extends BaseDevice {
     pairRetries: number = 3;
     lastAppsRefreshTs: number = 0;
+    private onlineRefreshPromise?: Promise<void>;
 
     async onInit(): Promise<void> {
         await super.initDevice('Samsung');
@@ -92,6 +93,21 @@ module.exports = class SamsungDevice extends BaseDevice {
     }
 
     async onDeviceOnline() {
+        if (this.onlineRefreshPromise) {
+            return;
+        }
+
+        const refreshPromise = this.refreshOnlineState()
+            .catch(err => this.logger.info('onDeviceOnline ERROR', err))
+            .finally(() => {
+                if (this.onlineRefreshPromise === refreshPromise) {
+                    this.onlineRefreshPromise = undefined;
+                }
+            });
+        this.onlineRefreshPromise = refreshPromise;
+    }
+
+    private async refreshOnlineState() {
         await this.shouldFetchPowerState();
         await this.shouldFetchModelName();
         await this.pairDevice();
