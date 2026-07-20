@@ -2,6 +2,8 @@
 
 Status: Fix implemented — [GitHub issue #60](https://github.com/balmli/com.samsung.smart/issues/60)
 
+Pull request: [#61](https://github.com/balmli/com.samsung.smart/pull/61)
+
 Area: Maintained `Samsung` driver
 
 ## Problem
