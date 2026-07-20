@@ -230,7 +230,7 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
-#### 2.2.1
+#### 2.2.2
 
 - Improved power-state polling reliability for newer Samsung TVs
 - Power transitions now recover cleanly from command failures, polling failures, and timeouts

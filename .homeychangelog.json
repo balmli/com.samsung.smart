@@ -1,4 +1,7 @@
 {
+  "2.2.2": {
+    "en": "Improved power-state polling and transition recovery for newer Samsung TVs. Turning off an already-off TV no longer sends a toggle command, slow successful power changes no longer trigger Homey's 10-second timeout, and application-launch authorization errors are clearer."
+  },
   "2.2.1": {
     "en": "Improved power-state polling and transition recovery for newer Samsung TVs. Turning off an already-off TV no longer sends a toggle command, slow successful power changes no longer trigger Homey's 10-second timeout, and application-launch authorization errors are clearer."
   },
