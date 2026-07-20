@@ -1,4 +1,4 @@
-import {DeviceSettings, HomeyDevice} from "./types";
+import {DeviceSettings, HomeyDevice} from './types';
 
 export interface SamsungConfig {
     getSetting(key: DeviceSettings): any;
@@ -6,15 +6,11 @@ export interface SamsungConfig {
 }
 
 export class SamsungConfigImpl implements SamsungConfig {
-
     device?: HomeyDevice;
     logger: any;
     storage: Map<string, any> = new Map(); // when used in drivers
 
-    constructor({device, logger}: {
-        device?: HomeyDevice,
-        logger: any
-    }) {
+    constructor({device, logger}: {device?: HomeyDevice; logger: any}) {
         this.device = device;
         this.logger = logger;
     }
@@ -27,5 +23,4 @@ export class SamsungConfigImpl implements SamsungConfig {
         // @ts-ignore
         return this.device ? this.device.setSettings({[key]: value}) : this.storage.set(key, value);
     }
-
 }

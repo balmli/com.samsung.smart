@@ -1,10 +1,9 @@
-import {DeviceSettings} from "../../lib/types";
-import {BaseDevice} from "../../lib/BaseDevice";
-import {SmartThingsClientImpl} from "../../lib/SmartThings";
-import {SamsungClientImpl} from "./SamsungClient";
+import {DeviceSettings} from '../../lib/types';
+import {BaseDevice} from '../../lib/BaseDevice';
+import {SmartThingsClientImpl} from '../../lib/SmartThings';
+import {SamsungClientImpl} from './SamsungClient';
 
 module.exports = class SamsungDevice extends BaseDevice {
-
     pairRetries: number = 3;
     lastAppsRefreshTs: number = 0;
 
@@ -20,12 +19,12 @@ module.exports = class SamsungDevice extends BaseDevice {
             config: this.config,
             port: 8001,
             homeyIpUtil: this.homeyIpUtil,
-            logger: this.logger
+            logger: this.logger,
         });
         this.smartThingsClient = new SmartThingsClientImpl({
             device: this,
             config: this.config,
-            logger: this.logger
+            logger: this.logger,
         });
 
         this.schedulePowerStatePolling(1);
@@ -36,11 +35,17 @@ module.exports = class SamsungDevice extends BaseDevice {
     async initSettings() {
         const settings = this.getSettings();
         if (settings.tokenAuthSupport === undefined || settings.tokenAuthSupport === null) {
-            await this.config.setSetting(DeviceSettings.tokenAuthSupport, false).catch((err: any) => this.logger.error(err));
+            await this.config
+                .setSetting(DeviceSettings.tokenAuthSupport, false)
+                .catch((err: any) => this.logger.error(err));
         }
     }
 
-    async onSettings({oldSettings, newSettings, changedKeys}: {
+    async onSettings({
+        oldSettings,
+        newSettings,
+        changedKeys,
+    }: {
         oldSettings: object;
         newSettings: object;
         changedKeys: string[];
@@ -64,7 +69,9 @@ module.exports = class SamsungDevice extends BaseDevice {
             } else {
                 // Clear token
                 this.homey.setTimeout(async () => {
-                    await this.config.setSetting(DeviceSettings.token, undefined).catch((err: any) => this.logger.error(err));
+                    await this.config
+                        .setSetting(DeviceSettings.token, undefined)
+                        .catch((err: any) => this.logger.error(err));
                 }, 1000);
             }
         }
@@ -85,9 +92,11 @@ module.exports = class SamsungDevice extends BaseDevice {
 
     async pairDevice(delay = 5000) {
         // Skip is token is not required, or already paired, or no more pair retries
-        if (!this.getSetting(DeviceSettings.tokenAuthSupport) ||
+        if (
+            !this.getSetting(DeviceSettings.tokenAuthSupport) ||
             this.getSetting(DeviceSettings.token) ||
-            this.pairRetries <= 0) {
+            this.pairRetries <= 0
+        ) {
             return;
         }
 
@@ -114,14 +123,14 @@ module.exports = class SamsungDevice extends BaseDevice {
 
     private async shouldRefreshAppList() {
         const now = new Date().getTime();
-        if ((now - this.lastAppsRefreshTs) > 300000) {
+        if (now - this.lastAppsRefreshTs > 300000) {
             await this.refreshAppList();
         }
     }
 
     private async refreshAppList() {
         try {
-            await this.samsungClient.getListOfApps()
+            await this.samsungClient.getListOfApps();
             this.lastAppsRefreshTs = Date.now();
         } catch (err) {
             this.logger.info('refreshAppList ERROR', err);
@@ -134,5 +143,4 @@ module.exports = class SamsungDevice extends BaseDevice {
         const settings = this.getSettings();
         return settings.smartthings && settings.smartthings_token && settings.smartthings_token.length > 0;
     }
-
 };

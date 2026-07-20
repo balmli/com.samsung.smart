@@ -1,16 +1,16 @@
-import Device from "homey/lib/Device";
-import Homey from "homey/lib/Homey";
+import Device from 'homey/lib/Device';
+import Homey from 'homey/lib/Homey';
 
 const http = require('http.min');
-const {default: PQueue} = require("p-queue");
-const isPortReachable = require("is-port-reachable");
-const wol = require("wake_on_lan");
+const {default: PQueue} = require('p-queue');
+const isPortReachable = require('is-port-reachable');
+const wol = require('wake_on_lan');
 
-import { appCodes} from "./apps";
-import { keycodes } from "./keys";
-import {DeviceSettings} from "./types";
-import {SamsungConfig} from "./SamsungConfig";
-import {HomeyIpUtil} from "./HomeyIpUtil";
+import {appCodes} from './apps';
+import {keycodes} from './keys';
+import {DeviceSettings} from './types';
+import {SamsungConfig} from './SamsungConfig';
+import {HomeyIpUtil} from './HomeyIpUtil';
 
 export interface SamsungClient {
     /**
@@ -40,7 +40,7 @@ export interface SamsungClient {
      * @param ipAddress
      * @param timeout default 2000ms
      */
-    getInfo(ipAddress?: string, timeout?: number): Promise<any>
+    getInfo(ipAddress?: string, timeout?: number): Promise<any>;
 
     /**
      * Initiate a pairing session with the TV.
@@ -60,7 +60,7 @@ export interface SamsungClient {
     /**
      * Wake the TV.
      */
-    wake(): Promise<void>
+    wake(): Promise<void>;
 
     /**
      * Turn the TV on.
@@ -144,9 +144,7 @@ export interface SamsungClient {
     modelClass(model: string): string | undefined;
 }
 
-
 export class SamsungBase implements SamsungClient {
-
     device?: Device;
     i18n?: Homey;
     config: SamsungConfig;
@@ -161,13 +159,20 @@ export class SamsungBase implements SamsungClient {
     socket: any;
     socketTimeout?: NodeJS.Timeout;
 
-    constructor({device, config, port, connectionTimeout, homeyIpUtil, logger}: {
-        device?: Device,
-        config: SamsungConfig,
-        port: number,
-        connectionTimeout?: number,
-        homeyIpUtil: HomeyIpUtil,
-        logger: any
+    constructor({
+        device,
+        config,
+        port,
+        connectionTimeout,
+        homeyIpUtil,
+        logger,
+    }: {
+        device?: Device;
+        config: SamsungConfig;
+        port: number;
+        connectionTimeout?: number;
+        homeyIpUtil: HomeyIpUtil;
+        logger: any;
     }) {
         this.device = device;
         // @ts-ignore
@@ -194,7 +199,7 @@ export class SamsungBase implements SamsungClient {
         try {
             const result = await http.get({
                 uri: this.getUri(),
-                timeout: (timeout || 2000)
+                timeout: timeout || 2000,
             });
             let ret = result.response && result.response.statusCode === 200;
             if (ret) {
@@ -209,15 +214,14 @@ export class SamsungBase implements SamsungClient {
             }
             this.logger.verbose(`Samsung apiActive: ${ret}`);
             return ret;
-        } catch (err: any) {
-        }
+        } catch (err: any) {}
         return false;
     }
 
     pingPort(ipaddress?: string, port?: number, timeout?: number): Promise<boolean> {
-        return isPortReachable((port || this.port), {
-            host: (ipaddress || this.config.getSetting(DeviceSettings.ipaddress)),
-            timeout: timeout || 2000
+        return isPortReachable(port || this.port, {
+            host: ipaddress || this.config.getSetting(DeviceSettings.ipaddress),
+            timeout: timeout || 2000,
         });
     }
 
@@ -255,7 +259,7 @@ export class SamsungBase implements SamsungClient {
 
     async wake(): Promise<void> {
         const self = this;
-        let mac = this.config.getSetting(DeviceSettings.mac_address)
+        let mac = this.config.getSetting(DeviceSettings.mac_address);
         if (!mac) {
             mac = await this.device?.homey.arp.getMAC(this.config.getSetting(DeviceSettings.ipaddress));
             if (!mac || mac.indexOf(':') < 0) {
@@ -297,9 +301,15 @@ export class SamsungBase implements SamsungClient {
         const cmds = this._commandsWithDelays(commands, delay);
         //this.logger.info('sendKeys', cmds);
         const queue = new PQueue({concurrency: 1});
-        return queue.addAll(cmds
-            .map((cmd: any) => cmd.cmd ? [() => this.sendKey(cmd.cmd), () => this._delay(cmd.delay)] : [() => this._delay(cmd.delay)])
-            .reduce((acc: any, val: any) => acc.concat(val), []));
+        return queue.addAll(
+            cmds
+                .map((cmd: any) =>
+                    cmd.cmd
+                        ? [() => this.sendKey(cmd.cmd), () => this._delay(cmd.delay)]
+                        : [() => this._delay(cmd.delay)],
+                )
+                .reduce((acc: any, val: any) => acc.concat(val), []),
+        );
     }
 
     async setChannel(channel: number): Promise<any> {
@@ -313,7 +323,12 @@ export class SamsungBase implements SamsungClient {
         const notFoundError = this.device?.homey.__('errors.app_request_404');
         if (app.dialId) {
             try {
-                const resp1 = await this._applicationCmd(`http://${this.config.getSetting(DeviceSettings.ipaddress)}:8080/ws/apps/${app.dialId}`, app.dialId, 'get', false);
+                const resp1 = await this._applicationCmd(
+                    `http://${this.config.getSetting(DeviceSettings.ipaddress)}:8080/ws/apps/${app.dialId}`,
+                    app.dialId,
+                    'get',
+                    false,
+                );
                 return resp1 && resp1.includes('<state>running</state>');
             } catch (err: any) {
                 this.logger.info('isAppRunning DIAL app', err);
@@ -324,7 +339,12 @@ export class SamsungBase implements SamsungClient {
         }
         if (app.appId) {
             try {
-                const resp2 = await this._applicationCmd(`${this.getUri()}applications/${app.appId}`, app.appId, 'get', true);
+                const resp2 = await this._applicationCmd(
+                    `${this.getUri()}applications/${app.appId}`,
+                    app.appId,
+                    'get',
+                    true,
+                );
                 return resp2 && resp2.visible;
             } catch (err: any) {
                 this.logger.info('isAppRunning Samsung app', err);
@@ -352,7 +372,7 @@ export class SamsungBase implements SamsungClient {
 
     async launchYouTube(videoId: string): Promise<void> {
         try {
-            await this.launchApp({"name": "YouTube", "appId": "", "dialId": "YouTube"}, 'v=' + videoId);
+            await this.launchApp({name: 'YouTube', appId: '', dialId: 'YouTube'}, 'v=' + videoId);
             this.logger.verbose(`launchYouTube: started YouTube with video ID: ${videoId}`);
         } catch (err: any) {
             this.logger.info(`launchYouTube: error starting Youtube for video ID: ${videoId}`, err);
@@ -368,18 +388,23 @@ export class SamsungBase implements SamsungClient {
         if (apps && apps.length > 0) {
             const curIds = new Set();
             this._apps.map((a: any) => curIds.add(a.appId));
-            apps.filter((a: any) => !curIds.has(a.appId))
-                .map((a: any) => this._apps.push({
+            apps.filter((a: any) => !curIds.has(a.appId)).map((a: any) =>
+                this._apps.push({
                     name: a.name,
                     appId: a.appId,
-                    dialId: ""
-                }));
+                    dialId: '',
+                }),
+            );
         }
     }
 
     _commandsChannel(channel: number) {
         const commands = [];
-        commands.push(...String(channel).split('').map((num: string) => `KEY_${num}`));
+        commands.push(
+            ...String(channel)
+                .split('')
+                .map((num: string) => `KEY_${num}`),
+        );
         commands.push('KEY_ENTER');
         return commands;
     }
@@ -401,7 +426,7 @@ export class SamsungBase implements SamsungClient {
                 return cmd;
             })
             .reduce((acc: any, val: any) => acc.concat(val), [])
-            .map((cmd: any) => isNaN(cmd) ? cmd : parseFloat(cmd))
+            .map((cmd: any) => (isNaN(cmd) ? cmd : parseFloat(cmd)))
             .map((cmd: any) => {
                 if (isNaN(cmd) && !(cmd in keyCodeMap)) {
                     throw new Error(this.device?.homey.__('errors.invalid_key', {key: cmd}));
@@ -418,8 +443,11 @@ export class SamsungBase implements SamsungClient {
 
     _commandsWithDelays(commands: any, delay?: number) {
         const cmds = this._commands(commands);
-        return cmds.map((cmd: any) => typeof cmd === 'number' ? {delay: cmd} :
-            {cmd: cmd, delay: delay || this.config.getSetting(DeviceSettings.delay_keys)});
+        return cmds.map((cmd: any) =>
+            typeof cmd === 'number'
+                ? {delay: cmd}
+                : {cmd: cmd, delay: delay || this.config.getSetting(DeviceSettings.delay_keys)},
+        );
     }
 
     findApp(appId: string) {
@@ -436,7 +464,13 @@ export class SamsungBase implements SamsungClient {
         const notFoundError = this.device?.homey.__('errors.app_request_404');
         if (app.dialId) {
             try {
-                return await this._applicationCmd(`http://${this.config.getSetting(DeviceSettings.ipaddress)}:8080/ws/apps/${app.dialId}${cmd === 'delete' ? '/run' : ''}`, app.dialId, cmd, false, launchData);
+                return await this._applicationCmd(
+                    `http://${this.config.getSetting(DeviceSettings.ipaddress)}:8080/ws/apps/${app.dialId}${cmd === 'delete' ? '/run' : ''}`,
+                    app.dialId,
+                    cmd,
+                    false,
+                    launchData,
+                );
             } catch (err: any) {
                 this.logger.info('applicationCmd DIAL app', err);
                 if (err !== notFoundError) {
@@ -446,7 +480,13 @@ export class SamsungBase implements SamsungClient {
         }
         if (app.appId) {
             try {
-                return await this._applicationCmd(`${this.getUri()}applications/${app.appId}`, app.appId, cmd, true, launchData);
+                return await this._applicationCmd(
+                    `${this.getUri()}applications/${app.appId}`,
+                    app.appId,
+                    cmd,
+                    true,
+                    launchData,
+                );
             } catch (err: any) {
                 this.logger.info('applicationCmd Samsung app', err);
                 if (err !== notFoundError) {
@@ -463,15 +503,18 @@ export class SamsungBase implements SamsungClient {
         this.logger.verbose('_applicationCmd', appId, cmd, url);
 
         return new Promise((resolve, reject) => {
-            http[cmd]({
-                uri: url,
-                headers: {
-                    'Content-Type': json ? 'application/json' : 'text/plain',
-                    'Content-Length': Buffer.byteLength(lData)
+            http[cmd](
+                {
+                    uri: url,
+                    headers: {
+                        'Content-Type': json ? 'application/json' : 'text/plain',
+                        'Content-Length': Buffer.byteLength(lData),
+                    },
+                    json: json,
+                    timeout: 10000,
                 },
-                json: json,
-                timeout: 10000
-            }, lData)
+                lData,
+            )
                 .then(function (data: any) {
                     if (data.response && (data.response.statusCode === 200 || data.response.statusCode === 201)) {
                         self.logger.info(`Application command OK: ${cmd} ${appId}`);
@@ -497,32 +540,39 @@ export class SamsungBase implements SamsungClient {
                         self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
                         reject(msg);
                     } else {
-                        self.logger.error('Application command', data.data, data.response.statusMessage, data.response.statusCode);
-                        reject(self.device?.homey.__('errors.app_request_failed', {
-                            statusCode: data.response.statusCode,
-                            statusMessage: data.response.statusMessage
-                        }));
+                        self.logger.error(
+                            'Application command',
+                            data.data,
+                            data.response.statusMessage,
+                            data.response.statusCode,
+                        );
+                        reject(
+                            self.device?.homey.__('errors.app_request_failed', {
+                                statusCode: data.response.statusCode,
+                                statusMessage: data.response.statusMessage,
+                            }),
+                        );
                     }
                 })
                 .catch(function (err: any) {
                     if (err.code && err.code === 'ECONNREFUSED') {
                         const msg = self.device?.homey.__('errors.connection_refused', {
                             address: err.address,
-                            port: err.port
+                            port: err.port,
                         });
                         self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
                         reject(msg);
                     } else if (err.code && err.code === 'EHOSTUNREACH') {
                         const msg = self.device?.homey.__('errors.connection_hostunreachable', {
                             address: err.address,
-                            port: err.port
+                            port: err.port,
                         });
                         self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
                         reject(msg);
                     } else if (err.code && err.code === 'ENETUNREACH') {
                         const msg = self.device?.homey.__('errors.connection_netunreachable', {
                             address: err.address,
-                            port: err.port
+                            port: err.port,
                         });
                         self.logger.info(`Application command failed: ${cmd} ${appId}:`, msg);
                         reject(msg);
@@ -552,5 +602,4 @@ export class SamsungBase implements SamsungClient {
             this.device?.homey.setTimeout(resolve, ms);
         });
     }
-
 }

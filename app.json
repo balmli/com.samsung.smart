@@ -11,15 +11,9 @@
   "description": {
     "en": "Control your Samsung SmartTV"
   },
-  "category": [
-    "video"
-  ],
+  "category": ["video"],
   "tags": {
-    "en": [
-      "samsung",
-      "smarttv",
-      "tv"
-    ]
+    "en": ["samsung", "smarttv", "tv"]
   },
   "images": {
     "large": "/assets/images/large.png",
@@ -341,14 +335,7 @@
         "small": "/drivers/Samsung/assets/images/small.png"
       },
       "class": "tv",
-      "capabilities": [
-        "onoff",
-        "volume_up",
-        "channel_up",
-        "volume_down",
-        "channel_down",
-        "volume_mute"
-      ],
+      "capabilities": ["onoff", "volume_up", "channel_up", "volume_down", "channel_down", "volume_mute"],
       "id": "Samsung",
       "name": {
         "en": "Samsung"
@@ -509,14 +496,7 @@
         "small": "/drivers/SamsungEncrypted/assets/images/small.png"
       },
       "class": "tv",
-      "capabilities": [
-        "onoff",
-        "volume_up",
-        "channel_up",
-        "volume_down",
-        "channel_down",
-        "volume_mute"
-      ],
+      "capabilities": ["onoff", "volume_up", "channel_up", "volume_down", "channel_down", "volume_mute"],
       "id": "SamsungEncrypted",
       "name": {
         "en": "Samsung (encrypted)"
@@ -634,14 +614,7 @@
         "small": "/drivers/SamsungLegacy/assets/images/small.png"
       },
       "class": "tv",
-      "capabilities": [
-        "onoff",
-        "volume_up",
-        "channel_up",
-        "volume_down",
-        "channel_down",
-        "volume_mute"
-      ],
+      "capabilities": ["onoff", "volume_up", "channel_up", "volume_down", "channel_down", "volume_mute"],
       "id": "SamsungLegacy",
       "name": {
         "en": "Samsung (legacy)"

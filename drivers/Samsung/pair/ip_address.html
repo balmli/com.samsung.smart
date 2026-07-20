@@ -1,56 +1,50 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../../assets/styles.css">
-</head>
-<body>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="../../../assets/styles.css" />
+    </head>
+    <body>
+        <header class="homey-header">
+            <p class="homey-subtitle" data-i18n="pair.standard.subtitle"></p>
+        </header>
 
-<header class="homey-header">
-    <p class="homey-subtitle" data-i18n="pair.standard.subtitle">
-    </p>
-</header>
+        <form class="homey-form">
+            <fieldset class="homey-form-fieldset">
+                <div class="homey-form-group">
+                    <label class="homey-form-label" for="ipaddress" data-i18n="pair.ipaddress"></label>
+                    <div class="input_ip_address">
+                        <input class="homey-form-input" id="ipaddress" type="text" maxlength="15" />
+                    </div>
+                </div>
+            </fieldset>
 
-<form class="homey-form">
-    <fieldset class="homey-form-fieldset">
-        <div class="homey-form-group">
-            <label class="homey-form-label" for="ipaddress" data-i18n="pair.ipaddress"></label>
-            <div class="input_ip_address">
-                <input class="homey-form-input " id="ipaddress" type="text" maxlength="15">
-            </div>
-        </div>
-    </fieldset>
+            <button class="homey-button-primary-full" id="submit" data-i18n="pair.submit"></button>
+        </form>
 
-    <button class="homey-button-primary-full"
-            id="submit"
-            data-i18n="pair.submit"
-    ></button>
-</form>
+        <script type="text/javascript">
+            Homey.setTitle(Homey.__('pair.standard.title'));
 
-<script type="text/javascript">
-  Homey.setTitle(Homey.__('pair.standard.title'));
+            document.getElementById('submit').onclick = e => {
+                e.preventDefault();
+                Homey.showLoadingOverlay();
+                const ipaddress = document.getElementById('ipaddress').value;
 
-  document.getElementById('submit').onclick = (e) => {
-    e.preventDefault();
-    Homey.showLoadingOverlay();
-    const ipaddress = document.getElementById("ipaddress").value;
-
-    Homey.emit('ip_address_entered', { ipaddress }, (err, result) => {
-      Homey.hideLoadingOverlay();
-      if (err) {
-        Homey.alert(err, 'error', () => {
-        });
-      } else if (result) {
-        Homey.createDevice(result)
-          .then(function (result) {
-            Homey.done();
-          })
-          .catch(function (error) {
-            Homey.alert(err);
-          });
-      }
-    });
-  };
-</script>
-</body>
+                Homey.emit('ip_address_entered', {ipaddress}, (err, result) => {
+                    Homey.hideLoadingOverlay();
+                    if (err) {
+                        Homey.alert(err, 'error', () => {});
+                    } else if (result) {
+                        Homey.createDevice(result)
+                            .then(function (result) {
+                                Homey.done();
+                            })
+                            .catch(function (error) {
+                                Homey.alert(err);
+                            });
+                    }
+                });
+            };
+        </script>
+    </body>
 </html>

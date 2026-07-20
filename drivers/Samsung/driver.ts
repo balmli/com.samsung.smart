@@ -1,39 +1,37 @@
-import net from "net";
-import PairSession from "homey/lib/PairSession";
+import net from 'net';
+import PairSession from 'homey/lib/PairSession';
 
-import {BaseDriver} from "../../lib/BaseDriver";
-import {UPnPClient, UPnPClientImpl} from "../../lib/UPnPClient";
-import {SamsungClientImpl} from "./SamsungClient";
+import {BaseDriver} from '../../lib/BaseDriver';
+import {UPnPClient, UPnPClientImpl} from '../../lib/UPnPClient';
+import {SamsungClientImpl} from './SamsungClient';
 
 module.exports = class SamsungDriver extends BaseDriver {
-
     async onInit(): Promise<void> {
         await super.initDriver('Samsung');
         this.samsungClient = new SamsungClientImpl({
             config: this.config,
             port: 8001,
             homeyIpUtil: this.homeyIpUtil,
-            logger: this.logger
+            logger: this.logger,
         });
     }
 
     async onPair(session: PairSession): Promise<void> {
-
         let devices: any[] = [];
         let stopSearch = false;
         const upnpClient: UPnPClient = new UPnPClientImpl({config: this.config, logger: this.logger});
         upnpClient.on('device', async (event: any) => {
             this.logger.info(`UPnP device found: ${event.ip_address})`);
-            await this.checkForTV({ ipAddress: event.ip_address, devices, session });
+            await this.checkForTV({ipAddress: event.ip_address, devices, session});
         });
 
-        session.setHandler('list_devices', async (data) => {
+        session.setHandler('list_devices', async data => {
             try {
                 const startIpAddress = await this.homeyIpUtil.getHomeyIpAddress(this.homey);
 
                 upnpClient.search();
 
-                let lastDot = startIpAddress.lastIndexOf(".");
+                let lastDot = startIpAddress.lastIndexOf('.');
                 let ipAddrPrefix = startIpAddress.substring(0, lastDot + 1);
                 let ipHomey = Number(startIpAddress.substring(lastDot + 1, startIpAddress.length));
                 let first = Math.max(ipHomey - 20, 2);
@@ -48,14 +46,14 @@ module.exports = class SamsungDriver extends BaseDriver {
                     if (stopSearch) {
                         break;
                     }
-                    await this.checkForTV({ ipAddress: ipAddrPrefix + i, devices, session });
+                    await this.checkForTV({ipAddress: ipAddrPrefix + i, devices, session});
                 }
                 for (let i = 2; i < 255; i++) {
                     if (stopSearch) {
                         break;
                     }
                     if (i < first || i > last) {
-                        await this.checkForTV({ ipAddress: ipAddrPrefix + i, devices, session });
+                        await this.checkForTV({ipAddress: ipAddrPrefix + i, devices, session});
                     }
                 }
                 this.homey.clearTimeout(searchTimeout);
@@ -70,7 +68,7 @@ module.exports = class SamsungDriver extends BaseDriver {
             }
         });
 
-        session.setHandler('ip_address_entered', async (data) => {
+        session.setHandler('ip_address_entered', async data => {
             this.log('onPair: ip_address_entered:', data);
             let ipAddress = data.ipaddress;
 
@@ -78,7 +76,7 @@ module.exports = class SamsungDriver extends BaseDriver {
                 throw new Error(this.homey.__('pair.valid_ip_address'));
             }
 
-            await this.checkForTV({ ipAddress, devices, session });
+            await this.checkForTV({ipAddress, devices, session});
             if (devices.length === 0) {
                 throw new Error(this.homey.__('pair.no_tvs_on_ip'));
             }
@@ -91,10 +89,14 @@ module.exports = class SamsungDriver extends BaseDriver {
         });
     }
 
-    async checkForTV({ ipAddress, devices, session } : {
-        ipAddress: string,
-        devices: any[],
-        session?: PairSession,
+    async checkForTV({
+        ipAddress,
+        devices,
+        session,
+    }: {
+        ipAddress: string;
+        devices: any[];
+        session?: PairSession;
     }): Promise<boolean> {
         this.logger.info('checkForTV', ipAddress);
         const info = await this.samsungClient.getInfo(ipAddress, 100);
@@ -103,14 +105,14 @@ module.exports = class SamsungDriver extends BaseDriver {
             devices.push({
                 name: info.name,
                 data: {
-                    id: info.id
+                    id: info.id,
                 },
                 settings: {
                     ipaddress: ipAddress,
                     modelName: info.device.modelName,
                     frameTVSupport: info.device.FrameTVSupport === 'true',
                     tokenAuthSupport: info.device.TokenAuthSupport === 'true',
-                }
+                },
             });
             session?.emit('list_devices', devices);
             return true;
@@ -119,9 +121,10 @@ module.exports = class SamsungDriver extends BaseDriver {
     }
 
     private isValidDevice(info: any) {
-        return info &&
+        return (
+            info &&
             (!info.type || info.type !== 'Samsung Speaker') &&
-            this.samsungClient.modelClass(info.device.modelName) === undefined;
+            this.samsungClient.modelClass(info.device.modelName) === undefined
+        );
     }
-
 };

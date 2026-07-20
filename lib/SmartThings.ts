@@ -1,6 +1,6 @@
-import Device from "homey/lib/Device";
-import {DeviceSettings} from "./types";
-import {SamsungConfig} from "./SamsungConfig";
+import Device from 'homey/lib/Device';
+import {DeviceSettings} from './types';
+import {SamsungConfig} from './SamsungConfig';
 
 const http = require('http.min');
 
@@ -38,17 +38,12 @@ export interface SmartThingsClient {
 }
 
 export class SmartThingsClientImpl implements SmartThingsClient {
-
     device: Device;
     config: SamsungConfig;
     logger: any;
     stTvDeviceId: string | undefined = undefined;
 
-    constructor({device, config, logger}: {
-        device: Device,
-        config: SamsungConfig,
-        logger: any
-    }) {
+    constructor({device, config, logger}: {device: Device; config: SamsungConfig; logger: any}) {
         this.device = device;
         this.config = config;
         this.logger = logger;
@@ -71,19 +66,28 @@ export class SmartThingsClientImpl implements SmartThingsClient {
 
     async setStInputSource(input_source: any): Promise<void> {
         const deviceId = await this.getSmartThingsDevice();
-        const response = await this.sendSmartThingsCommand(deviceId, [{
-            component: 'main',
-            capability: 'mediaInputSource',
-            command: 'setInputSource',
-            arguments: [input_source]
-        }]);
+        const response = await this.sendSmartThingsCommand(deviceId, [
+            {
+                component: 'main',
+                capability: 'mediaInputSource',
+                command: 'setInputSource',
+                arguments: [input_source],
+            },
+        ]);
         if (response.response.statusCode !== 200) {
-            this.logger.info('Changing input source failed', response.data, response.response.statusCode, response.response.statusMessage);
-            throw new Error(this.device.homey.__('errors.smartthings.failed_changing_input_source', {
-                message: response.data.error.message,
-                statusCode: response.response.statusCode,
-                statusMessage: response.response.statusMessage
-            }));
+            this.logger.info(
+                'Changing input source failed',
+                response.data,
+                response.response.statusCode,
+                response.response.statusMessage,
+            );
+            throw new Error(
+                this.device.homey.__('errors.smartthings.failed_changing_input_source', {
+                    message: response.data.error.message,
+                    statusCode: response.response.statusCode,
+                    statusMessage: response.response.statusMessage,
+                }),
+            );
         }
     }
 
@@ -92,8 +96,8 @@ export class SmartThingsClientImpl implements SmartThingsClient {
         const response = await http({
             uri: `${SMARTTHINGS_API}/devices`,
             headers: {
-                'Authorization': `Bearer ${token}`
-            }
+                Authorization: `Bearer ${token}`,
+            },
         });
         if (response.response.statusCode === 200) {
             const json = JSON.parse(response.data);
@@ -104,10 +108,12 @@ export class SmartThingsClientImpl implements SmartThingsClient {
         if (response.response.statusCode === 401) {
             throw new Error(this.device.homey.__('errors.smartthings.incorrect_token'));
         }
-        throw new Error(this.device.homey.__('errors.smartthings.failed_fetching_devices', {
-            statusCode: response.response.statusCode,
-            statusMessage: response.response.statusMessage
-        }));
+        throw new Error(
+            this.device.homey.__('errors.smartthings.failed_fetching_devices', {
+                statusCode: response.response.statusCode,
+                statusMessage: response.response.statusMessage,
+            }),
+        );
     }
 
     async fetchSmartThingsDevice(deviceId: string, path: string = ''): Promise<any> {
@@ -115,13 +121,18 @@ export class SmartThingsClientImpl implements SmartThingsClient {
         const response = await http({
             uri: `${SMARTTHINGS_API}/devices/${deviceId}${path}`,
             headers: {
-                'Authorization': `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
             },
-            json: true
+            json: true,
         });
-        this.logger.debug('fetchSmartThingsDevice', JSON.stringify(response.data), response.response.statusCode, response.response.statusMessage);
+        this.logger.debug(
+            'fetchSmartThingsDevice',
+            JSON.stringify(response.data),
+            response.response.statusCode,
+            response.response.statusMessage,
+        );
         return response.data;
-    };
+    }
 
     private async getSmartThingsDevice(): Promise<string> {
         if (this.stTvDeviceId) {
@@ -134,7 +145,9 @@ export class SmartThingsClientImpl implements SmartThingsClient {
         const devices = await this.fetchSmartThingsDevices();
         const tvDevices = devices
             .filter((d: any) => d.name === tvName && d.ocf.modelNumber === tvModelName)
-            .filter((d: any) => d.components.filter((c: any) => c.capabilities.filter((cap: any) => cap.id === 'tvChannel') > 0))
+            .filter((d: any) =>
+                d.components.filter((c: any) => c.capabilities.filter((cap: any) => cap.id === 'tvChannel') > 0),
+            )
             .map((d: any) => d.deviceId);
 
         if (tvDevices.length === 0) {
@@ -162,15 +175,15 @@ export class SmartThingsClientImpl implements SmartThingsClient {
     private async sendSmartThingsCommand(deviceId: string, commands: any) {
         const token = await this.getStToken();
         this.logger.debug('sendSmartThingsCommand', commands);
-        return http.post({
+        return http.post(
+            {
                 uri: `${SMARTTHINGS_API}/devices/${deviceId}/commands`,
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
                 },
-                json: true
+                json: true,
             },
-            {"commands": commands}
+            {commands: commands},
         );
-    };
-
+    }
 }

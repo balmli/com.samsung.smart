@@ -3,9 +3,7 @@
   "name": {
     "en": "Samsung"
   },
-  "$extends": [
-    "defaults"
-  ],
+  "$extends": ["defaults"],
   "pair": [
     {
       "id": "list_devices",

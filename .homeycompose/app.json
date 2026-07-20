@@ -10,15 +10,9 @@
   "description": {
     "en": "Control your Samsung SmartTV"
   },
-  "category": [
-    "video"
-  ],
+  "category": ["video"],
   "tags": {
-    "en": [
-      "samsung",
-      "smarttv",
-      "tv"
-    ]
+    "en": ["samsung", "smarttv", "tv"]
   },
   "images": {
     "large": "/assets/images/large.png",

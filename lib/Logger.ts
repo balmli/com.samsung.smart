@@ -1,11 +1,25 @@
 // @ts-nocheck
 
-import Homey from "homey/lib/Homey";
+import Homey from 'homey/lib/Homey';
 
-const logLevelMap = new Map([['silly', 1], ['debug', 2], ['verbose', 3], ['info', 4], ['warn', 5], ['error', 6]]);
-const sentryLevelMap = new Map([[1, 'debug'], [2, 'debug'], [3, 'debug'], [4, 'info'], [5, 'warning'], [6, 'error']]);
+const logLevelMap = new Map([
+    ['silly', 1],
+    ['debug', 2],
+    ['verbose', 3],
+    ['info', 4],
+    ['warn', 5],
+    ['error', 6],
+]);
+const sentryLevelMap = new Map([
+    [1, 'debug'],
+    [2, 'debug'],
+    [3, 'debug'],
+    [4, 'info'],
+    [5, 'warning'],
+    [6, 'error'],
+]);
 const logLevelNameMap = new Map(
-    Array.from(logLevelMap.entries()).map(entry => [entry[1], entry[0][0].toUpperCase().concat(entry[0].slice(1))])
+    Array.from(logLevelMap.entries()).map(entry => [entry[1], entry[0][0].toUpperCase().concat(entry[0].slice(1))]),
 );
 
 /**
@@ -22,16 +36,17 @@ export class Logger {
             logFunc,
             errorFunc,
         }: {
-            homey?: Homey,
-            logLevel?: number | string,
-            captureLevel?: number | string,
-            prefix?: string,
-            logFunc?: Function,
-            errorFunc?: Function,
-        }, homeyEnv) {
-
+            homey?: Homey;
+            logLevel?: number | string;
+            captureLevel?: number | string;
+            prefix?: string;
+            logFunc?: Function;
+            errorFunc?: Function;
+        },
+        homeyEnv,
+    ) {
         // Load homey-log and create pre-bound functions or function stubs for logger
-        const log = homey && typeof homeyEnv.HOMEY_LOG_URL === 'string' ? require("homey-log") : undefined;
+        const log = homey && typeof homeyEnv.HOMEY_LOG_URL === 'string' ? require('homey-log') : undefined;
         const homeyLog = log ? new log.Log({homey}) : undefined;
 
         this.setLogLevel(logLevel);
@@ -68,8 +83,12 @@ export class Logger {
         } else if (logLevelMap.has(logLevel)) {
             this.logLevel = logLevelMap.get(logLevel);
         } else {
-            throw new Error(`Unsupported loglevel (${logLevel}) given. Please choose from ${
-                logLevelMap.entries().map(entry => entry.join(':')).join(', ')}`);
+            throw new Error(
+                `Unsupported loglevel (${logLevel}) given. Please choose from ${logLevelMap
+                    .entries()
+                    .map(entry => entry.join(':'))
+                    .join(', ')}`,
+            );
         }
         return this.logLevel;
     }
@@ -85,8 +104,12 @@ export class Logger {
         } else if (logLevelMap.has(captureLevel)) {
             this.captureLevel = logLevelMap.get(captureLevel);
         } else {
-            throw new Error(`Unsupported captureLevel (${captureLevel}) given. Please choose from ${
-                logLevelMap.entries().map(entry => entry.join(':')).join(', ')}`);
+            throw new Error(
+                `Unsupported captureLevel (${captureLevel}) given. Please choose from ${logLevelMap
+                    .entries()
+                    .map(entry => entry.join(':'))
+                    .join(', ')}`,
+            );
         }
         return this.captureLevel;
     }
@@ -121,7 +144,11 @@ export class Logger {
         if (this.logLevel <= logLevelId) {
             if (logLevelId === 6) {
                 if (logArgs[0] instanceof Error) {
-                    this.errorFunc(`${this.prefix}[${logLevelNameMap.get(logLevelId)}]`, logArgs[0].message, logArgs[0].stack);
+                    this.errorFunc(
+                        `${this.prefix}[${logLevelNameMap.get(logLevelId)}]`,
+                        logArgs[0].message,
+                        logArgs[0].stack,
+                    );
                 } else {
                     this.errorFunc.apply(null, [`${this.prefix}[${logLevelNameMap.get(logLevelId)}]`].concat(logArgs));
                 }
@@ -133,7 +160,10 @@ export class Logger {
             if (logLevelId === 6 && logArgs[0] instanceof Error) {
                 this.captureException(
                     logArgs[0],
-                    Object.assign({level: sentryLevelMap.get(logLevelId)}, typeof logArgs[1] === 'object' ? logArgs[1] : null)
+                    Object.assign(
+                        {level: sentryLevelMap.get(logLevelId)},
+                        typeof logArgs[1] === 'object' ? logArgs[1] : null,
+                    ),
                 );
             } else {
                 this.captureMessage(Array.prototype.join.call(logArgs, ' '), {level: sentryLevelMap.get(logLevelId)});

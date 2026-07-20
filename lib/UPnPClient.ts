@@ -1,22 +1,22 @@
-import EventEmitter from "events";
+import EventEmitter from 'events';
 
 const Client = require('node-ssdp-lite');
 const xmlParser = require('xml2json-light');
 const http = require('http.min');
 
-import {DeviceSettings} from "./types";
-import {SamsungConfig} from "./SamsungConfig";
+import {DeviceSettings} from './types';
+import {SamsungConfig} from './SamsungConfig';
 
 const INTERVAL_SSDP_SEARCH = 60 * 60 * 1000;
 const ST_RENDERINGCONTROL = 'urn:schemas-upnp-org:service:RenderingControl:1';
 const SERVICE_TYPES = [ST_RENDERINGCONTROL];
 
-export interface UPnPClient extends  EventEmitter {
+export interface UPnPClient extends EventEmitter {
     /**
      * Check if the TV is online.
      * @param timeout
      */
-    apiActive(timeout?: number): Promise<boolean>
+    apiActive(timeout?: number): Promise<boolean>;
 
     /**
      * Get the TV's current volume.
@@ -44,21 +44,16 @@ export interface UPnPClient extends  EventEmitter {
      *
      */
     search(): Promise<void>;
-
 }
 
 export class UPnPClientImpl extends EventEmitter implements UPnPClient {
-
     config: SamsungConfig;
     logger: any;
     _ssdpClient: any;
     _services: any;
     _lastSearch: any;
 
-    constructor({config, logger}: {
-        config: SamsungConfig,
-        logger: any
-    }) {
+    constructor({config, logger}: {config: SamsungConfig; logger: any}) {
         super();
 
         this.config = config;
@@ -79,13 +74,12 @@ export class UPnPClientImpl extends EventEmitter implements UPnPClient {
             try {
                 const result = await http.get({
                     uri: service.location,
-                    timeout: (timeout || 5000)
+                    timeout: timeout || 5000,
                 });
                 const ret = result.response && result.response.statusCode === 200;
                 this.logger.verbose(`UPnP apiActive: ${ret}`);
                 return ret;
-            } catch (err: any) {
-            }
+            } catch (err: any) {}
         }
         return false;
     }
@@ -109,7 +103,11 @@ export class UPnPClientImpl extends EventEmitter implements UPnPClient {
             throw new Error(`Invalid parameter for volume: ${volume}`);
         }
         try {
-            await this.soapRequest(ST_RENDERINGCONTROL, 'SetVolume', `<Channel>Master</Channel><DesiredVolume>${volume}</DesiredVolume>`);
+            await this.soapRequest(
+                ST_RENDERINGCONTROL,
+                'SetVolume',
+                `<Channel>Master</Channel><DesiredVolume>${volume}</DesiredVolume>`,
+            );
             this.logger.info(`Set volume: ${volume}`);
         } catch (err: any) {
             this.logger.info(`Set volume failed:`, err.message);
@@ -129,7 +127,11 @@ export class UPnPClientImpl extends EventEmitter implements UPnPClient {
 
     async setMute(muted: boolean): Promise<void> {
         try {
-            await this.soapRequest(ST_RENDERINGCONTROL, 'SetMute', `<Channel>Master</Channel><DesiredMute>${muted ? '1' : '0'}</DesiredMute>`);
+            await this.soapRequest(
+                ST_RENDERINGCONTROL,
+                'SetMute',
+                `<Channel>Master</Channel><DesiredMute>${muted ? '1' : '0'}</DesiredMute>`,
+            );
             this.logger.info(`Set mute: ${muted}`);
         } catch (err: any) {
             this.logger.info(`Set mute failed:`, err.message);
@@ -137,11 +139,11 @@ export class UPnPClientImpl extends EventEmitter implements UPnPClient {
     }
 
     async search() {
-        if (!this._lastSearch || (Date.now() - this._lastSearch > INTERVAL_SSDP_SEARCH)) {
+        if (!this._lastSearch || Date.now() - this._lastSearch > INTERVAL_SSDP_SEARCH) {
             this._lastSearch = Date.now();
             SERVICE_TYPES.map(st => {
                 this.logger.info('UPnP search start, type: ', st);
-                this._ssdpClient.search(st)
+                this._ssdpClient.search(st);
             });
         }
     }
@@ -167,14 +169,17 @@ export class UPnPClientImpl extends EventEmitter implements UPnPClient {
         try {
             const result = await http.get({
                 uri: location,
-                timeout: 10000
+                timeout: 10000,
             });
             if (result.response && result.response.statusCode === 200) {
                 const json = xmlParser.xml2json(result.data);
-                if (json && json.root &&
+                if (
+                    json &&
+                    json.root &&
                     json.root.device &&
                     json.root.device.serviceList &&
-                    json.root.device.serviceList.service) {
+                    json.root.device.serviceList.service
+                ) {
                     json.root.device.serviceList.service
                         .filter((service: any) => service.serviceType === st)
                         .map((service: any) => {
@@ -182,7 +187,7 @@ export class UPnPClientImpl extends EventEmitter implements UPnPClient {
                             const data = {
                                 location: location,
                                 url: locUrl.origin,
-                                ...service
+                                ...service,
                             };
                             this._services.set(st, data);
                             this.logger.info('_fetchServicesFromLocation', data);
@@ -199,7 +204,6 @@ export class UPnPClientImpl extends EventEmitter implements UPnPClient {
         return line.length > 0 ? line[0].substr(prefix.length) : undefined;
     }
 
-
     private async soapRequest(serviceType: any, action: any, args: any): Promise<any> {
         const service = this._services.get(serviceType);
         if (!service) {
@@ -212,14 +216,15 @@ export class UPnPClientImpl extends EventEmitter implements UPnPClient {
         </s:Envelope>`;
         this.logger.debug(`soapRequest: ${serviceType} -> ${uri} ${action}`, body);
 
-        const result = await http.post({
+        const result = await http.post(
+            {
                 uri: uri,
                 headers: {
-                    'SOAPAction': `"${service.serviceType}#${action}"`,
-                    'content-type': `text/xml`
-                }
+                    SOAPAction: `"${service.serviceType}#${action}"`,
+                    'content-type': `text/xml`,
+                },
             },
-            body
+            body,
         );
 
         if (result && result.response.statusCode === 200) {
@@ -241,5 +246,4 @@ export class UPnPClientImpl extends EventEmitter implements UPnPClient {
             return state.substr(0, state.indexOf(endTag));
         }
     }
-
 }

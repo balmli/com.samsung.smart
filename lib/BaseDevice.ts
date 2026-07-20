@@ -1,19 +1,18 @@
 import Homey, {FlowCard} from 'homey';
 
-import macaddress from "macaddress";
+import macaddress from 'macaddress';
 
-import {Logger} from "./Logger";
-import {SamsungConfig, SamsungConfigImpl} from "./SamsungConfig";
-import {HomeyIpUtil, HomeyIpUtilImpl} from "./HomeyIpUtil";
-import {SamsungClient} from "./SamsungBase";
-import {UPnPClient, UPnPClientImpl} from "./UPnPClient";
-import {DeviceSettings} from "./types";
-import {SmartThingsClient} from "./SmartThings";
+import {Logger} from './Logger';
+import {SamsungConfig, SamsungConfigImpl} from './SamsungConfig';
+import {HomeyIpUtil, HomeyIpUtilImpl} from './HomeyIpUtil';
+import {SamsungClient} from './SamsungBase';
+import {UPnPClient, UPnPClientImpl} from './UPnPClient';
+import {DeviceSettings} from './types';
+import {SmartThingsClient} from './SmartThings';
 
 import {keycodes} from './keys';
 
 export class BaseDevice extends Homey.Device {
-
     logger: any;
     config!: SamsungConfig;
     homeyIpUtil!: HomeyIpUtil;
@@ -29,11 +28,14 @@ export class BaseDevice extends Homey.Device {
 
     async initDevice(deviceType: string) {
         // @ts-ignore
-        this.logger = new Logger({
-            homey: this.homey,
-            logFunc: this.log,
-            errorFunc: this.error,
-        }, Homey.env);
+        this.logger = new Logger(
+            {
+                homey: this.homey,
+                logFunc: this.log,
+                errorFunc: this.error,
+            },
+            Homey.env,
+        );
         await this.initLogger(deviceType);
 
         // @ts-ignore
@@ -63,7 +65,9 @@ export class BaseDevice extends Homey.Device {
                     self.logger.error(err);
                     reject(err);
                 } else {
-                    self.config.setSetting(DeviceSettings.mac_address_homey, mac).catch((err: any) => self.logger.error(err));
+                    self.config
+                        .setSetting(DeviceSettings.mac_address_homey, mac)
+                        .catch((err: any) => self.logger.error(err));
                     self.logger.info(`Found MAC address for Homey -> ${mac}`);
                     resolve(mac);
                 }
@@ -129,42 +133,54 @@ export class BaseDevice extends Homey.Device {
     }
 
     onKeyAutocomplete(query: string, args: any): Promise<FlowCard.ArgumentAutocompleteResults> {
-        return Promise.resolve(keycodes.filter((result: any) => {
-            return result.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
-        }));
+        return Promise.resolve(
+            keycodes.filter((result: any) => {
+                return result.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+            }),
+        );
     }
 
     onAppAutocomplete(query: string, args: any): Promise<FlowCard.ArgumentAutocompleteResults> {
         let apps = this.samsungClient.getApps();
-        return Promise.resolve((apps === undefined ? [] : apps).map((app: any) => {
-            return {
-                name: app.name,
-                appId: app.appId,
-                dialId: app.dialId
-            };
-        }).filter((result: any) => {
-            return result.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
-        }).sort((a: { name: string; }, b: { name: string; }) => {
-            if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-            if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-            return 0;
-        }));
+        return Promise.resolve(
+            (apps === undefined ? [] : apps)
+                .map((app: any) => {
+                    return {
+                        name: app.name,
+                        appId: app.appId,
+                        dialId: app.dialId,
+                    };
+                })
+                .filter((result: any) => {
+                    return result.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+                })
+                .sort((a: {name: string}, b: {name: string}) => {
+                    if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+                    if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+                    return 0;
+                }),
+        );
     }
 
     async onInputSourceAutocomplete(query: string, args: any): Promise<FlowCard.ArgumentAutocompleteResults> {
         let inputSources = await this.smartThingsClient.getStInputSources();
-        return Promise.resolve((inputSources === undefined ? [] : inputSources).map((is: any) => {
-            return {
-                id: is,
-                name: is
-            };
-        }).filter((result: any) => {
-            return result.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
-        }).sort((a: { name: string; }, b: { name: string; }) => {
-            if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-            if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-            return 0;
-        }));
+        return Promise.resolve(
+            (inputSources === undefined ? [] : inputSources)
+                .map((is: any) => {
+                    return {
+                        id: is,
+                        name: is,
+                    };
+                })
+                .filter((result: any) => {
+                    return result.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+                })
+                .sort((a: {name: string}, b: {name: string}) => {
+                    if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+                    if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+                    return 0;
+                }),
+        );
     }
 
     setStInputSource(input_source: string) {
@@ -174,7 +190,9 @@ export class BaseDevice extends Homey.Device {
     async setPowerState(powerState: boolean): Promise<void> {
         try {
             const power_state_polling = false;
-            await this.config.setSetting(DeviceSettings.power_state_polling, power_state_polling).catch((err: any) => this.logger.error(err));
+            await this.config
+                .setSetting(DeviceSettings.power_state_polling, power_state_polling)
+                .catch((err: any) => this.logger.error(err));
             await this.setCapabilityValue('onoff', powerState).catch((err: any) => this.logger.error(err));
             this.logger.info('setPowerState', powerState);
         } catch (err) {
@@ -188,7 +206,9 @@ export class BaseDevice extends Homey.Device {
         if (settings.ipaddress) {
             await this.updateMacAddress(settings.ipaddress);
         } else {
-            await this.setUnavailable(this.homey.__('errors.unavailable.ip_address_missing')).catch(err => this.logger.error(err));
+            await this.setUnavailable(this.homey.__('errors.unavailable.ip_address_missing')).catch(err =>
+                this.logger.error(err),
+            );
         }
     }
 
@@ -208,7 +228,9 @@ export class BaseDevice extends Homey.Device {
             await this.setAvailable();
         } else {
             this.logger.info('TV set unavailable');
-            await this.setUnavailable(this.homey.__('errors.unavailable.not_found')).catch(err => this.logger.error(err));
+            await this.setUnavailable(this.homey.__('errors.unavailable.not_found')).catch(err =>
+                this.logger.error(err),
+            );
         }
     }
 
@@ -218,7 +240,9 @@ export class BaseDevice extends Homey.Device {
                 const mac = await this.homey.arp.getMAC(ipaddress);
                 if (mac.indexOf(':') >= 0) {
                     this.logger.info(`Found MAC address for IP address: ${ipaddress} -> ${mac}`);
-                    await this.config.setSetting(DeviceSettings.mac_address, mac).catch((err: any) => this.logger.error(err));
+                    await this.config
+                        .setSetting(DeviceSettings.mac_address, mac)
+                        .catch((err: any) => this.logger.error(err));
                     return true;
                 } else {
                     this.logger.info('Invalid MAC address for IP address', ipaddress, mac);
@@ -234,7 +258,11 @@ export class BaseDevice extends Homey.Device {
 
     async turnOnOff(onOff: any) {
         if (this.turning_onoff_process !== undefined) {
-            throw new Error(this.homey.__(this.turning_onoff_process ? 'errors.onoff.on_in_progress' : 'errors.onoff.off_in_progress'));
+            throw new Error(
+                this.homey.__(
+                    this.turning_onoff_process ? 'errors.onoff.on_in_progress' : 'errors.onoff.off_in_progress',
+                ),
+            );
         }
 
         try {
@@ -338,8 +366,11 @@ export class BaseDevice extends Homey.Device {
         this.clearPowerStatePolling();
         const settings = this.getSettings();
         if (polling_interval || settings.poll_interval >= 10) {
-            const pollInterval = polling_interval || (settings.poll_interval || 10);
-            this.powerStatePollingTimeout = this.homey.setTimeout(this.doPowerStatePolling.bind(this), pollInterval * 1000);
+            const pollInterval = polling_interval || settings.poll_interval || 10;
+            this.powerStatePollingTimeout = this.homey.setTimeout(
+                this.doPowerStatePolling.bind(this),
+                pollInterval * 1000,
+            );
         }
     }
 
@@ -354,9 +385,10 @@ export class BaseDevice extends Homey.Device {
                 return;
             }
 
-            const onOff = this.getSetting(DeviceSettings.power_state_polling) === false ?
-                this.getCapabilityValue('onoff') :
-                await this.isDeviceOnline();
+            const onOff =
+                this.getSetting(DeviceSettings.power_state_polling) === false
+                    ? this.getCapabilityValue('onoff')
+                    : await this.isDeviceOnline();
 
             if (onOff && !this.getAvailable()) {
                 await this.setAvailable();
@@ -379,20 +411,23 @@ export class BaseDevice extends Homey.Device {
         const pollMethods = this.pollMethods(timeout).filter(pm => !!pm);
         const pollResults = await Promise.all(pollMethods.map(pm => pm.method));
         const onOff = pollResults.includes(true) ? true : pollResults.includes(false) ? false : undefined;
-        this.logger.verbose('isDeviceOnline', pollMethods.map(pm => pm.id), pollResults, onOff);
+        this.logger.verbose(
+            'isDeviceOnline',
+            pollMethods.map(pm => pm.id),
+            pollResults,
+            onOff,
+        );
         return onOff;
     }
 
     pollMethods(timeout: any): any[] {
         if (this.getSetting(DeviceSettings.power_state)) {
-            return [
-                {id: 'apiActive', method: this.samsungClient.apiActive(timeout)}
-            ];
+            return [{id: 'apiActive', method: this.samsungClient.apiActive(timeout)}];
         }
         return [
             {id: 'apiActive', method: this.samsungClient.apiActive(timeout)},
             {id: 'upnp', method: this.upnpClient ? this.upnpClient.apiActive(timeout) : undefined},
-            {id: 'ping', method: this.samsungClient.pingPort(undefined, undefined, timeout)}
+            {id: 'ping', method: this.samsungClient.pingPort(undefined, undefined, timeout)},
         ];
     }
 
@@ -425,7 +460,9 @@ export class BaseDevice extends Homey.Device {
             try {
                 const info = await this.samsungClient.getInfo();
                 const hasPowerState = !!(info.device && info.device.PowerState);
-                await this.config.setSetting(DeviceSettings.power_state, hasPowerState).catch((err: any) => this.logger.error(err));
+                await this.config
+                    .setSetting(DeviceSettings.power_state, hasPowerState)
+                    .catch((err: any) => this.logger.error(err));
                 this.logger.info(`Has PowerState set to: ${hasPowerState}`);
             } catch (err) {
                 this.logger.info('Fetching PowerState failed', err);
@@ -434,8 +471,7 @@ export class BaseDevice extends Homey.Device {
     }
 
     async shouldFetchModelName() {
-        if (!this.getSetting(DeviceSettings.name) ||
-            !this.getSetting(DeviceSettings.modelName)) {
+        if (!this.getSetting(DeviceSettings.name) || !this.getSetting(DeviceSettings.modelName)) {
             let name = 'notset';
             let modelName = 'unknown';
             try {
@@ -453,7 +489,9 @@ export class BaseDevice extends Homey.Device {
                 this.logger.info('Fetching device info failed', err);
             } finally {
                 await this.config.setSetting(DeviceSettings.name, name).catch((err: any) => this.logger.error(err));
-                await this.config.setSetting(DeviceSettings.modelName, modelName).catch((err: any) => this.logger.error(err));
+                await this.config
+                    .setSetting(DeviceSettings.modelName, modelName)
+                    .catch((err: any) => this.logger.error(err));
                 this.logger.setTags({modelName});
                 this.logger.info(`Device settings updated. name: ${name}, modelName: ${modelName}`);
             }
@@ -467,9 +505,12 @@ export class BaseDevice extends Homey.Device {
                 if (this.hasCapability('volume_set')) {
                     const volumeState = await this.upnpClient.getVolume();
                     if (volumeState !== undefined) {
-                        const volume = Math.round(100 * volumeState / this.getSetting(DeviceSettings.max_volume)) / 100;
+                        const volume =
+                            Math.round((100 * volumeState) / this.getSetting(DeviceSettings.max_volume)) / 100;
                         if (volume >= 0.0 && volume <= 1.0 && volume !== this.getCapabilityValue('volume_set')) {
-                            await this.setCapabilityValue('volume_set', volume).catch(err => this.logger.error('Error setting volume_set capability', err));
+                            await this.setCapabilityValue('volume_set', volume).catch(err =>
+                                this.logger.error('Error setting volume_set capability', err),
+                            );
                             this.logger.verbose('fetchState: volume updated: ', volume);
                         }
                     }
@@ -478,7 +519,9 @@ export class BaseDevice extends Homey.Device {
                     const muted = await this.upnpClient.getMute();
                     if (muted !== undefined) {
                         if (muted !== this.getCapabilityValue('volume_mute')) {
-                            await this.setCapabilityValue('volume_mute', muted).catch(err => this.logger.error('Error setting volume_mute capability', err));
+                            await this.setCapabilityValue('volume_mute', muted).catch(err =>
+                                this.logger.error('Error setting volume_mute capability', err),
+                            );
                             this.logger.verbose('fetchState: mute updated: ', muted);
                         }
                     }
@@ -494,5 +537,4 @@ export class BaseDevice extends Homey.Device {
             this.homey.setTimeout(resolve, ms);
         });
     }
-
 }
