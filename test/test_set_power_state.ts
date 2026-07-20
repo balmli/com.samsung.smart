@@ -243,6 +243,34 @@ describe("SamsungDevice power transitions", function () {
         expect(offCommands).to.equal(1);
     });
 
+    it("acknowledges a sent off command before transition confirmation", async function () {
+        const {device} = createTransitionDevice();
+        device.getCapabilityValue = () => true;
+        let commandSent: () => void = () => undefined;
+        device.samsungClient.turnOff = () =>
+            new Promise<undefined>(resolve => {
+                commandSent = () => resolve(undefined);
+            });
+        let acknowledged = false;
+        const command = device.turnOnOff(false).then(() => {
+            acknowledged = true;
+        });
+
+        try {
+            await new Promise(resolve => setImmediate(resolve));
+            commandSent();
+            await new Promise(resolve => setImmediate(resolve));
+
+            expect(acknowledged).to.equal(true);
+            expect(device.turning_onoff_process).to.equal(false);
+            expect(device.onOffPollingTimeout).to.not.equal(undefined);
+            expect(device.onOffCheckTimeout).to.not.equal(undefined);
+        } finally {
+            device.onDeleted();
+            await command;
+        }
+    });
+
     it("preserves the off command when the current state is unknown", async function () {
         const {device} = createTransitionDevice();
         let offCommands = 0;
@@ -338,19 +366,12 @@ describe("SamsungDevice power transitions", function () {
         expect(device.onOffCheckTimeout).to.equal(undefined);
     });
 
-    it("returns a timeout error and allows a later command", async function () {
+    it("cleans up after a transition timeout and allows a later command", async function () {
         const {device} = createTransitionDevice();
-        let commandErrorMessage;
-        const command = device.turnOnOff(true).catch(function () {
-            const [err] = arguments;
-            commandErrorMessage = err instanceof Error ? err.message : String(err);
-        });
-        await new Promise(resolve => setImmediate(resolve));
+        await device.turnOnOff(true);
 
         device.onOnOffTimeout();
-        await command;
 
-        expect(commandErrorMessage).to.equal("errors.connection_timeout");
         expect(device.turning_onoff_process).to.equal(undefined);
         expect(device.onOffPollingTimeout).to.equal(undefined);
         expect(device.onOffCheckTimeout).to.equal(undefined);
