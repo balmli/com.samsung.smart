@@ -2,6 +2,8 @@
 
 Status: Fix implemented — [GitHub issue #58](https://github.com/balmli/com.samsung.smart/issues/58)
 
+Pull request: [#59](https://github.com/balmli/com.samsung.smart/pull/59)
+
 Area: Maintained `Samsung` driver and shared transition state
 
 ## Problem
