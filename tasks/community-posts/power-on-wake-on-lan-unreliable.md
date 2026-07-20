@@ -1,6 +1,6 @@
 # Power-on through Wake-on-LAN is unreliable
 
-Status: Candidate bug
+Status: Wont fix — no reproducible app defect
 
 Area: Maintained `Samsung` driver
 
@@ -18,21 +18,51 @@ Many users can control a TV while it is online and can turn it off, but cannot t
 ## Current code observations
 
 - `lib/SamsungBase.ts` sends Wake-on-LAN using the stored TV MAC address.
-- `lib/BaseDevice.ts` performs an initial wake and up to five retries while polling for the target state.
+- The bundled Wake-on-LAN client sends three magic packets per attempt to the limited broadcast address
+  `255.255.255.255` on UDP port 9.
+- The maintained driver performs an initial wake and up to five retries while polling for the target state, then
+  returns the existing bounded connection-timeout error after 30 seconds.
 - MAC discovery, interface/broadcast selection, stale addressing, retry timing, and transition detection can all affect the result.
+
+## Assessment
+
+The reports do not identify one common app failure. They do not include the resolved MAC source, Wake-on-LAN send
+error, packet destination observed on the LAN, probe results after the command, or evidence distinguishing a TV that
+did not receive the magic packet from a TV that woke but was not detected.
+
+The reported alternatives are not equivalent tests of this app's Wake-on-LAN path. SmartThings and voice assistants
+can use Samsung's cloud service, while channel keys use the Samsung remote-control service. A channel key waking one
+model does not prove that a generic remote key is a safe power-on fallback: toggle-style power keys can turn an
+already-on TV off, and arbitrary channel keys have visible side effects.
+
+Wake-on-LAN delivery depends on the TV's active network adapter and firmware standby behavior, the stored MAC
+address, wired-to-wireless broadcast forwarding, access-point isolation, VLANs, and router handling of limited or
+directed broadcasts. A successful UDP send also cannot confirm that the TV received or acted on the packet.
+
+The separate persistent **power on in progress** failure reported in post #653 was addressed by
+[`power-transition-stuck-in-progress.md`](power-transition-stuck-in-progress.md). That recovery fix does not establish
+why an individual TV fails to wake.
+
+Without reproducible hardware or packet-level evidence, changing broadcast addresses, adding remote-key fallbacks,
+or routing power-on through SmartThings would be speculative and could regress working installations. No production
+change is justified for this task.
 
 ## Expected behavior
 
 When the TV advertises Wake-on-LAN support and has a valid stored MAC address, the on command should wake it reliably or return a useful, bounded error.
 
-## Investigation and acceptance criteria
+## Reopen criteria
 
-- Add tests for missing/invalid MAC addresses, retry count, retry timing, and completion/timeout behavior.
-- Log safe diagnostic context such as retry number and whether a valid MAC exists, without logging the MAC itself in task artifacts.
-- Verify whether broadcast addressing or the Homey network interface must be selected explicitly.
-- Distinguish Wake-on-LAN failure from subsequent online-state detection failure.
-- Provide a clear user-facing error when wake cannot be attempted.
+- Reproduce on identified maintained Samsung hardware and record whether it uses Wi-Fi or Ethernet, without
+  publishing the MAC or local IP address.
+- Confirm that the stored MAC belongs to the adapter that remains wake-capable in standby.
+- Capture sanitized evidence showing the magic packet's source interface and broadcast destination.
+- Compare with another Wake-on-LAN sender on the same LAN and adapter; a SmartThings cloud wake is not equivalent.
+- Record whether the physical TV wakes before Homey's online probes succeed or time out.
+- Identify a deterministic app behavior that can be covered by a focused failing regression test before proposing a
+  production change.
 
 ## Hardware verification
 
-Test separately with a modern Samsung TV connected over Wi-Fi and Ethernet where available. Wake behavior depends heavily on TV and network configuration.
+No qualifying hardware reproduction or packet capture is available. Wake behavior remains dependent on TV model,
+firmware, network adapter, and LAN configuration.
