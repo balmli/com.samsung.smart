@@ -23,8 +23,8 @@ export class BaseDevice extends Homey.Device {
     onOffPollingTimeout?: NodeJS.Timeout;
     onOffCheckTimeout?: NodeJS.Timeout;
     powerStatePollingTimeout?: NodeJS.Timeout;
-    private wakeRetries: number = 0;
-    private deleted?: boolean;
+    protected wakeRetries: number = 0;
+    protected deleted?: boolean;
 
     async initDevice(deviceType: string) {
         // @ts-ignore
