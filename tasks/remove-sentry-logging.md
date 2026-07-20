@@ -2,6 +2,8 @@
 
 Status: Fix implemented — [GitHub issue #69](https://github.com/balmli/com.samsung.smart/issues/69)
 
+Pull request: [#70](https://github.com/balmli/com.samsung.smart/pull/70)
+
 Area: Shared application logging
 
 ## Problem
