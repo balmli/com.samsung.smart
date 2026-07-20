@@ -2,6 +2,8 @@
 
 Status: Fix implemented — [GitHub issue #54](https://github.com/balmli/com.samsung.smart/issues/54)
 
+Pull request: [#55](https://github.com/balmli/com.samsung.smart/pull/55)
+
 Area: Shared device setting used by the maintained `Samsung` driver
 
 ## Problem
