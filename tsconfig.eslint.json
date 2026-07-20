@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node", "mocha"]
+  },
+  "include": ["app.ts", "drivers/**/*.ts", "lib/**/*.ts", "lib/**/*.js", "test/**/*.ts"]
+}

@@ -2,6 +2,7 @@ env.json
 *.iml
 .idea
 build/
+/.homeybuild/
 docs/
 info/*
 node_modules/

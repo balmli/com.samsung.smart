@@ -2,10 +2,17 @@
   "name": "com.samsung.smart",
   "version": "1.0.0",
   "description": "Samsung SmartTV",
-  "main": "app.js",
+  "main": "app.ts",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'test/**/*.ts'",
-    "posttest": "homey app validate"
+    "build": "tsc",
+    "pretest": "npm run test:typecheck",
+    "test": "env TS_NODE_PROJECT=tsconfig.eslint.json TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\",\"moduleResolution\":\"node\",\"verbatimModuleSyntax\":false}' mocha -r ts-node/register 'test/**/*.ts'",
+    "posttest": "homey app validate",
+    "test:typecheck": "tsc --noEmit -p tsconfig.eslint.json",
+    "lint": "eslint app.ts drivers lib test"
   },
   "repository": {
     "type": "git",
@@ -30,15 +37,18 @@
     "xml2json-light": "1.0.6"
   },
   "devDependencies": {
-    "@tsconfig/node12": "^1.0.9",
-    "@types/chai": "^4.3.0",
-    "@types/mocha": "^9.1.1",
-    "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.3",
-    "@types/node": "^16.11.12",
-    "chai": "^4.3.6",
-    "eslint": "^5.12.1",
-    "mocha": "^10.0.0",
-    "ts-mocha": "^10.0.0",
-    "typescript": "^4.9.4"
+    "@eslint/js": "^10.0.1",
+    "@tsconfig/node24": "^24.0.4",
+    "@types/chai": "^4.3.20",
+    "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.12",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^24.12.0",
+    "chai": "^4.5.0",
+    "eslint": "^10.7.0",
+    "globals": "^17.7.0",
+    "mocha": "^11.7.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.64.0"
   }
 }
