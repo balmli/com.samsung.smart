@@ -10,14 +10,10 @@ class SamsungSmartApp extends Homey.App {
     async onInit() {
         try {
             // @ts-ignore
-            this.logger = new Logger(
-                {
-                    homey: this.homey,
-                    logFunc: this.log,
-                    errorFunc: this.error,
-                },
-                Homey.env,
-            );
+            this.logger = new Logger({
+                logFunc: this.log,
+                errorFunc: this.error,
+            });
 
             await this.initFlows();
 

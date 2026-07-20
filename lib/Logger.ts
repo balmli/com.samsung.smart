@@ -1,7 +1,5 @@
 // @ts-nocheck
 
-import Homey from 'homey/lib/Homey';
-
 const logLevelMap = new Map([
     ['silly', 1],
     ['debug', 2],
@@ -10,57 +8,31 @@ const logLevelMap = new Map([
     ['warn', 5],
     ['error', 6],
 ]);
-const sentryLevelMap = new Map([
-    [1, 'debug'],
-    [2, 'debug'],
-    [3, 'debug'],
-    [4, 'info'],
-    [5, 'warning'],
-    [6, 'error'],
-]);
 const logLevelNameMap = new Map(
     Array.from(logLevelMap.entries()).map(entry => [entry[1], entry[0][0].toUpperCase().concat(entry[0].slice(1))]),
 );
 
 /**
  * @class Logger
- * This class is used by all RFDriver classes to dynamically print logs and send logs to sentry
+ * This class is used by all RFDriver classes to dynamically print logs.
  */
 export class Logger {
-    constructor(
-        {
-            homey,
-            logLevel = 3,
-            captureLevel = 5,
-            prefix,
-            logFunc,
-            errorFunc,
-        }: {
-            homey?: Homey;
-            logLevel?: number | string;
-            captureLevel?: number | string;
-            prefix?: string;
-            logFunc?: Function;
-            errorFunc?: Function;
-        },
-        homeyEnv,
-    ) {
-        // Load homey-log and create pre-bound functions or function stubs for logger
-        const log = homey && typeof homeyEnv.HOMEY_LOG_URL === 'string' ? require('homey-log') : undefined;
-        const homeyLog = log ? new log.Log({homey}) : undefined;
-
+    constructor({
+        logLevel = 3,
+        prefix,
+        logFunc,
+        errorFunc,
+    }: {
+        logLevel?: number | string;
+        prefix?: string;
+        logFunc?: Function;
+        errorFunc?: Function;
+    }) {
         this.setLogLevel(logLevel);
-        this.setCaptureLevel(captureLevel);
 
         this.logFunc = logFunc || console.log;
         this.errorFunc = errorFunc || console.error;
         this.prefix = prefix ? `[${[].concat(prefix).join('][')}]` : '';
-
-        this.setTags = homeyLog ? homeyLog.setTags.bind(homeyLog) : () => null;
-        this.setUser = homeyLog ? homeyLog.setUser.bind(homeyLog) : () => null;
-        this.setExtra = homeyLog ? homeyLog.setExtra.bind(homeyLog) : () => null;
-        this.captureMessage = homeyLog ? homeyLog.captureMessage.bind(homeyLog) : () => null;
-        this.captureException = homeyLog ? homeyLog.captureException.bind(homeyLog) : () => null;
 
         // Bind logging functions with this to ensure right this context
         this.log = this._log.bind(this);
@@ -94,40 +66,11 @@ export class Logger {
     }
 
     /**
-     * Can be used to dynamically set the captureLevel of the logger
-     * @param {String} captureLevel The level at which logs are send to sentry. can be 'silly'|'debug'|'verbose'|'info'|'warn'|'error'.
-     * @returns {number} result The id of the captureLevel
-     */
-    setCaptureLevel(captureLevel) {
-        if (!isNaN(captureLevel) && logLevelNameMap.has(captureLevel)) {
-            this.captureLevel = Number(captureLevel);
-        } else if (logLevelMap.has(captureLevel)) {
-            this.captureLevel = logLevelMap.get(captureLevel);
-        } else {
-            throw new Error(
-                `Unsupported captureLevel (${captureLevel}) given. Please choose from ${logLevelMap
-                    .entries()
-                    .map(entry => entry.join(':'))
-                    .join(', ')}`,
-            );
-        }
-        return this.captureLevel;
-    }
-
-    /**
      * Get the label of the current log level
      * @returns {String} logLevelLabel The label of the logLevel. can be 'silly'|'debug'|'verbose'|'info'|'warn'|'error'.
      */
     getLogLevelLabel() {
         return logLevelNameMap.get(this.logLevel);
-    }
-
-    /**
-     * Get the label of the current capture level
-     * @returns {String} captureLevelLabel The label of the captureLevel. can be 'silly'|'debug'|'verbose'|'info'|'warn'|'error'.
-     */
-    getCaptureLevelLabel() {
-        return logLevelNameMap.get(this.captureLevel);
     }
 
     /**
@@ -156,19 +99,6 @@ export class Logger {
                 this.logFunc.apply(null, [`${this.prefix}[${logLevelNameMap.get(logLevelId)}]`].concat(logArgs));
             }
         }
-        if (this.captureLevel <= logLevelId) {
-            if (logLevelId === 6 && logArgs[0] instanceof Error) {
-                this.captureException(
-                    logArgs[0],
-                    Object.assign(
-                        {level: sentryLevelMap.get(logLevelId)},
-                        typeof logArgs[1] === 'object' ? logArgs[1] : null,
-                    ),
-                );
-            } else {
-                this.captureMessage(Array.prototype.join.call(logArgs, ' '), {level: sentryLevelMap.get(logLevelId)});
-            }
-        }
     }
 
     /**
@@ -178,7 +108,7 @@ export class Logger {
      * @memberof Logger
      */
     _silly() {
-        if (this.captureLevel <= 1 || this.logLevel <= 1) {
+        if (this.logLevel <= 1) {
             this.log.bind(null, 'silly').apply(null, arguments);
         }
     }
@@ -190,7 +120,7 @@ export class Logger {
      * @memberof Logger
      */
     _debug() {
-        if (this.captureLevel <= 2 || this.logLevel <= 2) {
+        if (this.logLevel <= 2) {
             this.log.bind(null, 'debug').apply(null, arguments);
         }
     }
@@ -202,7 +132,7 @@ export class Logger {
      * @memberof Logger
      */
     _verbose() {
-        if (this.captureLevel <= 3 || this.logLevel <= 3) {
+        if (this.logLevel <= 3) {
             this.log.bind(null, 'verbose').apply(null, arguments);
         }
     }
@@ -214,7 +144,7 @@ export class Logger {
      * @memberof Logger
      */
     _info() {
-        if (this.captureLevel <= 4 || this.logLevel <= 4) {
+        if (this.logLevel <= 4) {
             this.log.bind(null, 'info').apply(null, arguments);
         }
     }
@@ -226,7 +156,7 @@ export class Logger {
      * @memberof Logger
      */
     _warn() {
-        if (this.captureLevel <= 5 || this.logLevel <= 5) {
+        if (this.logLevel <= 5) {
             this.log.bind(null, 'warn').apply(null, arguments);
         }
     }
@@ -238,7 +168,7 @@ export class Logger {
      * @memberof Logger
      */
     _error() {
-        if (this.captureLevel <= 6 || this.logLevel <= 6) {
+        if (this.logLevel <= 6) {
             this.log.bind(null, 'error').apply(null, arguments);
         }
     }

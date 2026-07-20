@@ -28,7 +28,6 @@
   "homepage": "https://github.com/balmli/com.samsung.smart#readme",
   "dependencies": {
     "@balmli/homey-samsung-encryption": "^1.0.0",
-    "homey-log": "2.1.0",
     "http.min": "2.1.0",
     "is-port-reachable": "3.0.0",
     "macaddress": "0.5.1",

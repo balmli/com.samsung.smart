@@ -28,15 +28,10 @@ export class BaseDevice extends Homey.Device {
 
     async initDevice(deviceType: string) {
         // @ts-ignore
-        this.logger = new Logger(
-            {
-                homey: this.homey,
-                logFunc: this.log,
-                errorFunc: this.error,
-            },
-            Homey.env,
-        );
-        await this.initLogger(deviceType);
+        this.logger = new Logger({
+            logFunc: this.log,
+            errorFunc: this.error,
+        });
 
         // @ts-ignore
         this.config = new SamsungConfigImpl({device: this, logger: this.logger});
@@ -47,14 +42,6 @@ export class BaseDevice extends Homey.Device {
 
         await this.updateMacAddress(this.config.getSetting(DeviceSettings.ipaddress));
         await this.setMacAddressHomey();
-    }
-
-    async initLogger(deviceType: string) {
-        this.logger.setTags({deviceType});
-        const modelName = this.getSetting(DeviceSettings.modelName);
-        if (modelName) {
-            this.logger.setTags({modelName});
-        }
     }
 
     async setMacAddressHomey(): Promise<any> {
@@ -492,7 +479,6 @@ export class BaseDevice extends Homey.Device {
                 await this.config
                     .setSetting(DeviceSettings.modelName, modelName)
                     .catch((err: any) => this.logger.error(err));
-                this.logger.setTags({modelName});
                 this.logger.info(`Device settings updated. name: ${name}, modelName: ${modelName}`);
             }
         }

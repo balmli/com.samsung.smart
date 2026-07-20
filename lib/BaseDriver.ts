@@ -13,14 +13,10 @@ export class BaseDriver extends Homey.Driver {
 
     async initDriver(driverType: string) {
         // @ts-ignore
-        this.logger = new Logger(
-            {
-                homey: this.homey,
-                logFunc: this.log,
-                errorFunc: this.error,
-            },
-            Homey.env,
-        );
+        this.logger = new Logger({
+            logFunc: this.log,
+            errorFunc: this.error,
+        });
 
         this.config = new SamsungConfigImpl({logger: this.logger});
         this.homeyIpUtil = new HomeyIpUtilImpl();
