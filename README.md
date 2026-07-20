@@ -230,6 +230,15 @@ Some TVs use a different type of pairing, and are therefore not supported at the
 
 ## Release Notes:
 
+#### 2.2.0
+
+- Improved power-state polling reliability for newer Samsung TVs
+- Power transitions now recover cleanly from command failures, polling failures, and timeouts
+- Turning off a TV that is already known to be off no longer sends a toggle power command
+- Slow successful power changes no longer show Homey's 10-second timeout message
+- Application-launch actions now explain authorization failures more clearly
+- Added guidance for model-dependent standby wakeups and unexpected power-state Flow triggers
+
 #### 2.1.0
 
 - Added action to close running app
