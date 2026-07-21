@@ -38,6 +38,8 @@ The existing `cmd/` package proves that `drivers/Samsung/SamsungClient.ts` can b
 
 The production client currently hard-codes the WebSocket connection name to `homey`, preventing a clearly separate integration-test authorization identity.
 
+An initial hardware run with two profiles using the same TV address showed that Samsung displayed an approval prompt only for the first profile. Both profiles had different internal client IDs but used the same TV-visible WebSocket name, so the TV correctly treated them as one authorization. Profile identities are therefore required to include the stable profile ID; legacy shared-name profiles must be migrated and paired once under their new names.
+
 ## Intended automated coverage
 
 - A custom client identity is encoded in WebSocket pairing and command connection URIs while Homey retains the existing `homey` default.

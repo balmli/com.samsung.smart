@@ -21,6 +21,21 @@ interface ProfileFile {
     profiles: IntegrationProfile[];
 }
 
+export const LEGACY_INTEGRATION_CLIENT_NAME = 'Homey Samsung Integration Tests';
+
+export function integrationClientName(profileId: string): string {
+    return `${LEGACY_INTEGRATION_CLIENT_NAME} (${profileId})`;
+}
+
+export function ensureUniqueIntegrationIdentity(profile: IntegrationProfile): IntegrationProfile {
+    if (profile.clientName !== LEGACY_INTEGRATION_CLIENT_NAME) return profile;
+    return {
+        ...profile,
+        clientName: integrationClientName(profile.id),
+        token: undefined,
+    };
+}
+
 export function defaultIntegrationProfilePath(): string {
     return join(homedir(), '.com.samsung.smart-integration', 'profiles.json');
 }

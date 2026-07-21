@@ -4,7 +4,13 @@ import {createServer, IncomingMessage, Server, ServerResponse} from 'http';
 import {isIP} from 'net';
 import {join} from 'path';
 
-import {IntegrationProfile, IntegrationProfileStore, toPublicProfile} from './core/IntegrationProfileStore';
+import {
+    ensureUniqueIntegrationIdentity,
+    IntegrationProfile,
+    integrationClientName,
+    IntegrationProfileStore,
+    toPublicProfile,
+} from './core/IntegrationProfileStore';
 import {HumanCheckpointBroker, HumanOutcome, IntegrationRunner, RunSnapshot} from './core/IntegrationRunner';
 import {IntegrationLogEntry, SamsungIntegrationSession} from './SamsungIntegrationSession';
 import {createSamsungIntegrationSuite} from './suite';
@@ -101,16 +107,20 @@ export class IntegrationWebServer {
                 sendJson(response, 400, {error: 'Enter a valid IPv4 address'});
                 return;
             }
-            const profile: IntegrationProfile = {
-                id: String(input.id || input.ipAddress).replace(/[^a-zA-Z0-9_-]/g, '-'),
-                clientId: input.clientId || `integration-${randomUUID()}`,
-                clientName: input.clientName || 'Homey Samsung Integration Tests',
+            const id = String(input.id || input.ipAddress).replace(/[^a-zA-Z0-9_-]/g, '-');
+            const existing = await this.profiles.get(id);
+            const clientName = input.clientName || existing?.clientName || integrationClientName(id);
+            const profile: IntegrationProfile = ensureUniqueIntegrationIdentity({
+                ...existing,
+                id,
+                clientId: input.clientId || existing?.clientId || `integration-${randomUUID()}`,
+                clientName,
                 ipAddress: input.ipAddress,
                 localIpAddress: input.localIpAddress || undefined,
                 macAddress: input.macAddress || undefined,
-            };
-            const existing = await this.profiles.get(profile.id);
-            await this.profiles.save({...existing, ...profile, token: existing?.token});
+                token: existing && existing.clientName === clientName ? existing.token : undefined,
+            });
+            await this.profiles.save(profile);
             sendJson(response, 201, toPublicProfile((await this.profiles.get(profile.id))!));
             this.broadcast();
             return;
@@ -179,8 +189,10 @@ export class IntegrationWebServer {
     }
 
     private async connect(profileId: string): Promise<void> {
-        const profile = await this.profiles.get(profileId);
-        if (!profile) throw new Error(`Profile ${profileId} was not found`);
+        const savedProfile = await this.profiles.get(profileId);
+        if (!savedProfile) throw new Error(`Profile ${profileId} was not found`);
+        const profile = ensureUniqueIntegrationIdentity(savedProfile);
+        if (profile.clientName !== savedProfile.clientName) await this.profiles.save(profile);
         this.session?.close();
         this.logs.length = 0;
         this.session = new SamsungIntegrationSession(profile, this.profiles);

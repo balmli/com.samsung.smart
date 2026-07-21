@@ -231,7 +231,8 @@ npm run integration:web
 ```
 
 Then open `http://127.0.0.1:8765` and create a profile for the TV. **Connect & accept on TV** opens the Samsung
-remote channel under the separate name **Homey Samsung Integration Tests**; press OK/Allow on the TV remote when
+remote channel under a separate name such as **Homey Samsung Integration Tests (living-room)**; every profile has
+its own TV authorization, even when profiles use the same IP and MAC address. Press OK/Allow on the TV remote when
 prompted. **Test Homey operations** runs the maintained driver's remote keys and sequences, volume, mute, channel,
 application, browser, YouTube, Frame, power-off, and Wake-on-LAN checks. The YouTube check launches video
 `aqz-KE-bpKQ`. Unsupported or unconfigured operations are reported as skipped.

@@ -33,9 +33,9 @@ function render() {
               .map(
                   profile => `
             <article class="profile">
-                <div><strong>${escapeHtml(profile.id)}</strong><p>${escapeHtml(profile.ipAddress)} · ${escapeHtml(profile.modelName || 'Not inspected')}</p></div>
+                <div><strong>${escapeHtml(profile.id)}</strong><p>${escapeHtml(profile.ipAddress)} · ${escapeHtml(profile.modelName || 'Not inspected')}</p><p>${escapeHtml(profile.clientName)}</p></div>
                 <button data-connect="${encodeURIComponent(profile.id)}">Connect & accept on TV</button>
-                <em>${profile.paired ? 'AUTHORIZED' : 'PAIRING NEEDED'}</em>
+                <em>${profile.tokenAuthSupport === false ? 'NO TOKEN REQUIRED' : profile.paired ? 'TOKEN SAVED' : 'PAIRING NEEDED'}</em>
             </article>`,
               )
               .join('')
@@ -43,7 +43,7 @@ function render() {
 
     const active = state.activeProfile;
     element('active-summary').textContent = active
-        ? `${active.modelName || 'Samsung TV'} at ${active.ipAddress} · ${active.paired ? 'authorized' : 'not yet authorized'}`
+        ? `${active.modelName || 'Samsung TV'} at ${active.ipAddress} · connected as ${active.clientName}`
         : 'Connect a profile to begin.';
     element('run-options').hidden = !active;
     element('actions').innerHTML = !active

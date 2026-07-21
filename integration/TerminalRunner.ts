@@ -1,7 +1,12 @@
 import {randomUUID} from 'crypto';
 import {createInterface} from 'readline/promises';
 
-import {IntegrationProfile, IntegrationProfileStore} from './core/IntegrationProfileStore';
+import {
+    ensureUniqueIntegrationIdentity,
+    IntegrationProfile,
+    integrationClientName,
+    IntegrationProfileStore,
+} from './core/IntegrationProfileStore';
 import {HumanCheckpointBroker, IntegrationRunner, TestResult} from './core/IntegrationRunner';
 import {SamsungIntegrationSession} from './SamsungIntegrationSession';
 import {createSamsungIntegrationSuite} from './suite';
@@ -20,17 +25,17 @@ export async function runInTerminal(options: TerminalOptions): Promise<number> {
     const input = createInterface({input: process.stdin, output: process.stdout});
     const store = new IntegrationProfileStore();
     const existing = await store.get(options.profileId);
-    const profile: IntegrationProfile = {
+    const profile: IntegrationProfile = ensureUniqueIntegrationIdentity({
         id: options.profileId,
         clientId: existing?.clientId || `integration-${randomUUID()}`,
-        clientName: existing?.clientName || 'Homey Samsung Integration Tests',
+        clientName: existing?.clientName || integrationClientName(options.profileId),
         ipAddress: options.ipAddress,
         macAddress: options.macAddress || existing?.macAddress,
         token: existing?.token,
         tokenAuthSupport: existing?.tokenAuthSupport,
         frameTVSupport: existing?.frameTVSupport,
         modelName: existing?.modelName,
-    };
+    });
     await store.save(profile);
     const session = new SamsungIntegrationSession(profile, store);
     session.on('log', entry => console.log(`[${entry.level}] ${entry.message}`));
