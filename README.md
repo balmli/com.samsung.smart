@@ -218,6 +218,45 @@ Go to advanced settings for the Samsung device, enable SmartThings API and enter
 
 This will enable the 'Set input source' - action.
 
+## Hardware integration tests
+
+The maintained **Samsung** driver has an opt-in hardware test runner that connects directly to a TV without Homey.
+It uses the same production Samsung client and operations as the Homey device. It does not support or test the
+Samsung Encrypted or Samsung Legacy drivers.
+
+Start the local web interface:
+
+```bash
+npm run integration:web
+```
+
+Then open `http://127.0.0.1:8765` and create a profile for the TV. **Connect & accept on TV** opens the Samsung
+remote channel under a separate name such as **Homey Samsung Integration Tests (living-room)**; every profile has
+its own TV authorization, even when profiles use the same IP and MAC address. Press OK/Allow on the TV remote when
+prompted. **Test Homey operations** runs the maintained driver's remote keys and sequences, volume, mute, channel,
+application, browser, YouTube, Frame, power-off, and Wake-on-LAN checks. The YouTube check launches video
+`aqz-KE-bpKQ`. Unsupported or unconfigured operations are reported as skipped.
+
+After connecting, the application field is populated from the installed-app list returned by that TV. Select an app
+to use it for the launch, running-state, and close tests. The dedicated YouTube-video test remains separate.
+
+The web interface pauses before disruptive operations and whenever visible behavior needs human verification. It
+records Yes, No, and Cannot determine separately. A MAC address is required for the Wake-on-LAN test. Optional
+target and return channel fields allow the numbered-channel action to be tested and restored. During the power
+cycle, the runner waits for shutdown to complete before sending and, when necessary, retrying Wake-on-LAN.
+
+Terminal mode uses the same test definitions:
+
+```bash
+npm run integration:terminal -- --ip 192.0.2.10
+```
+
+Add `--mac AA:BB:CC:DD:EE:FF --disruptive` to include the complete operation suite. Optional terminal arguments are
+`--channel 7`, `--restore-channel 5`, and `--browser-url https://example.com`. Disruptive checks are excluded by
+default in terminal mode. Profiles and pairing tokens are saved with user-only permissions under
+`~/.com.samsung.smart-integration/`; they are not stored in this repository. Hardware tests are never run by the
+normal unit-test or CI commands.
+
 ## Feedback:
 
 Please report issues by visiting the communtity topic: https://community.homey.app/t/10019

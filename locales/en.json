@@ -31,6 +31,8 @@
     "connection": "Connection could not be estabished.",
     "wake_error": "Unable to wake up device.",
     "missing_mac_address": "Unable to wake up device. The MAC address is missing.",
+    "pairing_timeout": "Pairing timed out while waiting for approval on the TV.",
+    "pairing_token_missing": "The TV did not return a pairing token.",
     "invalid_channel_number": "Invalid channel number",
     "invalid_key": "Invalid key: __key__",
     "invalid_delay": "Delay must be between 1 and 9999",

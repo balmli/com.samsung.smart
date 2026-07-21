@@ -4,5 +4,13 @@
     "noEmit": true,
     "types": ["node", "mocha"]
   },
-  "include": ["app.ts", "drivers/**/*.ts", "lib/**/*.ts", "lib/**/*.js", "test/**/*.ts"]
+  "include": [
+    "app.ts",
+    "drivers/**/*.ts",
+    "integration/**/*.ts",
+    "integration/**/*.js",
+    "lib/**/*.ts",
+    "lib/**/*.js",
+    "test/**/*.ts"
+  ]
 }

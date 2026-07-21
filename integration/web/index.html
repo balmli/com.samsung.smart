@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Samsung TV Integration Lab</title>
+        <link rel="stylesheet" href="/styles.css" />
+    </head>
+    <body>
+        <header>
+            <div>
+                <p class="eyebrow">COM.SAMSUNG.SMART</p>
+                <h1>TV Integration Lab</h1>
+            </div>
+            <div class="connection"><span></span> Local runner</div>
+        </header>
+
+        <main>
+            <section class="panel setup">
+                <div class="section-heading">
+                    <div>
+                        <span>01</span>
+                        <h2>Connect a TV</h2>
+                    </div>
+                    <p>Uses a separate TV authorization named for each profile.</p>
+                </div>
+                <form id="profile-form">
+                    <label>Profile name<input name="id" placeholder="living-room" required /></label>
+                    <label
+                        >TV IP address<input name="ipAddress" inputmode="decimal" placeholder="192.168.1.50" required
+                    /></label>
+                    <label
+                        >MAC address <small>optional, needed for wake tests</small
+                        ><input name="macAddress" placeholder="AA:BB:CC:DD:EE:FF"
+                    /></label>
+                    <button class="primary" type="submit">Save profile</button>
+                </form>
+                <div id="profiles" class="profile-list"></div>
+            </section>
+
+            <section class="panel workspace">
+                <div class="section-heading">
+                    <div>
+                        <span>02</span>
+                        <h2>Run checks</h2>
+                    </div>
+                    <p id="active-summary">Connect a profile to begin.</p>
+                </div>
+                <div id="run-options" class="run-options" hidden>
+                    <label class="full"
+                        >Application to test<select id="application">
+                            <option value="">No applications loaded</option>
+                        </select></label
+                    >
+                    <label
+                        >Target live-TV channel <small>optional</small><input id="channel" inputmode="numeric"
+                    /></label>
+                    <label
+                        >Return live-TV channel <small>optional</small><input id="restore-channel" inputmode="numeric"
+                    /></label>
+                    <label class="full"
+                        >Browser test URL<input id="browser-url" type="url" value="https://example.com"
+                    /></label>
+                </div>
+                <div id="actions" class="actions"></div>
+                <div id="checkpoint"></div>
+                <ol id="tests" class="test-list"></ol>
+            </section>
+
+            <section class="panel logs-panel">
+                <div class="section-heading compact">
+                    <div>
+                        <span>03</span>
+                        <h2>Activity</h2>
+                    </div>
+                    <a id="download" href="/api/results" hidden>Download JSON</a>
+                </div>
+                <pre id="logs">Waiting for a connection…</pre>
+            </section>
+        </main>
+
+        <div id="toast" role="status" aria-live="polite"></div>
+        <script src="/form.js" defer></script>
+        <script src="/app.js" defer></script>
+    </body>
+</html>

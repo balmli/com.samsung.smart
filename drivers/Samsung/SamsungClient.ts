@@ -4,6 +4,14 @@ import {SamsungBase, SamsungClient} from '../../lib/SamsungBase';
 const WebSocket = require('ws');
 
 export class SamsungClientImpl extends SamsungBase implements SamsungClient {
+    private readonly clientName: string;
+    private installedApps: Array<{name: string; appId: string; dialId: string}> = [];
+
+    constructor(options: ConstructorParameters<typeof SamsungBase>[0] & {clientName?: string}) {
+        super(options);
+        this.clientName = options.clientName || DEFAULT_NAME;
+    }
+
     protected getApplicationRequestError(statusCode: number): string | undefined {
         return statusCode === 401 ? this.device?.homey.__('errors.app_request_401') : undefined;
     }
@@ -12,27 +20,58 @@ export class SamsungClientImpl extends SamsungBase implements SamsungClient {
         return `http://${ipAddress || this.config.getSetting(DeviceSettings.ipaddress)}:${this.port}/api/v2/`;
     }
 
-    async pair(): Promise<string> {
+    async pair(timeoutMs = 60000): Promise<string> {
         return new Promise(async (resolve, reject) => {
             const uri = this.getWsUri(true);
-            this.logger.info(`Pair to ${uri}`);
+            this.logger.info(`Pair to ${this.getHostPort(true)}`);
 
             let ws = new WebSocket(uri, {
                 rejectUnauthorized: false,
             });
+            let finished = false;
+            const timeout = setTimeout(() => {
+                if (!finished) {
+                    finished = true;
+                    ws?.close();
+                    reject(
+                        new Error(
+                            this.device?.homey.__('errors.pairing_timeout') ||
+                                'Pairing timed out while waiting for approval on the TV',
+                        ),
+                    );
+                }
+            }, timeoutMs);
+
+            const finish = (callback: () => void) => {
+                if (!finished) {
+                    finished = true;
+                    clearTimeout(timeout);
+                    callback();
+                }
+            };
 
             ws.on('message', (response: any) => {
-                const message = Buffer.isBuffer(response) ? response.toString() : response;
-                this.logger.verbose('pair: message: ', message);
-                const data = JSON.parse(message);
-                ws.close();
+                try {
+                    const message = Buffer.isBuffer(response) ? response.toString() : response;
+                    const data = JSON.parse(message);
+                    ws.close();
 
-                // Got the token
-                if (data.data && data.data.token) {
-                    this.logger.verbose('pair: got token', data.data.token);
-                    resolve(data.data.token);
-                } else {
-                    reject();
+                    if (data.data && data.data.token) {
+                        this.logger.verbose('pair: received a token');
+                        finish(() => resolve(data.data.token));
+                    } else {
+                        finish(() =>
+                            reject(
+                                new Error(
+                                    this.device?.homey.__('errors.pairing_token_missing') ||
+                                        'The TV did not return a pairing token',
+                                ),
+                            ),
+                        );
+                    }
+                } catch (error) {
+                    ws.close();
+                    finish(() => reject(error));
                 }
             })
                 .on('close', () => {
@@ -41,7 +80,7 @@ export class SamsungClientImpl extends SamsungBase implements SamsungClient {
                 .on('error', (error: any) => {
                     this.logger.info('Pair error', error);
                     ws.close();
-                    reject();
+                    finish(() => reject(error));
                 });
         });
     }
@@ -54,6 +93,14 @@ export class SamsungClientImpl extends SamsungBase implements SamsungClient {
                 to: 'host',
             },
         });
+    }
+
+    getInstalledApps(): Array<{name: string; appId: string; dialId: string}> {
+        return structuredClone(this.installedApps);
+    }
+
+    async connect(): Promise<void> {
+        await this._connection();
     }
 
     async turnOn(): Promise<void> {
@@ -160,7 +207,7 @@ export class SamsungClientImpl extends SamsungBase implements SamsungClient {
                 event: 'art_app_request',
                 to: 'host',
                 clientIp: homeyIpAddress,
-                deviceName: this.base64Encode(DEFAULT_NAME),
+                deviceName: this.base64Encode(this.clientName),
                 data: JSON.stringify({
                     id: this.getId(),
                     value: onOff ? 'on' : 'off',
@@ -178,7 +225,7 @@ export class SamsungClientImpl extends SamsungBase implements SamsungClient {
             } else {
                 let tokenAuthSupport = this.config.getSetting(DeviceSettings.tokenAuthSupport);
                 let token = this.config.getSetting(DeviceSettings.token);
-                this.logger.verbose('_connection: tokenAuthSupport:', tokenAuthSupport, ', token:', token);
+                this.logger.verbose('_connection: tokenAuthSupport:', tokenAuthSupport, ', hasToken:', !!token);
 
                 const hostPort = this.getHostPort(tokenAuthSupport);
                 const uri = this.getWsUri(tokenAuthSupport, token);
@@ -189,18 +236,18 @@ export class SamsungClientImpl extends SamsungBase implements SamsungClient {
                     rejectUnauthorized: false,
                 });
 
-                this.logger.verbose('_connection', tokenAuthSupport, token, uri);
+                this.logger.verbose('_connection', tokenAuthSupport, hostPort);
 
                 this.socket
                     .on('message', (response: any) => {
                         const message = Buffer.isBuffer(response) ? response.toString() : response;
-                        this.logger.verbose('WS message: ', message);
                         const data = JSON.parse(message);
+                        this.logger.verbose('WS event:', data.event);
 
                         if (data.event === 'ms.channel.connect') {
                             if (data.data && data.data.token) {
                                 const token = data.data.token;
-                                this.logger.info(`_connection: got a new token ${token}`);
+                                this.logger.info('_connection: received a new token');
                                 self.config
                                     .setSetting(DeviceSettings.token, token)
                                     .catch((err: any) => this.logger.error(err));
@@ -214,6 +261,18 @@ export class SamsungClientImpl extends SamsungBase implements SamsungClient {
                                 const apps = data.data.data;
                                 if (apps && apps.length > 0) {
                                     this.logger.info(`_connection: got ${apps.length} apps`);
+                                    const installed = new Map<string, {name: string; appId: string; dialId: string}>();
+                                    for (const app of apps) {
+                                        const known = this.getApps().find(
+                                            (candidate: any) => candidate.appId === app.appId,
+                                        );
+                                        installed.set(app.appId, {
+                                            name: app.name,
+                                            appId: app.appId,
+                                            dialId: known?.dialId || '',
+                                        });
+                                    }
+                                    this.installedApps = [...installed.values()];
                                     this.mergeApps(apps.map((a: any) => ({appId: a.appId, name: a.name})));
                                     this.logger.verbose(`_connection: after merge:`, this.getApps());
                                 }
@@ -298,6 +357,14 @@ export class SamsungClientImpl extends SamsungBase implements SamsungClient {
         }
     }
 
+    disconnect() {
+        this._clearSocketTimeout();
+        if (this.socket) {
+            this.socket.close();
+            this.socket = null;
+        }
+    }
+
     private async connectAndSend(aCmd: any): Promise<any> {
         const self = this;
         return this._commandQueue.add(
@@ -336,7 +403,7 @@ export class SamsungClientImpl extends SamsungBase implements SamsungClient {
     }
 
     private getWsUri(tokenAuthSupport: boolean, token?: string) {
-        const app_name_base64 = this.base64Encode(DEFAULT_NAME);
+        const app_name_base64 = this.base64Encode(this.clientName);
         const tokenPart = token ? '&token=' + token : '';
         return `${this.getHostPort(tokenAuthSupport)}/api/v2/channels/samsung.remote.control?name=${app_name_base64}${tokenPart}`;
     }

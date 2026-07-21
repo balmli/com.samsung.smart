@@ -2,11 +2,13 @@ import {DeviceSettings} from '../../lib/types';
 import {BaseDevice} from '../../lib/BaseDevice';
 import {SmartThingsClientImpl} from '../../lib/SmartThings';
 import {SamsungClientImpl} from './SamsungClient';
+import {SamsungOperations} from './SamsungOperations';
 
 module.exports = class SamsungDevice extends BaseDevice {
     pairRetries: number = 3;
     lastAppsRefreshTs: number = 0;
     private onlineRefreshPromise?: Promise<void>;
+    operations!: SamsungOperations;
 
     async onInit(): Promise<void> {
         this.deleted = false;
@@ -15,8 +17,6 @@ module.exports = class SamsungDevice extends BaseDevice {
 
         await this.initSettings();
         await this.migrate();
-        await this.registerCapListeners();
-
         this.samsungClient = new SamsungClientImpl({
             device: this,
             config: this.config,
@@ -29,6 +29,9 @@ module.exports = class SamsungDevice extends BaseDevice {
             config: this.config,
             logger: this.logger,
         });
+        this.operations = new SamsungOperations(this.samsungClient as SamsungClientImpl, this.upnpClient);
+
+        await this.registerCapListeners();
 
         this.schedulePowerStatePolling(1);
         await this.initSmartThings();
@@ -53,6 +56,18 @@ module.exports = class SamsungDevice extends BaseDevice {
         }
     }
 
+    async registerCapListeners() {
+        this.registerCapabilityListener('onoff', async value => this.turnOnOff(value));
+        this.registerCapabilityListener('volume_set', async value =>
+            this.operations.setVolume(Math.round(value * this.getSetting(DeviceSettings.max_volume))),
+        );
+        this.registerCapabilityListener('volume_mute', async () => this.operations.toggleMute());
+        this.registerCapabilityListener('volume_up', async () => this.operations.volumeUp());
+        this.registerCapabilityListener('volume_down', async () => this.operations.volumeDown());
+        this.registerCapabilityListener('channel_up', async () => this.operations.channelUp());
+        this.registerCapabilityListener('channel_down', async () => this.operations.channelDown());
+    }
+
     async turnOnOff(onOff: boolean): Promise<void> {
         if (this.turning_onoff_process !== undefined) {
             throw new Error(
@@ -75,7 +90,8 @@ module.exports = class SamsungDevice extends BaseDevice {
             if (onOff) {
                 this.wakeRetries = 5;
             }
-            const command = onOff ? this.samsungClient.wake() : this.samsungClient.turnOff();
+            const operations = this.operations || this.samsungClient;
+            const command = onOff ? operations.wake() : operations.turnOff();
             this.logger.info('turnOnOff: in progress: ' + (onOff ? 'on' : 'off'));
             await command;
         } catch (err) {
@@ -99,7 +115,7 @@ module.exports = class SamsungDevice extends BaseDevice {
             }
             if (this.turning_onoff_process && !onOff && this.wakeRetries > 0) {
                 this.wakeRetries--;
-                await this.samsungClient.wake();
+                await (this.operations || this.samsungClient).wake();
             }
         } catch (err) {
             this.logger.info(err);
@@ -212,7 +228,7 @@ module.exports = class SamsungDevice extends BaseDevice {
         try {
             const token = await this.samsungClient.pair();
             await this.config.setSetting(DeviceSettings.token, token).catch((err: any) => this.logger.error(err));
-            this.logger.info(`Pairing: got a new token: ${token}`);
+            this.logger.info('Pairing: received a new token');
         } catch (err) {
             this.pairRetries--;
             if (this.pairRetries > 0) {

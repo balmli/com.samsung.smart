@@ -6,6 +6,7 @@
 .idea
 /cmd
 /docs
+/integration
 /test
 /test2
 /tasks
