@@ -63,12 +63,17 @@ class IntegrationLogger {
     }
 
     private write(level: IntegrationLogEntry['level'], args: any[]) {
+        if (args[0] === 'getInfo' && args[2]?.device?.modelName) {
+            args = [`getInfo succeeded (${args[2].device.modelName})`];
+        }
         const message = args
             .map(value =>
                 value instanceof Error ? value.message : typeof value === 'string' ? value : JSON.stringify(value),
             )
             .join(' ')
-            .replace(/([?&]token=)[^&\s]+/gi, '$1[redacted]');
+            .replace(/([?&]token=)[^&\s]+/gi, '$1[redacted]')
+            .replace(/\buuid:[a-f0-9-]+\b/gi, '[device-id]')
+            .replace(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g, '[tv-address]');
         this.sink({timestamp: new Date().toISOString(), level, message});
     }
 }
@@ -205,6 +210,15 @@ export class SamsungIntegrationSession extends EventEmitter {
         }
         const token = await this.operations.pair(timeout);
         await this.adapter.setSettings({[DeviceSettings.token]: token});
+        return this.getProfile();
+    }
+
+    async connectAndAuthorize(timeout = 60000): Promise<PublicIntegrationProfile> {
+        await this.inspect();
+        if (this.profile.tokenAuthSupport && !this.profile.token) {
+            await this.pair(timeout);
+        }
+        await this.operations.connect();
         return this.getProfile();
     }
 

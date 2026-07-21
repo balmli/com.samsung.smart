@@ -230,9 +230,15 @@ Start the local web interface:
 npm run integration:web
 ```
 
-Then open `http://127.0.0.1:8765`, create a profile for the TV, and connect it. The TV may ask for permission under
-the separate name **Homey Samsung Integration Tests**. Press OK/Allow on the TV remote. The web interface pauses
-when a result needs human verification and records Yes, No, or Cannot determine separately.
+Then open `http://127.0.0.1:8765` and create a profile for the TV. **Connect & accept on TV** opens the Samsung
+remote channel under the separate name **Homey Samsung Integration Tests**; press OK/Allow on the TV remote when
+prompted. **Test Homey operations** runs the maintained driver's remote keys and sequences, volume, mute, channel,
+application, browser, YouTube, Frame, power-off, and Wake-on-LAN checks. The YouTube check launches video
+`aqz-KE-bpKQ`. Unsupported or unconfigured operations are reported as skipped.
+
+The web interface pauses before disruptive operations and whenever visible behavior needs human verification. It
+records Yes, No, and Cannot determine separately. A MAC address is required for the Wake-on-LAN test. Optional
+target and return channel fields allow the numbered-channel action to be tested and restored.
 
 Terminal mode uses the same test definitions:
 
@@ -240,8 +246,9 @@ Terminal mode uses the same test definitions:
 npm run integration:terminal -- --ip 192.0.2.10
 ```
 
-Add `--mac AA:BB:CC:DD:EE:FF --disruptive` to include volume, mute, power-off, and Wake-on-LAN checks. Disruptive
-checks are excluded by default. Profiles and pairing tokens are saved with user-only permissions under
+Add `--mac AA:BB:CC:DD:EE:FF --disruptive` to include the complete operation suite. Optional terminal arguments are
+`--channel 7`, `--restore-channel 5`, and `--browser-url https://example.com`. Disruptive checks are excluded by
+default in terminal mode. Profiles and pairing tokens are saved with user-only permissions under
 `~/.com.samsung.smart-integration/`; they are not stored in this repository. Hardware tests are never run by the
 normal unit-test or CI commands.
 

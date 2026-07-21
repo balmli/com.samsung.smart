@@ -34,7 +34,7 @@ function render() {
                   profile => `
             <article class="profile">
                 <div><strong>${escapeHtml(profile.id)}</strong><p>${escapeHtml(profile.ipAddress)} · ${escapeHtml(profile.modelName || 'Not inspected')}</p></div>
-                <button data-connect="${encodeURIComponent(profile.id)}">Connect</button>
+                <button data-connect="${encodeURIComponent(profile.id)}">Connect & accept on TV</button>
                 <em>${profile.paired ? 'AUTHORIZED' : 'PAIRING NEEDED'}</em>
             </article>`,
               )
@@ -45,11 +45,10 @@ function render() {
     element('active-summary').textContent = active
         ? `${active.modelName || 'Samsung TV'} at ${active.ipAddress} · ${active.paired ? 'authorized' : 'not yet authorized'}`
         : 'Connect a profile to begin.';
+    element('run-options').hidden = !active;
     element('actions').innerHTML = !active
-        ? '<button disabled>Run safe checks</button>'
-        : `${active.paired ? '' : '<button class="primary" data-action="pair">Pair — press OK on TV</button>'}
-           <button data-action="safe" ${active.paired ? '' : 'disabled'}>Run safe checks</button>
-           <button class="danger" data-action="disruptive" ${active.paired ? '' : 'disabled'}>Include disruptive checks</button>`;
+        ? '<button disabled>Test Homey operations</button>'
+        : '<button class="danger" data-action="operations">Test Homey operations</button>';
 
     const pending = state.run?.pending;
     element('checkpoint').innerHTML = pending
@@ -98,13 +97,13 @@ document.addEventListener('click', async event => {
     try {
         if (button.dataset.connect) {
             button.disabled = true;
+            button.textContent = 'Waiting for TV approval…';
             await request(`/api/profiles/${button.dataset.connect}/connect`);
-        } else if (button.dataset.action === 'pair') {
-            button.disabled = true;
-            await request(`/api/profiles/${encodeURIComponent(state.activeProfile.id)}/pair`);
-        } else if (button.dataset.action === 'safe' || button.dataset.action === 'disruptive') {
+        } else if (button.dataset.action === 'operations') {
             await request(`/api/profiles/${encodeURIComponent(state.activeProfile.id)}/run`, {
-                includeDisruptive: button.dataset.action === 'disruptive',
+                browserUrl: element('browser-url').value,
+                channel: element('channel').value,
+                restoreChannel: element('restore-channel').value,
             });
         } else if (button.dataset.answer) {
             await request('/api/answer', {
@@ -115,6 +114,7 @@ document.addEventListener('click', async event => {
         }
     } catch (error) {
         toast(error.message);
+        render();
     }
 });
 

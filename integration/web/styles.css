@@ -216,6 +216,18 @@ button.danger {
     gap: 9px;
     border-bottom: 1px solid var(--line);
 }
+.run-options {
+    padding: 20px 24px 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+.run-options[hidden] {
+    display: none;
+}
+.run-options label:last-child {
+    grid-column: 1 / -1;
+}
 #checkpoint {
     padding: 0 24px;
 }

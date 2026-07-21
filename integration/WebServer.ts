@@ -116,7 +116,7 @@ export class IntegrationWebServer {
             return;
         }
 
-        const profileAction = url.pathname.match(/^\/api\/profiles\/([^/]+)\/(connect|pair|run)$/);
+        const profileAction = url.pathname.match(/^\/api\/profiles\/([^/]+)\/(connect|run)$/);
         if (method === 'POST' && profileAction) {
             const [, profileId, action] = profileAction;
             if (action === 'connect') {
@@ -128,18 +128,18 @@ export class IntegrationWebServer {
                 sendJson(response, 409, {error: 'Connect this profile first'});
                 return;
             }
-            if (action === 'pair') {
-                sendJson(response, 200, {profile: await this.session.pair()});
-                this.broadcast();
-                return;
-            }
             const input = await readJson(request);
             if (this.runner && ['running', 'awaiting-human'].includes(this.runner.getSnapshot().status)) {
                 sendJson(response, 409, {error: 'A test run is already active'});
                 return;
             }
             this.runner = new IntegrationRunner(
-                createSamsungIntegrationSuite(this.session, input.includeDisruptive === true),
+                createSamsungIntegrationSuite(this.session, {
+                    browserUrl: input.browserUrl || undefined,
+                    channel: input.channel ? Number(input.channel) : undefined,
+                    includeDisruptive: true,
+                    restoreChannel: input.restoreChannel ? Number(input.restoreChannel) : undefined,
+                }),
                 this.checkpoints,
             );
             this.runner.on('change', snapshot => {
@@ -189,8 +189,14 @@ export class IntegrationWebServer {
             if (this.logs.length > 250) this.logs.shift();
             this.broadcast();
         });
-        await this.session.inspect();
-        this.broadcast();
+        try {
+            await this.session.connectAndAuthorize();
+            this.broadcast();
+        } catch (error) {
+            this.session.close();
+            this.session = undefined;
+            throw error;
+        }
     }
 
     private async state() {

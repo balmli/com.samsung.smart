@@ -11,6 +11,9 @@ export interface TerminalOptions {
     ipAddress: string;
     macAddress?: string;
     includeDisruptive?: boolean;
+    channel?: number;
+    restoreChannel?: number;
+    browserUrl?: string;
 }
 
 export async function runInTerminal(options: TerminalOptions): Promise<number> {
@@ -33,17 +36,18 @@ export async function runInTerminal(options: TerminalOptions): Promise<number> {
     session.on('log', entry => console.log(`[${entry.level}] ${entry.message}`));
 
     try {
-        const inspected = await session.inspect();
+        console.log('Press OK/Allow on the TV remote if a permission prompt appears.');
+        const inspected = await session.connectAndAuthorize();
         console.log(`Connected to ${inspected.modelName} at ${inspected.ipAddress}.`);
-        if (inspected.tokenAuthSupport && !inspected.paired) {
-            console.log('Press OK/Allow on the TV remote when the permission prompt appears.');
-            await session.pair();
-            console.log('Pairing completed with the separate integration-test identity.');
-        }
 
         const checkpoints = new HumanCheckpointBroker();
         const runner = new IntegrationRunner(
-            createSamsungIntegrationSuite(session, options.includeDisruptive),
+            createSamsungIntegrationSuite(session, {
+                browserUrl: options.browserUrl,
+                channel: options.channel,
+                includeDisruptive: options.includeDisruptive,
+                restoreChannel: options.restoreChannel,
+            }),
             checkpoints,
         );
         checkpoints.on('change', async pending => {

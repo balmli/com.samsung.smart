@@ -56,6 +56,7 @@ Automated tests can validate runner behavior and production-code wiring, but can
 - A documented command starts the local web runner and another starts terminal mode.
 - The runner discovers or accepts a TV IP, validates that it is supported by the maintained driver, and pairs under a separate identity.
 - A human can press OK on the TV and answer observation questions in either interface.
-- The initial suite exercises safe connectivity and remote-key operations with opt-in disruptive groups.
+- The web workflow has one connection/approval action followed by one broad Homey-operation suite. Terminal mode
+  keeps disruptive operations opt-in.
 - Unit tests establish the runner state machine and identity behavior without contacting a LAN device.
 - Root build, lint, type-check, unit tests, and relevant Homey validation pass.

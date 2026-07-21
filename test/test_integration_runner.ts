@@ -1,5 +1,6 @@
 const expect = require('chai').expect;
 const {saveProfileForm} = require('../integration/web/form');
+const {FULL_OPERATION_TEST_IDS, YOUTUBE_VIDEO_ID, validateFullOperationSuite} = require('../integration/suitePlan');
 
 import {
     HumanCheckpointBroker,
@@ -97,5 +98,27 @@ describe('Samsung integration web profile form', function () {
         await submission;
 
         expect(resetCount).to.equal(1);
+    });
+});
+
+describe('Samsung Homey-operation hardware suite', function () {
+    it('covers the maintained Homey operations and uses the requested YouTube video', async function () {
+        expect(FULL_OPERATION_TEST_IDS).to.include.members([
+            'remote-navigation',
+            'remote-sequence',
+            'volume-up-down',
+            'mute-unmute',
+            'set-volume',
+            'channel-up-down',
+            'change-channel',
+            'youtube',
+            'app-running',
+            'close-app',
+            'browser',
+            'art-mode',
+            'power-cycle',
+        ]);
+        expect(YOUTUBE_VIDEO_ID).to.equal('aqz-KE-bpKQ');
+        expect(() => validateFullOperationSuite(FULL_OPERATION_TEST_IDS.map((id: string) => ({id})))).to.not.throw();
     });
 });

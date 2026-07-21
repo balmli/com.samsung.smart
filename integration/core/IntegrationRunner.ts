@@ -17,6 +17,7 @@ export interface HumanCheckpoint {
 }
 
 export interface IntegrationTestContext {
+    skip(reason: string): never;
     verify(prompt: string): Promise<HumanAnswer>;
 }
 
@@ -114,6 +115,9 @@ export class IntegrationRunner extends EventEmitter {
 
             try {
                 await definition.run({
+                    skip: reason => {
+                        throw new ObservationSkipped(reason);
+                    },
                     verify: async prompt => {
                         result.status = 'awaiting-human';
                         this.snapshot.status = 'awaiting-human';

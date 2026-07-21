@@ -94,6 +94,10 @@ export class SamsungClientImpl extends SamsungBase implements SamsungClient {
         });
     }
 
+    async connect(): Promise<void> {
+        await this._connection();
+    }
+
     async turnOn(): Promise<void> {
         return this.sendKey('KEY_POWER');
     }

@@ -19,6 +19,10 @@ export class SamsungOperations {
         return this.samsungClient.pair(timeout);
     }
 
+    connect(): Promise<void> {
+        return this.samsungClient.connect();
+    }
+
     wake(): Promise<void> {
         return this.samsungClient.wake();
     }
@@ -61,6 +65,7 @@ export class SamsungOperations {
 
     async getVolume(): Promise<number | undefined> {
         await this.upnpClient.search();
+        await new Promise(resolve => setTimeout(resolve, 1500));
         return this.upnpClient.getVolume();
     }
 

@@ -35,6 +35,9 @@ async function main(): Promise<void> {
             ipAddress,
             macAddress: option('mac'),
             includeDisruptive: process.argv.includes('--disruptive'),
+            channel: option('channel') ? Number(option('channel')) : undefined,
+            restoreChannel: option('restore-channel') ? Number(option('restore-channel')) : undefined,
+            browserUrl: option('browser-url'),
         });
         return;
     }
