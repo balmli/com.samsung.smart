@@ -1,12 +1,12 @@
 # Samsung hardware integration test runner
 
-Status: Planned
+Status: Pull request open
 
 Area: Maintained `Samsung` driver only
 
 GitHub issue: https://github.com/balmli/com.samsung.smart/issues/71
 
-Pull request: Pending
+Pull request: https://github.com/balmli/com.samsung.smart/pull/72
 
 ## Summary
 
