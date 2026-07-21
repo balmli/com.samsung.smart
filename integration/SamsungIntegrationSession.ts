@@ -66,16 +66,23 @@ class IntegrationLogger {
         if (args[0] === 'getInfo' && args[2]?.device?.modelName) {
             args = [`getInfo succeeded (${args[2].device.modelName})`];
         }
-        const message = args
-            .map(value =>
-                value instanceof Error ? value.message : typeof value === 'string' ? value : JSON.stringify(value),
-            )
-            .join(' ')
-            .replace(/([?&]token=)[^&\s]+/gi, '$1[redacted]')
-            .replace(/\buuid:[a-f0-9-]+\b/gi, '[device-id]')
-            .replace(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g, '[tv-address]');
+        const message = redactIntegrationLog(
+            args
+                .map(value =>
+                    value instanceof Error ? value.message : typeof value === 'string' ? value : JSON.stringify(value),
+                )
+                .join(' '),
+        );
         this.sink({timestamp: new Date().toISOString(), level, message});
     }
+}
+
+export function redactIntegrationLog(message: string): string {
+    return message
+        .replace(/([?&]token=)[^&\s]+/gi, '$1[redacted]')
+        .replace(/\buuid:[a-f0-9-]+\b/gi, '[device-id]')
+        .replace(/\b(?:[a-f0-9]{2}:){5}[a-f0-9]{2}\b/gi, '[mac-address]')
+        .replace(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g, '[tv-address]');
 }
 
 class IntegrationDeviceAdapter {

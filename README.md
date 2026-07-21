@@ -238,7 +238,8 @@ application, browser, YouTube, Frame, power-off, and Wake-on-LAN checks. The You
 
 The web interface pauses before disruptive operations and whenever visible behavior needs human verification. It
 records Yes, No, and Cannot determine separately. A MAC address is required for the Wake-on-LAN test. Optional
-target and return channel fields allow the numbered-channel action to be tested and restored.
+target and return channel fields allow the numbered-channel action to be tested and restored. During the power
+cycle, the runner waits for shutdown to complete before sending and, when necessary, retrying Wake-on-LAN.
 
 Terminal mode uses the same test definitions:
 

@@ -1,4 +1,5 @@
 import {IntegrationTest} from './core/IntegrationRunner';
+import {waitForOffThenWake} from './powerCycle';
 import {SamsungIntegrationSession} from './SamsungIntegrationSession';
 
 const {YOUTUBE_VIDEO_ID, validateFullOperationSuite} = require('./suitePlan');
@@ -211,7 +212,7 @@ export function createSamsungIntegrationSuite(
                 await context.verify('May the test turn the TV off and then wake it again?');
                 await session.operations.turnOff();
                 await context.verify('Did the TV turn off completely?');
-                await session.operations.wake();
+                await waitForOffThenWake(session.operations);
                 await context.verify('Did the TV turn back on?');
             },
         },

@@ -51,6 +51,8 @@ The production client currently hard-codes the WebSocket connection name to `hom
 
 Automated tests can validate runner behavior and production-code wiring, but cannot prove TV-visible behavior. Pairing, key handling, application launching, volume, power, Wake-on-LAN, and Frame Art Mode remain unverified until the suite is run against matching hardware and the human observations are recorded.
 
+A UE55KS8005 hardware run confirmed inspection, WebSocket keys, application discovery, UPnP volume, YouTube, browser launch, and power-off. The first Wake-on-LAN attempt was sent only four seconds after the power key while the TV was still completing shutdown, and the TV did not wake. The power-cycle test now waits for the Samsung API to become unreachable, allows the network interface to settle, and retries the same production Wake-on-LAN operation while polling for recovery. A repeat hardware run is still required to confirm wake behavior.
+
 ## Acceptance criteria
 
 - A documented command starts the local web runner and another starts terminal mode.
