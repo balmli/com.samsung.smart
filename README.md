@@ -218,6 +218,33 @@ Go to advanced settings for the Samsung device, enable SmartThings API and enter
 
 This will enable the 'Set input source' - action.
 
+## Hardware integration tests
+
+The maintained **Samsung** driver has an opt-in hardware test runner that connects directly to a TV without Homey.
+It uses the same production Samsung client and operations as the Homey device. It does not support or test the
+Samsung Encrypted or Samsung Legacy drivers.
+
+Start the local web interface:
+
+```bash
+npm run integration:web
+```
+
+Then open `http://127.0.0.1:8765`, create a profile for the TV, and connect it. The TV may ask for permission under
+the separate name **Homey Samsung Integration Tests**. Press OK/Allow on the TV remote. The web interface pauses
+when a result needs human verification and records Yes, No, or Cannot determine separately.
+
+Terminal mode uses the same test definitions:
+
+```bash
+npm run integration:terminal -- --ip 192.0.2.10
+```
+
+Add `--mac AA:BB:CC:DD:EE:FF --disruptive` to include volume, mute, power-off, and Wake-on-LAN checks. Disruptive
+checks are excluded by default. Profiles and pairing tokens are saved with user-only permissions under
+`~/.com.samsung.smart-integration/`; they are not stored in this repository. Hardware tests are never run by the
+normal unit-test or CI commands.
+
 ## Feedback:
 
 Please report issues by visiting the communtity topic: https://community.homey.app/t/10019
