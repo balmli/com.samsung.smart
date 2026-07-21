@@ -46,6 +46,15 @@ function render() {
         ? `${active.modelName || 'Samsung TV'} at ${active.ipAddress} · connected as ${active.clientName}`
         : 'Connect a profile to begin.';
     element('run-options').hidden = !active;
+    const application = element('application');
+    const previousApplication = application.value;
+    const apps = state.apps || [];
+    application.innerHTML = apps.length
+        ? apps.map(app => `<option value="${escapeHtml(app.key)}">${escapeHtml(app.name)}</option>`).join('')
+        : '<option value="">No applications loaded</option>';
+    const defaultApplication = apps.find(app => app.name.toLowerCase() === 'youtube')?.key || apps[0]?.key || '';
+    application.value = apps.some(app => app.key === previousApplication) ? previousApplication : defaultApplication;
+    application.disabled = !active || !apps.length;
     element('actions').innerHTML = !active
         ? '<button disabled>Test Homey operations</button>'
         : '<button class="danger" data-action="operations">Test Homey operations</button>';
@@ -101,6 +110,7 @@ document.addEventListener('click', async event => {
             await request(`/api/profiles/${button.dataset.connect}/connect`);
         } else if (button.dataset.action === 'operations') {
             await request(`/api/profiles/${encodeURIComponent(state.activeProfile.id)}/run`, {
+                appKey: element('application').value,
                 browserUrl: element('browser-url').value,
                 channel: element('channel').value,
                 restoreChannel: element('restore-channel').value,

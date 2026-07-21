@@ -47,13 +47,20 @@
                     <p id="active-summary">Connect a profile to begin.</p>
                 </div>
                 <div id="run-options" class="run-options" hidden>
+                    <label class="full"
+                        >Application to test<select id="application">
+                            <option value="">No applications loaded</option>
+                        </select></label
+                    >
                     <label
                         >Target live-TV channel <small>optional</small><input id="channel" inputmode="numeric"
                     /></label>
                     <label
                         >Return live-TV channel <small>optional</small><input id="restore-channel" inputmode="numeric"
                     /></label>
-                    <label>Browser test URL<input id="browser-url" type="url" value="https://example.com" /></label>
+                    <label class="full"
+                        >Browser test URL<input id="browser-url" type="url" value="https://example.com"
+                    /></label>
                 </div>
                 <div id="actions" class="actions"></div>
                 <div id="checkpoint"></div>

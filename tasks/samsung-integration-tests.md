@@ -62,5 +62,7 @@ A UE55KS8005 hardware run confirmed inspection, WebSocket keys, application disc
 - A human can press OK on the TV and answer observation questions in either interface.
 - The web workflow has one connection/approval action followed by one broad Homey-operation suite. Terminal mode
   keeps disruptive operations opt-in.
+- The web workflow loads the TV's installed applications and lets the user select the app used by the launch,
+  running-state, and close tests.
 - Unit tests establish the runner state machine and identity behavior without contacting a LAN device.
 - Root build, lint, type-check, unit tests, and relevant Homey validation pass.

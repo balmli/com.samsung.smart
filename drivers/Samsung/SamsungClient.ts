@@ -5,6 +5,7 @@ const WebSocket = require('ws');
 
 export class SamsungClientImpl extends SamsungBase implements SamsungClient {
     private readonly clientName: string;
+    private installedApps: Array<{name: string; appId: string; dialId: string}> = [];
 
     constructor(options: ConstructorParameters<typeof SamsungBase>[0] & {clientName?: string}) {
         super(options);
@@ -92,6 +93,10 @@ export class SamsungClientImpl extends SamsungBase implements SamsungClient {
                 to: 'host',
             },
         });
+    }
+
+    getInstalledApps(): Array<{name: string; appId: string; dialId: string}> {
+        return structuredClone(this.installedApps);
     }
 
     async connect(): Promise<void> {
@@ -256,6 +261,18 @@ export class SamsungClientImpl extends SamsungBase implements SamsungClient {
                                 const apps = data.data.data;
                                 if (apps && apps.length > 0) {
                                     this.logger.info(`_connection: got ${apps.length} apps`);
+                                    const installed = new Map<string, {name: string; appId: string; dialId: string}>();
+                                    for (const app of apps) {
+                                        const known = this.getApps().find(
+                                            (candidate: any) => candidate.appId === app.appId,
+                                        );
+                                        installed.set(app.appId, {
+                                            name: app.name,
+                                            appId: app.appId,
+                                            dialId: known?.dialId || '',
+                                        });
+                                    }
+                                    this.installedApps = [...installed.values()];
                                     this.mergeApps(apps.map((a: any) => ({appId: a.appId, name: a.name})));
                                     this.logger.verbose(`_connection: after merge:`, this.getApps());
                                 }

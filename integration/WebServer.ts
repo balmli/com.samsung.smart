@@ -13,6 +13,7 @@ import {
 } from './core/IntegrationProfileStore';
 import {HumanCheckpointBroker, HumanOutcome, IntegrationRunner, RunSnapshot} from './core/IntegrationRunner';
 import {IntegrationLogEntry, SamsungIntegrationSession} from './SamsungIntegrationSession';
+import {samsungApplicationKey} from '../drivers/Samsung/SamsungOperations';
 import {createSamsungIntegrationSuite} from './suite';
 
 const CONTENT_TYPES: Record<string, string> = {
@@ -143,8 +144,12 @@ export class IntegrationWebServer {
                 sendJson(response, 409, {error: 'A test run is already active'});
                 return;
             }
+            const selectedApp = this.session
+                .getInstalledApps()
+                .find(app => samsungApplicationKey(app) === input.appKey);
             this.runner = new IntegrationRunner(
                 createSamsungIntegrationSuite(this.session, {
+                    app: selectedApp,
                     browserUrl: input.browserUrl || undefined,
                     channel: input.channel ? Number(input.channel) : undefined,
                     includeDisruptive: true,
@@ -203,6 +208,7 @@ export class IntegrationWebServer {
         });
         try {
             await this.session.connectAndAuthorize();
+            await this.session.refreshInstalledApps();
             this.broadcast();
         } catch (error) {
             this.session.close();
@@ -215,6 +221,7 @@ export class IntegrationWebServer {
         return {
             profiles: (await this.profiles.list()).map(toPublicProfile),
             activeProfile: this.session?.getProfile(),
+            apps: this.session?.getInstalledApps().map(app => ({...app, key: samsungApplicationKey(app)})),
             run: this.runner?.getSnapshot() || this.latestRun,
             logs: this.logs,
         };

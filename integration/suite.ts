@@ -1,15 +1,17 @@
 import {IntegrationTest} from './core/IntegrationRunner';
+import {SamsungApplication} from '../drivers/Samsung/SamsungOperations';
 import {waitForOffThenWake} from './powerCycle';
 import {SamsungIntegrationSession} from './SamsungIntegrationSession';
 
 const {YOUTUBE_VIDEO_ID, validateFullOperationSuite} = require('./suitePlan');
-const YOUTUBE_APP = {name: 'YouTube', appId: '', dialId: 'YouTube'};
+const {createApplicationTests} = require('./applicationSuite');
 
 export interface SamsungSuiteOptions {
     includeDisruptive?: boolean;
     channel?: number;
     restoreChannel?: number;
     browserUrl?: string;
+    app?: SamsungApplication;
 }
 
 export function createSamsungIntegrationSuite(
@@ -59,9 +61,7 @@ export function createSamsungIntegrationSuite(
             id: 'installed-apps',
             title: 'Request installed applications',
             run: async () => {
-                await session.operations.refreshApps();
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                if (!session.operations.getApps()?.length) throw new Error('The TV returned no applications');
+                if (!(await session.refreshInstalledApps()).length) throw new Error('The TV returned no applications');
             },
         },
     ];
@@ -140,15 +140,7 @@ export function createSamsungIntegrationSuite(
                 }
             },
         },
-        {
-            id: 'launch-app',
-            title: 'Launch an application',
-            disruptive: true,
-            run: async context => {
-                await session.operations.launchApp(YOUTUBE_APP);
-                await context.verify('Did the YouTube application open?');
-            },
-        },
+        ...createApplicationTests(session, resolved.app),
         {
             id: 'youtube',
             title: 'Launch the test YouTube video',
@@ -156,24 +148,6 @@ export function createSamsungIntegrationSuite(
             run: async context => {
                 await session.operations.launchYouTube(YOUTUBE_VIDEO_ID);
                 await context.verify(`Did YouTube start video ${YOUTUBE_VIDEO_ID}?`);
-            },
-        },
-        {
-            id: 'app-running',
-            title: 'Check whether YouTube is running',
-            run: async () => {
-                if (!(await session.operations.isAppRunning(YOUTUBE_APP))) {
-                    throw new Error('The TV did not report YouTube as running');
-                }
-            },
-        },
-        {
-            id: 'close-app',
-            title: 'Close the YouTube application',
-            disruptive: true,
-            run: async context => {
-                await session.operations.closeApp(YOUTUBE_APP);
-                await context.verify('Did the YouTube application close?');
             },
         },
         {

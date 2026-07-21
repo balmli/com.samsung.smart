@@ -237,6 +237,9 @@ prompted. **Test Homey operations** runs the maintained driver's remote keys and
 application, browser, YouTube, Frame, power-off, and Wake-on-LAN checks. The YouTube check launches video
 `aqz-KE-bpKQ`. Unsupported or unconfigured operations are reported as skipped.
 
+After connecting, the application field is populated from the installed-app list returned by that TV. Select an app
+to use it for the launch, running-state, and close tests. The dedicated YouTube-video test remains separate.
+
 The web interface pauses before disruptive operations and whenever visible behavior needs human verification. It
 records Yes, No, and Cannot determine separately. A MAC address is required for the Wake-on-LAN test. Optional
 target and return channel fields allow the numbered-channel action to be tested and restored. During the power

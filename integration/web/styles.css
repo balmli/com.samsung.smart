@@ -140,6 +140,7 @@ small {
     font-weight: 450;
 }
 input,
+select,
 textarea {
     width: 100%;
     border: 1px solid var(--line);
@@ -151,6 +152,7 @@ textarea {
     outline: none;
 }
 input:focus,
+select:focus,
 textarea:focus {
     border-color: var(--blue);
     box-shadow: 0 0 0 3px #69a8ff18;
@@ -225,7 +227,7 @@ button.danger {
 .run-options[hidden] {
     display: none;
 }
-.run-options label:last-child {
+.run-options .full {
     grid-column: 1 / -1;
 }
 #checkpoint {

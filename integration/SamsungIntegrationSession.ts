@@ -12,7 +12,7 @@ import {HomeyIpUtil} from '../lib/HomeyIpUtil';
 import {DeviceSettings} from '../lib/types';
 import {UPnPClientImpl} from '../lib/UPnPClient';
 import {SamsungClientImpl} from '../drivers/Samsung/SamsungClient';
-import {SamsungOperations} from '../drivers/Samsung/SamsungOperations';
+import {SamsungApplication, SamsungOperations} from '../drivers/Samsung/SamsungOperations';
 
 const translations = require('../locales/en.json');
 
@@ -227,6 +227,21 @@ export class SamsungIntegrationSession extends EventEmitter {
         }
         await this.operations.connect();
         return this.getProfile();
+    }
+
+    async refreshInstalledApps(timeout = 3000): Promise<SamsungApplication[]> {
+        await this.operations.refreshApps();
+        const deadline = Date.now() + timeout;
+        while (this.operations.getInstalledApps().length === 0 && Date.now() < deadline) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        return this.getInstalledApps();
+    }
+
+    getInstalledApps(): SamsungApplication[] {
+        return this.operations
+            .getInstalledApps()
+            .sort((first, second) => first.name.localeCompare(second.name, undefined, {sensitivity: 'base'}));
     }
 
     close(): void {

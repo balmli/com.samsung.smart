@@ -1,6 +1,16 @@
 import {UPnPClient} from '../../lib/UPnPClient';
 import {SamsungClientImpl} from './SamsungClient';
 
+export interface SamsungApplication {
+    name: string;
+    appId: string;
+    dialId: string;
+}
+
+export function samsungApplicationKey(app: SamsungApplication): string {
+    return app.appId ? `app:${app.appId}` : `dial:${app.dialId}`;
+}
+
 export class SamsungOperations {
     constructor(
         readonly samsungClient: SamsungClientImpl,
@@ -76,6 +86,10 @@ export class SamsungOperations {
 
     getApps(): any {
         return this.samsungClient.getApps();
+    }
+
+    getInstalledApps(): SamsungApplication[] {
+        return this.samsungClient.getInstalledApps();
     }
 
     refreshApps(): Promise<any> {

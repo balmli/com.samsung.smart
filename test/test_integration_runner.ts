@@ -1,6 +1,7 @@
 const expect = require('chai').expect;
 const {saveProfileForm} = require('../integration/web/form');
 const {FULL_OPERATION_TEST_IDS, YOUTUBE_VIDEO_ID, validateFullOperationSuite} = require('../integration/suitePlan');
+const {createApplicationTests} = require('../integration/applicationSuite');
 
 import {
     HumanCheckpointBroker,
@@ -120,5 +121,39 @@ describe('Samsung Homey-operation hardware suite', function () {
         ]);
         expect(YOUTUBE_VIDEO_ID).to.equal('aqz-KE-bpKQ');
         expect(() => validateFullOperationSuite(FULL_OPERATION_TEST_IDS.map((id: string) => ({id})))).to.not.throw();
+    });
+});
+
+describe('Samsung integration application selection', function () {
+    it('launches, checks, and closes the application selected by the user', async function () {
+        const selectedApp = {name: 'Netflix', appId: '11101200001', dialId: 'Netflix'};
+        const calls: any[] = [];
+        const session = {
+            operations: {
+                launchApp: async (app: any) => calls.push(['launch', app]),
+                isAppRunning: async (app: any) => {
+                    calls.push(['running', app]);
+                    return true;
+                },
+                closeApp: async (app: any) => calls.push(['close', app]),
+            },
+        };
+        const context = {
+            skip: (reason: string) => {
+                throw new Error(reason);
+            },
+            verify: async () => ({outcome: 'yes'}),
+        };
+        const tests = createApplicationTests(session, selectedApp);
+
+        await tests.find((test: any) => test.id === 'launch-app').run(context);
+        await tests.find((test: any) => test.id === 'app-running').run(context);
+        await tests.find((test: any) => test.id === 'close-app').run(context);
+
+        expect(calls).to.eql([
+            ['launch', selectedApp],
+            ['running', selectedApp],
+            ['close', selectedApp],
+        ]);
     });
 });
