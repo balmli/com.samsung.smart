@@ -1,4 +1,4 @@
-/* global document, EventSource */
+/* global document, EventSource, saveProfileForm */
 
 let state = {profiles: [], logs: []};
 
@@ -84,10 +84,9 @@ function render() {
 
 element('profile-form').addEventListener('submit', async event => {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
+    const profileForm = event.currentTarget;
     try {
-        await request('/api/profiles', Object.fromEntries(form));
-        event.currentTarget.reset();
+        await saveProfileForm(profileForm, profile => request('/api/profiles', profile));
     } catch (error) {
         toast(error.message);
     }

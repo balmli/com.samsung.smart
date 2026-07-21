@@ -1,4 +1,5 @@
 const expect = require('chai').expect;
+const {saveProfileForm} = require('../integration/web/form');
 
 import {
     HumanCheckpointBroker,
@@ -81,5 +82,20 @@ describe('Samsung integration runner', function () {
         expect(result.status).to.equal('failed');
         expect(result.tests.map(test => test.status)).to.eql(['failed', 'skipped']);
         expect(snapshots.some(snapshot => snapshot.status === 'awaiting-human')).to.equal(true);
+    });
+});
+
+describe('Samsung integration web profile form', function () {
+    it('resets the submitted form after the asynchronous save completes', async function () {
+        let resetCount = 0;
+        const form = {reset: () => resetCount++};
+        let finishSave: () => void = () => undefined;
+        const save = () => new Promise<void>(resolve => (finishSave = resolve));
+
+        const submission = saveProfileForm(form, save, () => ({id: 'living-room', ipAddress: '192.0.2.1'}));
+        finishSave();
+        await submission;
+
+        expect(resetCount).to.equal(1);
     });
 });

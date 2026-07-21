@@ -12,6 +12,7 @@ import {createSamsungIntegrationSuite} from './suite';
 const CONTENT_TYPES: Record<string, string> = {
     '/': 'text/html; charset=utf-8',
     '/app.js': 'text/javascript; charset=utf-8',
+    '/form.js': 'text/javascript; charset=utf-8',
     '/styles.css': 'text/css; charset=utf-8',
 };
 
